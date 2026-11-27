@@ -94,12 +94,12 @@ export function Field({ label, hint, children, wide }: { label: string; hint?: s
 /** Section title, a one-line description and the section's actions. Actions wrap under the title on phones. */
 export function SectionHeader({ title, description, action }: { title: string; description?: ReactNode; action?: ReactNode }) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
-      <div className="min-w-0">
+    <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3 mb-6">
+      <div className="min-w-0 flex-1 basis-56">
         <h2 className="text-xl font-semibold tracking-tight text-gray-900">{title}</h2>
         {description && <p className="text-sm text-gray-500 mt-1 max-w-2xl">{description}</p>}
       </div>
-      {action && <div className="flex flex-wrap items-center gap-2 sm:flex-shrink-0">{action}</div>}
+      {action && <div className="flex flex-wrap items-center gap-2 flex-shrink-0">{action}</div>}
     </div>
   );
 }

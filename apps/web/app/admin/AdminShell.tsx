@@ -11,38 +11,51 @@ import { NAV_GROUPS, type AdminTab } from './nav';
 /**
  * The admin's frame: top bar, section navigation and the content area.
  *
- *   Large screens (lg and up): a sidebar you can collapse to icons. The choice is remembered.
- *   Smaller screens: the sidebar becomes a drawer opened from the menu button. It closes when you
+ *   Medium screens and up: a slim icon rail that opens over the page while the pointer (or
+ *   keyboard focus) is on it and closes when it leaves. The pin button keeps it open beside the
+ *   content instead; that choice is remembered.
+ *   Phones: the sidebar becomes a drawer opened from the menu button. It closes when you
  *   pick a section, press Escape or tap outside, keeps keyboard focus inside while open and hands
  *   focus back to the menu button.
  *
  * Every section renders inside the same content column, so they all share one width and padding.
  */
 
-const COLLAPSE_KEY = 'runivo-admin-sidebar';
+const PIN_KEY = 'runivo-admin-sidebar-pinned';
 const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
-function readCollapsed(): boolean {
-  try { return localStorage.getItem(COLLAPSE_KEY) === 'collapsed'; } catch { return false; }
+function readPinned(): boolean {
+  try { return localStorage.getItem(PIN_KEY) === '1'; } catch { return false; }
 }
 
 export function AdminShell({
   tab, onTabChange, onSignOut, children,
 }: { tab: AdminTab; onTabChange: (tab: AdminTab) => void; onSignOut: () => void; children: ReactNode }) {
   const router = useRouter();
-  const [collapsed, setCollapsed] = useState(readCollapsed);
+  const [pinned, setPinned] = useState(readPinned);
+  const [peek, setPeek] = useState(false);          // pointer or focus is on the rail
+  const peekTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const open = pinned || peek;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const menuBtn = useRef<HTMLButtonElement>(null);
   const drawer = useRef<HTMLDivElement>(null);
   const main = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
 
-  const toggleCollapsed = () => {
-    setCollapsed(c => {
-      try { localStorage.setItem(COLLAPSE_KEY, c ? 'expanded' : 'collapsed'); } catch { /* private mode: fine */ }
-      return !c;
+  const togglePinned = () => {
+    setPinned(p => {
+      try { localStorage.setItem(PIN_KEY, p ? '0' : '1'); } catch { /* private mode: fine */ }
+      return !p;
     });
+    setPeek(false);
   };
+  // A short delay on close, so brushing past the edge or crossing a gap doesn't make it flicker.
+  const peekOpen = () => { if (peekTimer.current) clearTimeout(peekTimer.current); setPeek(true); };
+  const peekClose = () => {
+    if (peekTimer.current) clearTimeout(peekTimer.current);
+    peekTimer.current = setTimeout(() => setPeek(false), 120);
+  };
+  useEffect(() => () => { if (peekTimer.current) clearTimeout(peekTimer.current); }, []);
 
   const closeDrawer = useCallback(() => {
     setDrawerOpen(false);
@@ -78,7 +91,7 @@ export function AdminShell({
 
   // Resizing up to a large screen while the drawer is open: close it.
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)');
+    const mq = window.matchMedia('(min-width: 768px)');
     const onChange = () => { if (mq.matches) setDrawerOpen(false); };
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
@@ -94,16 +107,16 @@ export function AdminShell({
       {/* Top bar */}
       <header className="sticky top-0 z-30 h-16 bg-white border-b border-gray-100 flex items-center gap-2 px-3 sm:px-5">
         <IconButton
-          ref={menuBtn} label="Open menu" className="lg:hidden"
+          ref={menuBtn} label="Open menu" className="md:hidden"
           aria-expanded={drawerOpen} aria-controls="admin-drawer" onClick={() => setDrawerOpen(true)}
         >
           <Menu className="w-5 h-5" aria-hidden />
         </IconButton>
         <IconButton
-          label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'} className="hidden lg:inline-flex"
-          aria-expanded={!collapsed} aria-controls="admin-sidebar" onClick={toggleCollapsed}
+          label={pinned ? 'Unpin sidebar (open on hover)' : 'Keep sidebar open'} className="hidden md:inline-flex"
+          aria-pressed={pinned} aria-controls="admin-sidebar" onClick={togglePinned}
         >
-          {collapsed ? <PanelLeftOpen className="w-5 h-5" aria-hidden /> : <PanelLeftClose className="w-5 h-5" aria-hidden />}
+          {pinned ? <PanelLeftClose className="w-5 h-5" aria-hidden /> : <PanelLeftOpen className="w-5 h-5" aria-hidden />}
         </IconButton>
 
         <div className="flex items-center gap-3 min-w-0 ml-1">
@@ -122,13 +135,20 @@ export function AdminShell({
       </header>
 
       <div className="flex">
-        {/* Sidebar (large screens) */}
-        <aside
-          id="admin-sidebar"
-          className={`hidden lg:block sticky top-16 h-[calc(100vh-4rem)] flex-shrink-0 overflow-y-auto overflow-x-hidden border-r border-gray-100 bg-white transition-[width] duration-200 ${collapsed ? 'w-[76px]' : 'w-60'}`}
-        >
-          <NavList tab={tab} onPick={pick} collapsed={collapsed} />
-        </aside>
+        {/* Sidebar (medium screens and up). The outer box holds the rail's space in the layout;
+            the panel inside widens over the content on hover, or beside it when pinned. */}
+        <div className={`hidden md:block flex-shrink-0 transition-[width] duration-200 ${pinned ? 'w-60' : 'w-[76px]'}`}>
+          <aside
+            id="admin-sidebar"
+            onMouseEnter={peekOpen} onMouseLeave={peekClose}
+            onFocus={peekOpen}
+            onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) peekClose(); }}
+            className={`fixed top-16 left-0 z-20 h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden border-r border-gray-100 bg-white
+              transition-[width,box-shadow] duration-200 ease-out ${open ? 'w-60' : 'w-[76px]'} ${peek && !pinned ? 'shadow-xl shadow-gray-900/10' : ''}`}
+          >
+            <NavList tab={tab} onPick={id => { pick(id); if (!pinned) setPeek(false); }} collapsed={!open} />
+          </aside>
+        </div>
 
         {/* Content: the same column for every section */}
         <main ref={main} id="main" tabIndex={-1} className="flex-1 min-w-0 outline-none">
@@ -141,7 +161,7 @@ export function AdminShell({
       {/* Drawer (smaller screens) */}
       <AnimatePresence>
         {drawerOpen && (
-          <div className="lg:hidden fixed inset-0 z-40">
+          <div className="md:hidden fixed inset-0 z-40">
             <motion.div
               className="absolute inset-0 bg-gray-900/40" aria-hidden onClick={closeDrawer}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}
