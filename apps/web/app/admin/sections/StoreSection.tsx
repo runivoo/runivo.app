@@ -3,10 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Plus, Trash2, Pencil, ShoppingBag, ChevronUp, ChevronDown, Upload, Crown, Lock } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
-import {
-  inputClass, primaryBtn, ghostBtn, thClass, Field, ErrorNote, FormCard, Spinner, Badge,
-  toLocalInput, fromLocalInput,
-} from '../ui';
+import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, toLocalInput, fromLocalInput, Button, IconButton, SectionHeader, TableCard } from '../ui';
 import type { PartnerRow } from './PartnersSection';
 
 interface StoreRow {
@@ -189,13 +186,11 @@ export default function StoreSection() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-lg font-bold text-gray-900">PACE Store</h2>
-          <p className="text-xs text-gray-400 mt-0.5">{rewards.length} rewards · {rewards.filter(r => r.status === 'available').length} live</p>
-        </div>
-        <button onClick={openNew} className={primaryBtn}><Plus className="w-4 h-4" strokeWidth={2.5} />Add reward</button>
-      </div>
+      <SectionHeader
+        title="PACE Store"
+        description={<>{rewards.length} rewards · {rewards.filter(r => r.status === 'available').length} live</>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>Add reward</Button>}
+      />
 
       {showForm && (
         <FormCard title={editId ? 'Edit reward' : 'New reward'} onClose={close}>
@@ -269,10 +264,8 @@ export default function StoreSection() {
           </p>
           <ErrorNote message={error} />
           <div className="flex gap-2 mt-4">
-            <button onClick={close} className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-500 bg-white">Cancel</button>
-            <button onClick={save} disabled={!canSave || saving} className="flex-1 py-2.5 rounded-full bg-gray-900 text-white min-h-[44px] text-sm font-bold disabled:opacity-40">
-              {saving ? 'Saving…' : editId ? 'Update reward' : 'Create reward'}
-            </button>
+            <Button variant="secondary" grow onClick={close}>Cancel</Button>
+            <Button grow onClick={save} disabled={!canSave || saving}>{saving ? 'Saving…' : editId ? 'Update reward' : 'Create reward'}</Button>
           </div>
         </FormCard>
       )}
@@ -287,9 +280,7 @@ export default function StoreSection() {
           <textarea className={`${inputClass} resize-y font-mono text-xs`} rows={6} value={csv} onChange={e => setCsv(e.target.value)} placeholder={'code\nBRK-7KQ2\nBRK-9XW4'} />
           {uploadMsg && <p className="text-xs text-gray-600 mt-2">{uploadMsg}</p>}
           <div className="flex justify-end mt-3">
-            <button onClick={uploadCodes} disabled={uploading || !csv.trim()} className={primaryBtn}>
-              <Upload className="w-4 h-4" />{uploading ? 'Uploading…' : 'Upload codes'}
-            </button>
+            <Button onClick={uploadCodes} disabled={uploading || !csv.trim()} icon={<Upload className="w-4 h-4" aria-hidden />}>{uploading ? 'Uploading…' : 'Upload codes'}</Button>
           </div>
         </FormCard>
       )}
@@ -302,7 +293,7 @@ export default function StoreSection() {
           <p className="text-sm text-gray-400">No rewards yet. Add your first one.</p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-gray-100 overflow-hidden">
+        <TableCard>
           <table className="w-full text-sm">
             <thead><tr className="bg-gray-50 border-b border-gray-100">
               <th className={thClass}>Reward</th>
@@ -343,14 +334,12 @@ export default function StoreSection() {
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1">
                         {r.code_mode === 'pool' && (
-                          <button onClick={() => { setCodesFor(r); setShowForm(false); setUploadMsg(''); }} className={ghostBtn} aria-label={`Upload codes for ${r.title}`}>
-                            <Upload className="w-3 h-3 inline -mt-0.5" /> Codes
-                          </button>
+                          <Button variant="secondary" size="sm" onClick={() => { setCodesFor(r); setShowForm(false); setUploadMsg(''); }} aria-label={`Upload codes for ${r.title}`} icon={<Upload className="w-3.5 h-3.5" aria-hidden />}>Codes</Button>
                         )}
-                        <button onClick={() => reorder(r, 'up')} disabled={idx === 0} className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center disabled:opacity-30" aria-label="Move up"><ChevronUp className="w-3 h-3 text-gray-400" /></button>
-                        <button onClick={() => reorder(r, 'down')} disabled={idx === rewards.length - 1} className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center disabled:opacity-30" aria-label="Move down"><ChevronDown className="w-3 h-3 text-gray-400" /></button>
-                        <button onClick={() => openEdit(r)} className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center" aria-label={`Edit ${r.title}`}><Pencil className="w-4 h-4 text-gray-400" /></button>
-                        <button onClick={() => del(r)} className="w-11 h-11 rounded-full border border-red-100 bg-red-50 flex items-center justify-center" aria-label={`Delete ${r.title}`}><Trash2 className="w-4 h-4 text-red-400" /></button>
+                        <IconButton label="Move up" onClick={() => reorder(r, 'up')} disabled={idx === 0}><ChevronUp className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                        <IconButton label="Move down" onClick={() => reorder(r, 'down')} disabled={idx === rewards.length - 1}><ChevronDown className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                        <IconButton label={`Edit ${r.title}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                        <IconButton variant="danger" label={`Delete ${r.title}`} onClick={() => del(r)}><Trash2 className="w-4 h-4" aria-hidden /></IconButton>
                       </div>
                     </td>
                   </tr>
@@ -358,7 +347,7 @@ export default function StoreSection() {
               })}
             </tbody>
           </table>
-        </div>
+        </TableCard>
       )}
     </div>
   );

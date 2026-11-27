@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Download, BarChart3 } from 'lucide-react';
 import { adminFetch, downloadCsv } from '@/lib/adminApi';
-import { inputClass, primaryBtn, thClass, Field, ErrorNote, Spinner } from '../ui';
+import { inputClass, thClass, Field, ErrorNote, Spinner, Button, SectionHeader } from '../ui';
 import type { PartnerRow } from './PartnersSection';
 
 interface Report {
@@ -75,10 +75,10 @@ export default function ReportsSection() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900">Partner reports</h2>
-        <p className="text-xs text-gray-400 mt-0.5">Monthly views, redemptions and fees. Totals only: partners never see who redeemed.</p>
-      </div>
+      <SectionHeader
+        title="Partner reports"
+        description={<>Monthly views, redemptions and fees. Totals only: partners never see who redeemed.</>}
+      />
 
       <div className="flex flex-col sm:flex-row gap-3 items-end mb-6">
         <div className="flex-1 w-full">
@@ -92,9 +92,7 @@ export default function ReportsSection() {
         <div className="w-full sm:w-44">
           <Field label="Month"><input className={inputClass} type="month" value={month} onChange={e => setMonth(e.target.value)} /></Field>
         </div>
-        <button onClick={run} disabled={!partnerId || running} className={`${primaryBtn} h-[50px]`}>
-          <BarChart3 className="w-4 h-4" />{running ? 'Loading…' : 'Show report'}
-        </button>
+        <Button onClick={run} disabled={!partnerId || running} className="min-h-[48px]" icon={<BarChart3 className="w-4 h-4" aria-hidden />}>{running ? 'Loading…' : 'Show report'}</Button>
       </div>
 
       <ErrorNote message={error} />
@@ -160,7 +158,7 @@ export default function ReportsSection() {
           </div>
 
           <div className="flex justify-end">
-            <button onClick={exportCsv} className={primaryBtn}><Download className="w-4 h-4" />Export CSV</button>
+            <Button variant="secondary" onClick={exportCsv} icon={<Download className="w-4 h-4" aria-hidden />}>Export CSV</Button>
           </div>
         </div>
       )}

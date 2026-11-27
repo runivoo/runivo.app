@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Download, ListChecks } from 'lucide-react';
 import { adminFetch, downloadCsv } from '@/lib/adminApi';
-import { ghostBtn, thClass, ErrorNote, Spinner } from '../ui';
+import { thClass, ErrorNote, Spinner, Button, SectionHeader, TableCard, EmptyState } from '../ui';
 
 interface WaitlistRow { id: string; email: string; city: string | null; source: string; created_at: string }
 
@@ -28,28 +28,19 @@ export default function WaitlistSection() {
 
   return (
     <div>
-      <div className="flex items-start justify-between gap-4 mb-6">
-        <div>
-          <h2 className="text-lg font-bold text-gray-900">Waitlist</h2>
-          <p className="text-xs text-gray-400 mt-0.5">
-            {loading ? 'Loading…' : `${total.toLocaleString()} sign-up${total === 1 ? '' : 's'} from runivo.in.`}
-            {total > rows.length ? ` Showing the newest ${rows.length.toLocaleString()}.` : ''}
-          </p>
-        </div>
-        <button onClick={exportCsv} disabled={rows.length === 0} className={`${ghostBtn} flex items-center gap-1.5`}>
-          <Download className="w-3.5 h-3.5" />Export CSV
-        </button>
-      </div>
+      <SectionHeader
+        title="Waitlist"
+        description={<>{loading ? 'Loading…' : `${total.toLocaleString()} sign-up${total === 1 ? '' : 's'} from runivo.in.`}
+            {total > rows.length ? ` Showing the newest ${rows.length.toLocaleString()}.` : ''}</>}
+        action={<Button variant="secondary" onClick={exportCsv} disabled={rows.length === 0} icon={<Download className="w-4 h-4" aria-hidden />}>Export CSV</Button>}
+      />
 
       <ErrorNote message={error} />
 
       {loading ? <Spinner /> : rows.length === 0 && !error ? (
-        <div className="text-center py-16">
-          <ListChecks className="w-8 h-8 text-gray-200 mx-auto mb-3" />
-          <p className="text-sm text-gray-400">No sign-ups yet. They appear here as people join from runivo.in.</p>
-        </div>
+        <EmptyState icon={<ListChecks className="w-8 h-8" />} title="No sign-ups yet." hint="They appear here as people join from runivo.in." />
       ) : rows.length > 0 && (
-        <div className="rounded-2xl border border-gray-100 overflow-hidden">
+        <TableCard>
           <table className="w-full text-sm">
             <thead><tr className="bg-gray-50 border-b border-gray-100">
               <th className={thClass}>Email</th>
@@ -68,7 +59,7 @@ export default function WaitlistSection() {
               ))}
             </tbody>
           </table>
-        </div>
+        </TableCard>
       )}
     </div>
   );

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Plus, Pencil, Handshake } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
-import { inputClass, primaryBtn, ghostBtn, thClass, Field, ErrorNote, FormCard, Spinner, Badge } from '../ui';
+import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, Button, IconButton, SectionHeader, TableCard, EmptyState } from '../ui';
 
 export interface PartnerRow {
   id: string;
@@ -110,15 +110,11 @@ export default function PartnersSection() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-lg font-bold text-gray-900">Partners</h2>
-          <p className="text-xs text-gray-400 mt-0.5">
-            {rows.filter(r => r.status === 'active').length} active · {rows.filter(r => r.status === 'applied').length} to review · {freeCount}/10 free listings used
-          </p>
-        </div>
-        <button onClick={openNew} className={primaryBtn}><Plus className="w-4 h-4" strokeWidth={2.5} />Add partner</button>
-      </div>
+      <SectionHeader
+        title="Partners"
+        description={<>{rows.filter(r => r.status === 'active').length} active · {rows.filter(r => r.status === 'applied').length} to review · {freeCount}/10 free listings used</>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>Add partner</Button>}
+      />
 
       {showForm && (
         <FormCard title={editId ? 'Edit partner' : 'New partner'} onClose={close}>
@@ -164,10 +160,8 @@ export default function PartnersSection() {
           </div>
           <ErrorNote message={error} />
           <div className="flex gap-2 mt-4">
-            <button onClick={close} className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-500 bg-white">Cancel</button>
-            <button onClick={save} disabled={saving || form.name.trim().length < 2} className="flex-1 py-2.5 rounded-full bg-gray-900 text-white min-h-[44px] text-sm font-bold disabled:opacity-40">
-              {saving ? 'Saving…' : editId ? 'Update partner' : 'Create partner'}
-            </button>
+            <Button variant="secondary" grow onClick={close}>Cancel</Button>
+            <Button grow onClick={save} disabled={saving || form.name.trim().length < 2}>{saving ? 'Saving…' : editId ? 'Update partner' : 'Create partner'}</Button>
           </div>
         </FormCard>
       )}
@@ -200,11 +194,9 @@ export default function PartnersSection() {
                     {r.offer && <p className="text-sm text-gray-700 mt-2 whitespace-pre-line">{r.offer}</p>}
                   </div>
                   <div className="flex gap-2 shrink-0">
-                    <button onClick={() => openEdit(r)} className={ghostBtn}>Edit</button>
-                    <button onClick={() => decide(r, 'rejected')} disabled={deciding === r.id} className={ghostBtn}>Reject</button>
-                    <button onClick={() => decide(r, 'active')} disabled={deciding === r.id} className="px-3 py-2 rounded-full bg-gray-900 text-white min-h-[44px] text-xs font-semibold disabled:opacity-40">
-                      Approve
-                    </button>
+                    <Button variant="secondary" size="sm" onClick={() => openEdit(r)}>Edit</Button>
+                    <Button variant="secondary" size="sm" onClick={() => decide(r, 'rejected')} disabled={deciding === r.id}>Reject</Button>
+                    <Button size="sm" onClick={() => decide(r, 'active')} disabled={deciding === r.id}>Approve</Button>
                   </div>
                 </div>
               </div>
@@ -214,12 +206,9 @@ export default function PartnersSection() {
       )}
 
       {loading ? <Spinner /> : others.length === 0 && applications.length === 0 ? (
-        <div className="text-center py-16">
-          <Handshake className="w-8 h-8 text-gray-200 mx-auto mb-3" />
-          <p className="text-sm text-gray-400">No partners yet. Applications from runivo.in/partners show up here.</p>
-        </div>
+        <EmptyState icon={<Handshake className="w-8 h-8" />} title="No partners yet." hint="Applications from runivo.in/partners show up here." />
       ) : others.length === 0 ? null : (
-        <div className="rounded-2xl border border-gray-100 overflow-hidden">
+        <TableCard>
           <table className="w-full text-sm">
             <thead><tr className="bg-gray-50 border-b border-gray-100">
               <th className={thClass}>Partner</th>
@@ -241,15 +230,13 @@ export default function PartnersSection() {
                   </td>
                   <td className="px-4 py-3"><Badge tone={STATUS_TONE[r.status]}>{r.status}</Badge></td>
                   <td className="px-4 py-3 text-right">
-                    <button onClick={() => openEdit(r)} className="w-11 h-11 rounded-full border border-gray-100 bg-white inline-flex items-center justify-center hover:border-gray-300" aria-label={`Edit ${r.name}`}>
-                      <Pencil className="w-4 h-4 text-gray-400" />
-                    </button>
+                    <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </TableCard>
       )}
     </div>
   );

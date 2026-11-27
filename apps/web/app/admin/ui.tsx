@@ -1,6 +1,6 @@
 'use client';
-import { AlertCircle, X } from 'lucide-react';
-import { Children, cloneElement, isValidElement, useId, type ReactElement, type ReactNode } from 'react';
+import { AlertCircle, ToggleLeft, ToggleRight, X } from 'lucide-react';
+import { Children, cloneElement, isValidElement, useId, type ComponentPropsWithRef, type ReactElement, type ReactNode } from 'react';
 
 /*
  * Admin building blocks. They follow the website's design system (app/globals.css, and the
@@ -14,10 +14,46 @@ export const inputClass = `w-full px-4 py-3 rounded-xl bg-white border border-gr
 
 export const labelClass = 'text-sm font-medium text-gray-500 mb-2 block';
 
-export const primaryBtn = `inline-flex items-center justify-center gap-2 px-6 min-h-[44px] rounded-full bg-gray-900 text-white
-  text-sm font-semibold hover:opacity-90 active:scale-[.98] transition disabled:opacity-40 disabled:pointer-events-none`;
-export const ghostBtn = `inline-flex items-center justify-center gap-1.5 px-4 min-h-[44px] sm:min-h-[40px] rounded-full border border-gray-100 bg-white
-  text-sm font-semibold text-gray-700 hover:border-gray-200 active:scale-[.98] transition disabled:opacity-40 disabled:pointer-events-none`;
+/* ── Buttons: one design for every action in the admin ───────────────────────── */
+
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'warn';
+
+const BUTTON_BASE = `inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap
+  transition active:scale-[.98] disabled:opacity-40 disabled:pointer-events-none`;
+const BUTTON_VARIANT: Record<ButtonVariant, string> = {
+  primary:   'bg-gray-900 text-white hover:opacity-90',
+  secondary: 'bg-white border border-gray-100 text-gray-700 hover:border-gray-200',
+  danger:    'bg-red-50 border border-red-100 text-red-600 hover:bg-red-100',
+  warn:      'bg-amber-500 text-white hover:opacity-90',
+};
+// Both sizes are at least 44px tall on touch screens.
+const BUTTON_SIZE = { md: 'px-6 min-h-[44px] text-sm', sm: 'px-4 min-h-[44px] sm:min-h-[40px] text-sm' };
+
+/** Text button. `grow` stretches it to share a row equally (Cancel / Save). */
+export function Button({
+  variant = 'primary', size = 'md', grow = false, icon, className = '', type = 'button', children, ...rest
+}: ComponentPropsWithRef<'button'> & { variant?: ButtonVariant; size?: 'md' | 'sm'; grow?: boolean; icon?: ReactNode }) {
+  return (
+    <button type={type} className={`${BUTTON_BASE} ${BUTTON_VARIANT[variant]} ${BUTTON_SIZE[size]} ${grow ? 'flex-1' : ''} ${className}`} {...rest}>
+      {icon}{children}
+    </button>
+  );
+}
+
+/** Round icon-only button (edit, delete, move). `label` is required: it is the accessible name and the tooltip. */
+export function IconButton({
+  label, variant = 'secondary', className = '', type = 'button', children, ...rest
+}: Omit<ComponentPropsWithRef<'button'>, 'aria-label' | 'title'> & { label: string; variant?: 'secondary' | 'danger' }) {
+  return (
+    <button
+      type={type} aria-label={label} title={label}
+      className={`${BUTTON_BASE} w-11 h-11 flex-shrink-0 ${BUTTON_VARIANT[variant]} ${className}`} {...rest}
+    >
+      {children}
+    </button>
+  );
+}
+
 export const thClass = 'text-left text-xs font-medium text-gray-500 px-4 py-3';
 
 /**
@@ -53,6 +89,54 @@ export function Field({ label, hint, children, wide }: { label: string; hint?: s
   );
 }
 
+/* ── Layout: every section starts and lays out the same way ──────────────────── */
+
+/** Section title, a one-line description and the section's actions. Actions wrap under the title on phones. */
+export function SectionHeader({ title, description, action }: { title: string; description?: ReactNode; action?: ReactNode }) {
+  return (
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
+      <div className="min-w-0">
+        <h2 className="text-xl font-semibold tracking-tight text-gray-900">{title}</h2>
+        {description && <p className="text-sm text-gray-500 mt-1 max-w-2xl">{description}</p>}
+      </div>
+      {action && <div className="flex flex-wrap items-center gap-2 sm:flex-shrink-0">{action}</div>}
+    </div>
+  );
+}
+
+/** Rounded white card that holds a table and scrolls sideways on narrow screens instead of breaking the page. */
+export function TableCard({ children }: { children: ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-gray-100 bg-white overflow-hidden">
+      <div className="overflow-x-auto">{children}</div>
+    </div>
+  );
+}
+
+/** Nothing to show yet: an optional icon, a line, and an optional hint. */
+export function EmptyState({ icon, title, hint }: { icon?: ReactNode; title: string; hint?: string }) {
+  return (
+    <div className="text-center py-16">
+      {icon && <div className="mx-auto mb-3 w-fit text-gray-200" aria-hidden>{icon}</div>}
+      <p className="text-sm text-gray-500">{title}</p>
+      {hint && <p className="text-sm text-gray-400 mt-1">{hint}</p>}
+    </div>
+  );
+}
+
+/** Live / off switch for a row. A real button with its state exposed (aria-pressed). */
+export function StatusToggle({ active, name, onToggle }: { active: boolean; name: string; onToggle: () => void }) {
+  return (
+    <button
+      type="button" onClick={onToggle} aria-pressed={active} aria-label={`${name}: ${active ? 'live' : 'off'}`}
+      className="inline-flex items-center gap-1.5 px-2 min-h-[44px] rounded-full hover:bg-gray-50 transition-colors"
+    >
+      {active ? <ToggleRight className="w-5 h-5 text-[#4E7F1F]" aria-hidden /> : <ToggleLeft className="w-5 h-5 text-gray-300" aria-hidden />}
+      <span className={`text-xs font-semibold ${active ? 'text-[#4E7F1F]' : 'text-gray-500'}`}>{active ? 'Live' : 'Off'}</span>
+    </button>
+  );
+}
+
 export function ErrorNote({ message }: { message: string }) {
   if (!message) return null;
   return (
@@ -68,9 +152,7 @@ export function FormCard({ title, onClose, children }: { title: string; onClose:
     <div className="mb-6 p-6 rounded-2xl border border-[#4E7F1F]/20 bg-green-50">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-base font-semibold tracking-tight text-gray-900">{title}</h3>
-        <button onClick={onClose} className="w-11 h-11 -mr-2 rounded-full flex items-center justify-center hover:bg-white transition-colors" aria-label="Close">
-          <X className="w-4 h-4 text-gray-500" aria-hidden />
-        </button>
+        <IconButton label="Close" onClick={onClose}><X className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
       </div>
       {children}
     </div>

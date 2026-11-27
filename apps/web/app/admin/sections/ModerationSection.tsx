@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { adminFetch } from '@/lib/adminApi';
-import { ghostBtn, ErrorNote, Spinner, Badge } from '../ui';
+import { ErrorNote, Spinner, Badge, Button, SectionHeader, EmptyState } from '../ui';
 
 interface Item {
   key: string;
@@ -66,22 +66,20 @@ export default function ModerationSection() {
 
   return (
     <div>
-      <div className="mb-5">
-        <h2 className="text-lg font-bold text-gray-900">Moderation</h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Open reports, oldest first. Act within 24 hours. Removing deletes the content; suspending also stops its author from posting.
-        </p>
-      </div>
+      <SectionHeader
+        title="Moderation"
+        description={<>Open reports, oldest first. Act within 24 hours. Removing deletes the content; suspending also stops its author from posting.</>}
+      />
       <ErrorNote message={error} />
 
       {items.length === 0 ? (
-        <p className="py-16 text-center text-sm text-gray-400">Nothing to review. 🎉</p>
+        <EmptyState title="Nothing to review." hint="New reports appear here." />
       ) : (
         <ul className="space-y-3">
           {items.map(item => {
             const overdue = Date.now() - new Date(item.first_reported_at).getTime() > 24 * 3_600_000;
             return (
-              <li key={item.key} className="p-4 rounded-2xl border border-gray-200 bg-white">
+              <li key={item.key} className="p-4 rounded-2xl border border-gray-100 bg-white">
                 <div className="flex flex-wrap items-center gap-2 mb-2">
                   <Badge tone="blue">{LABEL[item.source]}</Badge>
                   <Badge tone={item.report_count >= 3 ? 'red' : 'gray'}>{item.report_count} report{item.report_count === 1 ? '' : 's'}</Badge>
@@ -96,14 +94,12 @@ export default function ModerationSection() {
                   Reasons: {item.reasons.join(', ')}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-3">
-                  <button className={ghostBtn} disabled={busy === item.key} onClick={() => act(item, 'dismiss')}>Dismiss</button>
+                  <Button variant="secondary" size="sm" disabled={busy === item.key} onClick={() => act(item, 'dismiss')}>Dismiss</Button>
                   {item.source !== 'user' && (
-                    <button className={ghostBtn} disabled={busy === item.key} onClick={() => act(item, 'remove')}>Remove</button>
+                    <Button variant="secondary" size="sm" disabled={busy === item.key} onClick={() => act(item, 'remove')}>Remove</Button>
                   )}
                   {item.author_id && (
-                    <button className={`${ghostBtn} !text-red-600 !border-red-200`} disabled={busy === item.key} onClick={() => act(item, 'remove_and_ban')}>
-                      {item.source === 'user' ? 'Suspend runner' : 'Remove and suspend author'}
-                    </button>
+                    <Button variant="danger" size="sm" disabled={busy === item.key} onClick={() => act(item, 'remove_and_ban')}>{item.source === 'user' ? 'Suspend runner' : 'Remove and suspend author'}</Button>
                   )}
                 </div>
               </li>

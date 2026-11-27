@@ -1,9 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Check, X, Trophy } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
-import { ghostBtn, thClass, ErrorNote, Spinner, Badge } from '../ui';
+import { thClass, ErrorNote, Spinner, Badge, Button, SectionHeader, TableCard, EmptyState } from '../ui';
 
 /**
  * Races runners added in plan setup. Approving puts one in the catalogue so
@@ -54,19 +54,16 @@ export default function RacesSection() {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-1">
-        <Trophy className="w-5 h-5 text-gray-400" strokeWidth={1.8} />
-        <h2 className="text-lg font-bold text-gray-900">Races to review</h2>
-      </div>
-      <p className="text-sm text-gray-500 mb-5">
-        Added by runners in plan setup. Check the date and distance on the organiser&apos;s site before approving.
-        Curated races come from Events automatically.
-      </p>
+      <SectionHeader
+        title="Races to review"
+        description={<>Added by runners in plan setup. Check the date and distance on the organiser&apos;s site before approving.
+        Curated races come from Events automatically.</>}
+      />
       {error && <ErrorNote message={error} />}
       {loading ? <Spinner /> : rows.length === 0 ? (
-        <p className="text-sm text-gray-400 py-10 text-center">Nothing waiting.</p>
+        <EmptyState title="Nothing waiting." hint="Races runners add in plan setup show up here." />
       ) : (
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-x-auto">
+        <TableCard>
           <table className="w-full text-sm">
             <thead className="border-b border-gray-100">
               <tr>
@@ -94,12 +91,8 @@ export default function RacesSection() {
                     <td className="px-4 py-3 text-gray-700">{entered}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2 justify-end">
-                        <button className={ghostBtn} disabled={busy === r.id} onClick={() => review(r.id, true)} aria-label={`Approve ${r.name}`}>
-                          <Check className="w-3.5 h-3.5 inline -mt-0.5" /> Approve
-                        </button>
-                        <button className={ghostBtn} disabled={busy === r.id} onClick={() => review(r.id, false)} aria-label={`Reject ${r.name}`}>
-                          <X className="w-3.5 h-3.5 inline -mt-0.5" /> Reject
-                        </button>
+                        <Button variant="secondary" size="sm" disabled={busy === r.id} onClick={() => review(r.id, true)} aria-label={`Approve ${r.name}`} icon={<Check className="w-4 h-4" aria-hidden />}>Approve</Button>
+                        <Button variant="secondary" size="sm" disabled={busy === r.id} onClick={() => review(r.id, false)} aria-label={`Reject ${r.name}`} icon={<X className="w-4 h-4" aria-hidden />}>Reject</Button>
                       </div>
                     </td>
                   </tr>
@@ -107,7 +100,7 @@ export default function RacesSection() {
               })}
             </tbody>
           </table>
-        </div>
+        </TableCard>
       )}
     </div>
   );

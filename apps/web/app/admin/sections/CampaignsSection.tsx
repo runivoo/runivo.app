@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Plus, Pencil, Ban, BellRing } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
-import { inputClass, primaryBtn, thClass, Field, ErrorNote, FormCard, Spinner, Badge, toLocalInput, fromLocalInput } from '../ui';
+import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, toLocalInput, fromLocalInput, Button, IconButton, SectionHeader, TableCard } from '../ui';
 
 interface CampaignRow {
   id: string;
@@ -102,13 +102,11 @@ export default function CampaignsSection() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-lg font-bold text-gray-900">Campaigns</h2>
-          <p className="text-xs text-gray-400 mt-0.5">Festive and partner pushes, sent at each runner&apos;s local hour. Quiet hours and the 3-a-day limit still apply.</p>
-        </div>
-        <button onClick={openNew} className={primaryBtn}><Plus className="w-4 h-4" strokeWidth={2.5} />New campaign</button>
-      </div>
+      <SectionHeader
+        title="Campaigns"
+        description={<>Festive and partner pushes, sent at each runner&apos;s local hour. Quiet hours and the 3-a-day limit still apply.</>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>New campaign</Button>}
+      />
 
       {showForm && (
         <FormCard title={editId ? 'Edit campaign' : 'New campaign'} onClose={close}>
@@ -147,10 +145,8 @@ export default function CampaignsSection() {
           </div>
           <ErrorNote message={error} />
           <div className="flex gap-2 mt-4">
-            <button onClick={close} className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-500 bg-white">Cancel</button>
-            <button onClick={save} disabled={!canSave || saving} className="flex-1 py-2.5 rounded-full bg-gray-900 text-white min-h-[44px] text-sm font-bold disabled:opacity-40">
-              {saving ? 'Saving…' : editId ? 'Update campaign' : 'Schedule campaign'}
-            </button>
+            <Button variant="secondary" grow onClick={close}>Cancel</Button>
+            <Button grow onClick={save} disabled={!canSave || saving}>{saving ? 'Saving…' : editId ? 'Update campaign' : 'Schedule campaign'}</Button>
           </div>
         </FormCard>
       )}
@@ -163,7 +159,7 @@ export default function CampaignsSection() {
           <p className="text-sm text-gray-400">No campaigns yet.</p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-gray-100 overflow-hidden">
+        <TableCard>
           <table className="w-full text-sm">
             <thead><tr className="bg-gray-50 border-b border-gray-100">
               <th className={thClass}>Campaign</th>
@@ -192,10 +188,10 @@ export default function CampaignsSection() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
                       {r.sent_count === 0 && (r.status === 'scheduled' || r.status === 'draft') && (
-                        <button onClick={() => openEdit(r)} className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center" aria-label={`Edit ${r.name}`}><Pencil className="w-4 h-4 text-gray-400" /></button>
+                        <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
                       )}
                       {(r.status === 'scheduled' || r.status === 'draft') && (
-                        <button onClick={() => cancelCampaign(r)} className="w-11 h-11 rounded-full border border-red-100 bg-red-50 flex items-center justify-center" aria-label={`Cancel ${r.name}`}><Ban className="w-3 h-3 text-red-400" /></button>
+                        <IconButton variant="danger" label={`Cancel ${r.name}`} onClick={() => cancelCampaign(r)}><Ban className="w-4 h-4" aria-hidden /></IconButton>
                       )}
                     </div>
                   </td>
@@ -203,7 +199,7 @@ export default function CampaignsSection() {
               ))}
             </tbody>
           </table>
-        </div>
+        </TableCard>
       )}
     </div>
   );
