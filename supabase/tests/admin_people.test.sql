@@ -1,4 +1,4 @@
--- People (017_admin_people): emails for Studio, and nobody else can read them.
+-- People (015_studio, admin_people): emails for Studio, and nobody else can read them.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$

@@ -1,4 +1,4 @@
--- Studio images (018_studio_images): the bucket, the columns, and the app's lists carrying them.
+-- Studio images (015_studio, studio_images): the bucket, the columns, and the app's lists carrying them.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$

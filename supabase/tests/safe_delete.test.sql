@@ -1,4 +1,4 @@
--- Safe delete (016_safe_delete): impact counts, events keep their races, the log is server-only.
+-- Safe delete (015_studio, safe_delete): impact counts, events keep their races, the log is server-only.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$

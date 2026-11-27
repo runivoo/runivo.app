@@ -1,4 +1,4 @@
--- Broadcasts (020_broadcasts): Studio's record of email broadcasts, server only.
+-- Broadcasts (016_broadcasts): Studio's record of email broadcasts, server only.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$

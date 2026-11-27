@@ -1,4 +1,4 @@
--- Waitlist attribution (019_waitlist_attribution): platform and campaign are saved and counted.
+-- Waitlist attribution (015_studio, waitlist_attribution): platform and campaign are saved and counted.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$

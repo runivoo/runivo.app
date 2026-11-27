@@ -1,4 +1,4 @@
--- Studio overview (015_studio_overview): the admin's numbers, and only the server can read them.
+-- Studio overview (015_studio, studio_overview): the admin's numbers, and only the server can read them.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$
