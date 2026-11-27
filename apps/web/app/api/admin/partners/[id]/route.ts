@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json, oneOf } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, oneOf, logAction } from '@/lib/adminServer';
 import { partnerPayload, PARTNER_STATUSES } from '../fields';
 
 export const dynamic = 'force-dynamic';
@@ -17,6 +17,7 @@ export const PATCH = adminRoute(async (req: Request, ctx: Ctx) => {
     const { data, error } = await serviceClient()
       .from('partners').update({ status, reviewed_at: now, updated_at: now }).eq('id', id).select().single();
     if (error) return json({ error: 'Could not update the partner.' }, 400);
+    await logAction(req, { action: status === 'ended' ? 'end' : 'status', kind: 'partner', id, label: data?.name, details: { status } });
     return json({ partner: data });
   }
 
@@ -25,5 +26,6 @@ export const PATCH = adminRoute(async (req: Request, ctx: Ctx) => {
   const { data, error } = await serviceClient()
     .from('partners').update({ ...p, updated_at: new Date().toISOString() }).eq('id', id).select().single();
   if (error) return json({ error: error.message }, 400);
+  await logAction(req, { action: 'update', kind: 'partner', id, label: data?.name });
   return json({ partner: data });
 });

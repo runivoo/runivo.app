@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/adminServer';
 
 export const dynamic = 'force-dynamic';
 
@@ -145,5 +145,6 @@ export const POST = adminRoute(async (req) => {
   if (report.table === 'content_reports') q = q.eq('target_type', source);
   const { error } = await q;
   if (error) return json({ error: error.message }, 400);
+  await logAction(req, { action, kind: source, id: targetId });
   return json({ ok: true });
 });

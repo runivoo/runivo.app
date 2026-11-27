@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Plus, Pencil, Handshake } from 'lucide-react';
+import { Plus, Pencil, Handshake, Ban } from 'lucide-react';
+import { RemoveDialog } from '../RemoveDialog';
 import { adminFetch } from '@/lib/adminApi';
 import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, Button, IconButton, SectionHeader, TableCard, EmptyState } from '../ui';
 
@@ -52,6 +53,7 @@ export default function PartnersSection() {
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [removing, setRemoving] = useState<PartnerRow | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -230,13 +232,23 @@ export default function PartnersSection() {
                   </td>
                   <td className="px-4 py-3"><Badge tone={STATUS_TONE[r.status]}>{r.status}</Badge></td>
                   <td className="px-4 py-3 text-right">
-                    <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                    <div className="inline-flex gap-1">
+                      <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                      {r.status !== 'ended' && r.status !== 'rejected' && (
+                        <IconButton variant="danger" label={`End partnership with ${r.name}`} onClick={() => setRemoving(r)}><Ban className="w-4 h-4" aria-hidden /></IconButton>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </TableCard>
+      )}
+
+      {removing && (
+        <RemoveDialog kind="partner" id={removing.id} name={removing.name}
+          onClose={() => setRemoving(null)} onDone={() => { setRemoving(null); load(); }} />
       )}
     </div>
   );

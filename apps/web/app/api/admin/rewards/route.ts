@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/adminServer';
 import { rewardPayload, rewardProblem } from './fields';
 
 export const dynamic = 'force-dynamic';
@@ -25,5 +25,6 @@ export const POST = adminRoute(async (req) => {
   if (problem) return json({ error: problem }, 400);
   const { data, error } = await serviceClient().from('pace_store_rewards').insert(p).select().single();
   if (error) return json({ error: error.message }, 400);
+  await logAction(req, { action: 'create', kind: 'reward', id: data?.id, label: data?.title });
   return json({ reward: data }, 201);
 });

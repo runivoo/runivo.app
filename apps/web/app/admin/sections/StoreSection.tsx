@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Plus, Trash2, Pencil, ShoppingBag, ChevronUp, ChevronDown, Upload, Crown, Lock } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
+import { RemoveDialog } from '../RemoveDialog';
 import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, toLocalInput, fromLocalInput, Button, IconButton, SectionHeader, TableCard } from '../ui';
 import type { PartnerRow } from './PartnersSection';
 
@@ -71,6 +72,7 @@ export default function StoreSection() {
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [removing, setRemoving] = useState<StoreRow | null>(null);
   const [codesFor, setCodesFor] = useState<StoreRow | null>(null);
   const [csv, setCsv] = useState('');
   const [uploadMsg, setUploadMsg] = useState('');
@@ -139,11 +141,7 @@ export default function StoreSection() {
     setSaving(false);
   };
 
-  const del = async (r: StoreRow) => {
-    if (!window.confirm(`Delete "${r.title}"? Rewards someone has redeemed are hidden instead.`)) return;
-    try { await adminFetch(`/rewards/${r.id}`, { method: 'DELETE' }); await load(); }
-    catch (e) { setError((e as Error).message); }
-  };
+  const del = (r: StoreRow) => setRemoving(r);
 
   const reorder = async (row: StoreRow, dir: 'up' | 'down') => {
     const sorted = [...rewards].sort((a, b) => a.sort_order - b.sort_order);
@@ -339,7 +337,7 @@ export default function StoreSection() {
                         <IconButton label="Move up" onClick={() => reorder(r, 'up')} disabled={idx === 0}><ChevronUp className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
                         <IconButton label="Move down" onClick={() => reorder(r, 'down')} disabled={idx === rewards.length - 1}><ChevronDown className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
                         <IconButton label={`Edit ${r.title}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
-                        <IconButton variant="danger" label={`Delete ${r.title}`} onClick={() => del(r)}><Trash2 className="w-4 h-4" aria-hidden /></IconButton>
+                        <IconButton variant="danger" label={`Remove ${r.title}`} onClick={() => del(r)}><Trash2 className="w-4 h-4" aria-hidden /></IconButton>
                       </div>
                     </td>
                   </tr>
@@ -348,6 +346,11 @@ export default function StoreSection() {
             </tbody>
           </table>
         </TableCard>
+      )}
+
+      {removing && (
+        <RemoveDialog kind="reward" id={removing.id} name={removing.title}
+          onClose={() => setRemoving(null)} onDone={() => { setRemoving(null); load(); }} />
       )}
     </div>
   );

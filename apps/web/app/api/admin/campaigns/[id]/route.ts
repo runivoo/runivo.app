@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/adminServer';
 import { campaignPayload, campaignProblem } from '../fields';
 
 export const dynamic = 'force-dynamic';
@@ -15,8 +15,10 @@ export const PATCH = adminRoute(async (req: Request, ctx: Ctx) => {
 
   if (Object.keys(body).length === 1 && body.status === 'cancelled') {
     if (current.status === 'done') return json({ error: 'This campaign has already finished' }, 400);
-    const { error } = await db.from('notification_campaigns').update({ status: 'cancelled' }).eq('id', id);
-    return error ? json({ error: error.message }, 400) : json({ ok: true });
+    const { data: done, error } = await db.from('notification_campaigns').update({ status: 'cancelled' }).eq('id', id).select('name').single();
+    if (error) return json({ error: error.message }, 400);
+    await logAction(req, { action: 'cancel', kind: 'campaign', id, label: done?.name });
+    return json({ ok: true });
   }
   if (current.sent_count > 0) return json({ error: 'This campaign has started sending; cancel it and create a new one' }, 400);
   const p = campaignPayload(body);

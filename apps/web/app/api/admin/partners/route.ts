@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/adminServer';
 import { partnerPayload } from './fields';
 
 export const dynamic = 'force-dynamic';
@@ -14,5 +14,6 @@ export const POST = adminRoute(async (req) => {
   if (!p.name) return json({ error: 'Partner name is required' }, 400);
   const { data, error } = await serviceClient().from('partners').insert(p).select().single();
   if (error) return json({ error: error.message }, 400);
+  await logAction(req, { action: 'create', kind: 'partner', id: data?.id, label: data?.name });
   return json({ partner: data }, 201);
 });

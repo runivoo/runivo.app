@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Calendar, Plus, Trash2, Pencil } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { RemoveDialog } from '../RemoveDialog';
 import { inputClass, labelClass, ErrorNote, FormCard, Spinner, Badge, Button, IconButton, SectionHeader, TableCard, EmptyState, StatusToggle } from '../ui';
 
 interface EventRow {
@@ -65,7 +66,7 @@ export default function EventsSection() {
   const [error, setError] = useState('');
   const [form, setForm] = useState(EMPTY_EVENT);
   const [editId, setEditId] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [removing, setRemoving] = useState<EventRow | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -155,13 +156,6 @@ export default function EventsSection() {
     setEvents(prev => prev.map(e => e.id === row.id ? { ...e, is_active: !e.is_active } : e));
   };
 
-  const del = async (id: string) => {
-    setDeletingId(id);
-    const { error: err } = await supabase.from('events').delete().eq('id', id);
-    if (err) { setError(err.message); setDeletingId(null); return; }
-    setEvents(prev => prev.filter(e => e.id !== id));
-    setDeletingId(null);
-  };
 
   const canSave = form.title.trim().length >= 3 && !!form.starts_at && form.location_name.trim().length >= 2
     && (form.source !== 'curated' || form.registration_url.trim().length > 0);
@@ -322,8 +316,8 @@ export default function EventsSection() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
                       <IconButton label={`Edit ${e.title}`} onClick={() => openEdit(e)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
-                      <IconButton variant="danger" label={`Delete ${e.title}`} onClick={() => del(e.id)} disabled={deletingId === e.id}>
-                        {deletingId === e.id ? <span className="w-4 h-4 rounded-full border-2 border-red-300 border-t-transparent animate-spin" /> : <Trash2 className="w-4 h-4" aria-hidden />}
+                      <IconButton variant="danger" label={`Remove ${e.title}`} onClick={() => setRemoving(e)}>
+                        <Trash2 className="w-4 h-4" aria-hidden />
                       </IconButton>
                     </div>
                   </td>
@@ -332,6 +326,11 @@ export default function EventsSection() {
             </tbody>
           </table>
         </TableCard>
+      )}
+
+      {removing && (
+        <RemoveDialog kind="event" id={removing.id} name={removing.title}
+          onClose={() => setRemoving(null)} onDone={() => { setRemoving(null); load(); }} />
       )}
     </div>
   );

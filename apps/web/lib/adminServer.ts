@@ -41,13 +41,36 @@ export function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 }
 
+// The signed-in admin for a request that passed adminRoute's check.
+const ADMIN_OF = new WeakMap<Request, string>();
+
+/**
+ * Records an admin change in public.admin_actions (Studio → Activity).
+ * Never throws: a failed log line must not undo or fail the change itself.
+ */
+export async function logAction(req: Request, entry: {
+  action: string; kind: string; id?: string | null; label?: string | null; details?: Record<string, unknown>;
+}): Promise<void> {
+  const adminId = ADMIN_OF.get(req);
+  if (!adminId) return;
+  const { error } = await serviceClient().from('admin_actions').insert({
+    admin_id: adminId,
+    action: entry.action.slice(0, 40),
+    item_kind: entry.kind.slice(0, 40),
+    item_id: entry.id ?? null,
+    item_label: entry.label ? entry.label.slice(0, 200) : null,
+    details: entry.details ?? {},
+  });
+  if (error) console.error('[admin log]', error.message);
+}
+
 /** Wraps a handler: admin check, JSON errors, never leaks stack traces. */
 export function adminRoute<A extends unknown[]>(
   fn: (req: Request, ...args: A) => Promise<Response>,
 ): (req: Request, ...args: A) => Promise<Response> {
   return async (req, ...args) => {
     try {
-      await requireAdmin(req);
+      ADMIN_OF.set(req, await requireAdmin(req));
       return await fn(req, ...args);
     } catch (e) {
       if (e instanceof AdminError) return json({ error: e.message }, e.status);
