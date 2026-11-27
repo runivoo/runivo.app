@@ -43,7 +43,7 @@ export function WaitlistForm({ source = 'web' }: { source?: string }) {
         <span className="waitlist-tick"><Check size={18} strokeWidth={3} aria-hidden /></span>
         <div>
           <p className="waitlist-done-title">You’re on the list.</p>
-          <p className="waitlist-done-body">We’ll email you once, the day Runivo opens in your city.</p>
+          <p className="waitlist-done-body">Check your inbox for a confirmation. We’ll email you once more, the day Runivo opens in your city.</p>
         </div>
       </div>
     );

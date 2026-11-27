@@ -8,6 +8,7 @@ export default defineConfig({
     include: [
       'packages/shared/src/**/*.test.{ts,tsx}',
       'apps/mobile/src/**/*.test.{ts,tsx}',
+      'apps/web/lib/**/*.test.ts',
       // Pure helpers of edge functions (no Deno APIs).
       'supabase/functions/**/*.test.ts',
     ],

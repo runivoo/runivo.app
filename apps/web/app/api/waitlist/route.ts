@@ -1,5 +1,7 @@
 import { serviceClient, str, json } from '@/lib/adminServer';
+import { after } from 'next/server';
 import { makeLimiter, clientIp, EMAIL_RE } from '@/lib/rateLimit';
+import { sendWaitlistWelcome } from '@/lib/waitlistEmail';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,6 +10,10 @@ export const dynamic = 'force-dynamic';
  * join_waitlist, which validates again and ignores repeats. The answer is the
  * same for a new and a repeat email, so the form cannot be used to find out
  * who has signed up. Errors are never returned verbatim.
+ *
+ * A new address also gets a welcome email (lib/waitlistEmail.ts), sent after the
+ * response so the form is not slowed down. A repeat address gets nothing, so the
+ * form cannot be used to mail someone over and over.
  */
 
 // Per-IP limit: 6 sign-ups per 10 minutes per server instance.
@@ -43,7 +49,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
-    const { error } = await serviceClient().rpc('join_waitlist', { p_email: email, p_city: city, p_source: source });
+    const { data: isNew, error } = await serviceClient().rpc('join_waitlist', { p_email: email, p_city: city, p_source: source });
     if (error) {
       if (/rate_limited/.test(error.message)) {
         return json({ ok: false, error: 'We are getting a lot of sign-ups right now. Please try again in an hour.' }, 429);
@@ -54,6 +60,7 @@ export async function POST(req: Request): Promise<Response> {
       console.error('[waitlist]', error.message);
       return json({ ok: false, error: 'Something went wrong. Please try again.' }, 500);
     }
+    if (isNew === true) after(() => sendWaitlistWelcome(email, city));
   } catch (e) {
     console.error('[waitlist]', e);
     return json({ ok: false, error: 'Something went wrong. Please try again.' }, 500);
