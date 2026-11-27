@@ -153,7 +153,7 @@ Deno.serve(async (req) => {
         content: [
           {
             type:   'image',
-            source: { type: 'base64', media_type: mimeType, data: imageBase64 },
+            source: { type: 'base64', media_type: mimeType as 'image/jpeg' | 'image/png' | 'image/webp', data: imageBase64 },
           },
           {
             type: 'text',

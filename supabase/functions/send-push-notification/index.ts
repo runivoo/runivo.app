@@ -16,6 +16,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+// @ts-ignore esm.sh's @types/web-push has no default export, but the module itself does.
 import webpush from 'https://esm.sh/web-push@3.6.7';
 import { isServiceRoleRequest, isUuid } from '../_shared/auth.ts';
 

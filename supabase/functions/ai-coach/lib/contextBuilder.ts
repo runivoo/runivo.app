@@ -96,7 +96,8 @@ export async function buildUserContext(supabase: Db, userId: string): Promise<Us
     ? computeNutrition(
         nutritionProfileRes.data as NutritionProfileRow,
         (nutritionLogsRes.data ?? []) as NutritionLogRow[],
-        eventsRes.data as EventRow | null,
+        // PostgREST returns the joined event as one object; the client's types say array.
+        eventsRes.data as unknown as EventRow | null,
       )
     : null;
 

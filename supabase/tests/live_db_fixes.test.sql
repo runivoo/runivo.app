@@ -24,7 +24,9 @@ SELECT pg_temp.check(NOT has_table_privilege('anon', 'public.kudos', 'SELECT'), 
 -- M4: no SECURITY DEFINER function is callable without signing in (bar the landing-page count).
 SELECT pg_temp.check(count(*) = 0, 'anon can call no SECURITY DEFINER function')
 FROM pg_proc p WHERE p.pronamespace = 'public'::regnamespace AND p.prosecdef
-  AND p.proname <> 'city_runner_count' AND has_function_privilege('anon', p.oid, 'EXECUTE');
+  AND p.proname <> 'city_runner_count' AND has_function_privilege('anon', p.oid, 'EXECUTE')
+  -- PostGIS's own functions (e.g. st_estimatedextent) land in public on a real Supabase image.
+  AND NOT EXISTS (SELECT 1 FROM pg_depend d WHERE d.objid = p.oid AND d.deptype = 'e');
 
 -- B3: joining an open club makes you a member, never an owner or admin.
 SET LOCAL ROLE authenticated;

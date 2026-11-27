@@ -71,29 +71,37 @@ jobs:
         run: |
           for f in supabase/functions/*/index.ts; do
             echo "deno check $f"
-            deno check "$f"
+            deno check --node-modules-dir=none "$f"
           done
 
-  # Applies every migration to a real local Supabase and runs supabase/tests.
-  # First run on a runner may expose tests that assumed a hand-built database; keep
-  # it non-blocking until it has passed once, then remove continue-on-error.
+  # Applies every migration to a PostGIS Postgres (with a stand-in for Supabase's auth,
+  # storage and cron schemas, see supabase/tests/_supabase_base.sql) and runs supabase/tests.
+  # Needs no Supabase CLI. It passes all 57 tests, so it blocks the merge.
   sql:
     name: Database tests
     runs-on: ubuntu-latest
-    continue-on-error: true
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
-      - uses: supabase/setup-cli@v1
-        with:
-          version: latest
-      - name: Start local Supabase (applies all migrations)
-        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,mailpit,realtime,storage-api
       # Includes function_privileges.test.sql, which fails if a server-only function
       # becomes callable by clients.
       - name: Tests
         run: supabase/tests/run.sh
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
 
   # Scans the commits in a pull request. History before this was added is not rescanned
   # (an old service key lives there; it is handled by rotating it, not by this check).

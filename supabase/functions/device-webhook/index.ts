@@ -280,9 +280,12 @@ Deno.serve(async (req) => {
   // ── Normalise ──────────────────────────────────────────────────────────────
   let activities: NormalisedActivity[] = [];
   try {
-    if (provider === 'garmin') activities = normaliseGarmin(payload);
-    if (provider === 'coros')  activities = normaliseCoros(payload);
-    if (provider === 'polar')  activities = normalisePolar(payload);
+    // Widened: coros/polar already returned 501 above, so TypeScript has narrowed
+    // `provider` to 'garmin'. These stay ready for when their signatures exist.
+    const which: string = provider;
+    if (which === 'garmin') activities = normaliseGarmin(payload);
+    if (which === 'coros')  activities = normaliseCoros(payload);
+    if (which === 'polar')  activities = normalisePolar(payload);
   } catch (err) {
     console.error('Normalise error:', err);
     return new Response('Could not parse payload', { status: 422, headers: CORS });
@@ -304,7 +307,7 @@ Deno.serve(async (req) => {
   for (const activity of activities) {
     try {
       const match = matchConnection(connections ?? [], activity);
-      if (!match.ok) {
+      if (match.ok === false) {
         skipped.push({ externalId: activity.externalId, reason: match.reason });
         console.warn(`[device-webhook] ${provider} activity ${activity.externalId} skipped: ${match.reason}`);
         continue;

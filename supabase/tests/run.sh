@@ -19,6 +19,13 @@ PSQL="psql -X -q -v ON_ERROR_STOP=1"
 if [ -n "${DATABASE_URL:-}" ]; then
   TARGET="$DATABASE_URL"
 else
+  # Roles are cluster-wide, so the base dump cannot create them. Supabase has them already;
+  # a plain PostGIS Postgres (CI, a laptop) does not.
+  psql -X -q -d postgres -c "DO \$\$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='anon') THEN CREATE ROLE anon NOLOGIN; END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='authenticated') THEN CREATE ROLE authenticated NOLOGIN; END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='service_role') THEN CREATE ROLE service_role NOLOGIN BYPASSRLS; END IF;
+  END \$\$" >/dev/null 2>&1
   dropdb --if-exists "$DB" >/dev/null 2>&1; createdb "$DB" || exit 1
   $PSQL -d "$DB" -f supabase/tests/_supabase_base.sql >/dev/null 2>&1 || { echo "base failed"; exit 1; }
   for f in supabase/migrations/*.sql; do
