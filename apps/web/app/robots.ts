@@ -5,6 +5,6 @@ import type { MetadataRoute } from 'next';
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: '*', allow: '/', disallow: ['/admin', '/api/', '/invite', '/club/', '/r/', '/live', '/reset-password'] },
-    sitemap: 'https://runivo.in/sitemap.xml',
+    sitemap: 'https://www.runivo.in/sitemap.xml',
   };
 }

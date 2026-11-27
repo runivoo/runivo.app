@@ -17,7 +17,7 @@ const TITLE = 'Runivo — Run more.';
 const DESCRIPTION = 'A GPS running app with PaceX, an AI coach, and PACE rewards you can spend in the PACE Store. Join the waitlist.';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://runivo.in'),
+  metadataBase: new URL('https://www.runivo.in'),
   title: TITLE,
   description: DESCRIPTION,
   openGraph: {
