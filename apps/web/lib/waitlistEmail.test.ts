@@ -26,7 +26,7 @@ describe('renderWaitlistEmail', () => {
   it('is signed by Mehtab', () => {
     const m = renderWaitlistEmail(null);
     expect(m.text.trim().endsWith('Mehtab\nRunivo')).toBe(true);
-    expect(m.html).toContain('Mehtab<br>');
+    expect(m.html).toContain('Founder, Runivo');
   });
 
   it('carries the founder quote in both versions', () => {
@@ -35,14 +35,16 @@ describe('renderWaitlistEmail', () => {
     expect(m.html).toContain('Founder, Runivo');
   });
 
-  it('loads its images from runivo.in over https', () => {
+  it('loads its one image (the hex) from runivo.in over https', () => {
     const srcs = [...renderWaitlistEmail(null).html.matchAll(/src="([^"]+)"/g)].map(x => x[1]);
-    expect(srcs.length).toBe(2);
+    expect(srcs.length).toBe(1);
     for (const s of srcs) expect(s.startsWith('https://runivo.in/email/')).toBe(true);
   });
 
-  it('falls back to "your city" without one', () => {
-    expect(renderWaitlistEmail(null).text).toContain('in your city');
+  it('leaves the city out when there is none', () => {
+    const m = renderWaitlistEmail(null);
+    expect(m.text).toContain('Thanks for joining the Runivo waitlist. ');
+    expect(m.html).not.toContain('null');
   });
 
   it('escapes the city, which the visitor typed', () => {
