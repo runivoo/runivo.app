@@ -4,7 +4,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 import { appAlert } from '@mobile/shared/components/AppAlert';
-import { View, Text, Pressable, StyleSheet, ScrollView, Share } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ScrollView, Share, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme, Fonts, type AppColors } from '@theme';
 import { supabase } from '@shared/services/supabase';
@@ -13,6 +13,8 @@ interface Sponsored {
   id: string; brand: string; brand_color: string | null; title: string; description: string | null;
   metric: 'distance_km' | 'zones' | 'active_days'; target: number; ends_at: string;
   reward_title: string; reward_value: string; joined: boolean; progress: number; completed: boolean; code: string | null;
+  /** Banner or brand logo from Runivo Studio (https only). */
+  image_url?: string | null;
 }
 const UNIT = { distance_km: 'km', zones: 'zones', active_days: 'days' } as const;
 
@@ -46,7 +48,10 @@ export function SponsoredChallenges({ title = 'Brand challenges' }: { title?: st
           return (
             <View key={c.id} style={s.card}>
               <Text style={s.eyebrow}>Featured · {days} {days === 1 ? 'day' : 'days'} left</Text>
-              <Text style={s.brand}>{c.brand}</Text>
+              <View style={s.brandRow}>
+                {c.image_url?.startsWith('https://') && <Image source={{ uri: c.image_url }} style={s.logo} accessibilityIgnoresInvertColors />}
+                <Text style={s.brand}>{c.brand}</Text>
+              </View>
               <Text style={s.title} numberOfLines={2}>{c.title}</Text>
               <Text style={s.reward} numberOfLines={1}>Reward: {c.reward_value || c.reward_title}</Text>
               {c.joined && (
@@ -75,6 +80,8 @@ function mk(C: AppColors) {
     row: { gap: 10, paddingHorizontal: 18 },
     card: { width: 290, backgroundColor: C.alwaysDark, borderRadius: 26, padding: 18, gap: 6 },
     eyebrow: { fontFamily: Fonts.bold, fontSize: 12, color: C.lime },
+    brandRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    logo: { width: 24, height: 24, borderRadius: 12, backgroundColor: '#2A2B2E' },
     brand: { fontFamily: Fonts.medium, fontSize: 12.5, color: 'rgba(255,255,255,0.65)' },
     title: { fontFamily: Fonts.semiBold, fontSize: 20, lineHeight: 25, color: C.alwaysLight },
     reward: { fontFamily: Fonts.regular, fontSize: 13.5, color: 'rgba(255,255,255,0.8)' },

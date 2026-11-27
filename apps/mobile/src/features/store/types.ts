@@ -35,4 +35,6 @@ export interface Reward {
   /** This runner's code, once redeemed. */
   myCode?: string | null;
   howToUse?: string | null;
+  /** The reward's image, else its brand's logo (set in Runivo Studio). https only. */
+  imageUrl?: string | null;
 }

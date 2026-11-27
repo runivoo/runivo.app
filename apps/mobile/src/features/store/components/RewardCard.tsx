@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { useTheme, Fonts, type AppColors } from '@theme';
 import { Lock, Crown, Check } from '@mobile/shared/icons/lucideCompat';
 import type { Reward } from '../types';
@@ -30,7 +30,10 @@ export function RewardCard({ reward, onPress }: Props) {
       accessibilityRole="button"
       accessibilityLabel={`${reward.brand}: ${reward.title}, ${reward.paceCost} PACE${lock.label ? `, ${lock.label}` : ''}`}
     >
-      <Text style={s.eyebrow}>FEATURED{left}</Text>
+      <View style={s.topRow}>
+        <Text style={s.eyebrow}>FEATURED{left}</Text>
+        {reward.imageUrl && <Image source={{ uri: reward.imageUrl }} style={s.thumb} accessibilityIgnoresInvertColors />}
+      </View>
       <Text style={s.title} numberOfLines={2}>{reward.title}</Text>
       <Text style={s.sub} numberOfLines={1}>{reward.brand}{reward.description ? ` · ${reward.description}` : ''}</Text>
       {lock.blocked && (
@@ -57,6 +60,8 @@ function mkStyles(C: AppColors) {
   return StyleSheet.create({
     card:        { backgroundColor: C.alwaysDark, borderRadius: 28, padding: 18, gap: 8 },
     cardPressed: { transform: [{ scale: 0.99 }] },
+    topRow:      { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
+    thumb:       { width: 48, height: 48, borderRadius: 14, backgroundColor: '#2A2B2E' },
     eyebrow:     { fontFamily: Fonts.semiBold, fontSize: 13, color: C.lime },
     title:       { fontFamily: Fonts.medium, fontSize: 22, lineHeight: 27, color: C.alwaysLight },
     sub:         { fontFamily: Fonts.regular, fontSize: 14, color: '#C9CCC4' },

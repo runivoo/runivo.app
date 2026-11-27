@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { useTheme, Fonts, type AppColors } from '@theme';
 import { Coffee, Flag, Watch, Sneaker } from 'phosphor-react-native';
 import type { Reward } from '../types';
@@ -25,9 +25,13 @@ export function RewardTile({ reward, onPress }: Props) {
       accessibilityRole="button"
       accessibilityLabel={`${reward.title} from ${reward.brand}, ${reward.paceCost} PACE${lock.label ? `, ${lock.label}` : ''}`}
     >
-      <View style={[s.icon, { backgroundColor: muted ? C.bg : C.mint }]}>
-        <Icon size={20} color={muted ? C.t2 : C.green} weight="bold" />
-      </View>
+      {reward.imageUrl ? (
+        <Image source={{ uri: reward.imageUrl }} style={[s.icon, s.image, muted && { opacity: 0.5 }]} accessibilityIgnoresInvertColors />
+      ) : (
+        <View style={[s.icon, { backgroundColor: muted ? C.bg : C.mint }]}>
+          <Icon size={20} color={muted ? C.t2 : C.green} weight="bold" />
+        </View>
+      )}
       <Text style={s.title} numberOfLines={2}>{reward.title}</Text>
       {muted || lock.kind === 'redeemed' ? (
         <View style={s.lockPill}><Text style={s.lockTxt} numberOfLines={1}>{lock.label}</Text></View>
@@ -43,6 +47,7 @@ function mkStyles(C: AppColors) {
     card:        { backgroundColor: C.card, borderRadius: 24, padding: 14, gap: 6, flex: 1, minHeight: 138 },
     cardPressed: { transform: [{ scale: 0.98 }] },
     icon:        { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
+    image:       { backgroundColor: C.bg },
     title:       { fontFamily: Fonts.medium, fontSize: 15, lineHeight: 19, color: C.t1 },
     partner:     { fontFamily: Fonts.regular, fontSize: 13, color: C.t2 },
     lockPill:    { alignSelf: 'flex-start', height: 26, paddingHorizontal: 10, borderRadius: 13, backgroundColor: C.lavender, justifyContent: 'center', maxWidth: '100%' },

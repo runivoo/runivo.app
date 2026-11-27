@@ -6,6 +6,8 @@ export type Discipline =
 
 export interface RunEvent {
   id: string;
+  /** Cover image set in Runivo Studio (https only). */
+  imageUrl?: string;
   title: string;
   description: string;
   category: string;

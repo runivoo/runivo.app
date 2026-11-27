@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Pressable, Linking } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Linking, Image } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { ExternalLink } from '@mobile/shared/icons/lucideCompat';
 import type { RunEvent } from '../types';
@@ -73,10 +73,14 @@ export function EventCard({ event, joined, onJoin, onPress, featured }: Props) {
     <Pressable style={[s.card, featured && { paddingTop: 0, overflow: 'hidden' }]} onPress={onPress}>
       {featured && (
         <View style={s.mapWrap}>
-          <Svg width="100%" height={MAP_H} viewBox={`0 0 ${MAP_W} ${MAP_H}`} preserveAspectRatio="xMidYMid slice">
-            <CityBackdrop width={MAP_W} height={MAP_H} seed={event.id} />
-            <Path d="M30 14C82 -6 168 0 196 26L210 104C182 128 98 132 46 112Z" fill="none" stroke={C.red} strokeWidth={4} strokeLinejoin="round" />
-          </Svg>
+          {event.imageUrl ? (
+            <Image source={{ uri: event.imageUrl }} style={{ width: '100%', height: MAP_H }} resizeMode="cover" accessibilityIgnoresInvertColors />
+          ) : (
+            <Svg width="100%" height={MAP_H} viewBox={`0 0 ${MAP_W} ${MAP_H}`} preserveAspectRatio="xMidYMid slice">
+              <CityBackdrop width={MAP_W} height={MAP_H} seed={event.id} />
+              <Path d="M30 14C82 -6 168 0 196 26L210 104C182 128 98 132 46 112Z" fill="none" stroke={C.red} strokeWidth={4} strokeLinejoin="round" />
+            </Svg>
+          )}
           <View style={s.mapChip}><Text style={s.mapChipText}>Hosted · In-app RSVP</Text></View>
         </View>
       )}

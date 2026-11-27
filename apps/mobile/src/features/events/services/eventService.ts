@@ -16,6 +16,7 @@ export interface EventsData {
 function toRunEvent(e: Record<string, unknown>): RunEvent {
   return {
     id: e.id as string,
+    imageUrl: typeof e.image_url === 'string' && e.image_url.startsWith('https://') ? e.image_url : undefined,
     title: e.title as string,
     description: (e.description as string) ?? '',
     category: e.event_type as string,

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { appAlert } from '@mobile/shared/components/AppAlert';
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView, Share, Linking, Platform } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView, Share, Linking, Platform, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { CaretLeft, SealCheck, Coffee, Flag as FlagIcon, Sneaker } from 'phosphor-react-native';
@@ -158,11 +158,15 @@ export default function RewardDetailScreen() {
           </View>
         </View>
         <View style={s.heroMid}>
-          <View style={s.heroIcon}>
-            {reward.category === 'nutrition' ? <Coffee size={30} color="#4E7F1F" weight="bold" />
-              : reward.category === 'events' ? <FlagIcon size={30} color="#4E7F1F" weight="bold" />
-              : <Sneaker size={30} color="#4E7F1F" weight="bold" />}
-          </View>
+          {reward.imageUrl ? (
+            <Image source={{ uri: reward.imageUrl }} style={s.heroIcon} accessibilityIgnoresInvertColors />
+          ) : (
+            <View style={s.heroIcon}>
+              {reward.category === 'nutrition' ? <Coffee size={30} color="#4E7F1F" weight="bold" />
+                : reward.category === 'events' ? <FlagIcon size={30} color="#4E7F1F" weight="bold" />
+                : <Sneaker size={30} color="#4E7F1F" weight="bold" />}
+            </View>
+          )}
           <Text style={s.heroValue} numberOfLines={2}>{reward.title}</Text>
           <Text style={s.brand}>{reward.brand}{reward.valueLabel ? ` · ${reward.valueLabel}` : ''}</Text>
         </View>

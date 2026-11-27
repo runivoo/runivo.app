@@ -17,6 +17,7 @@ function expiresLabelFor(iso: unknown): string | undefined {
 function mapDbRowToReward(row: Record<string, unknown>): Reward {
   return {
     id:           String(row.id),
+    imageUrl:     typeof row.image_url === 'string' && row.image_url.startsWith('https://') ? row.image_url : null,
     brand:        String(row.brand),
     title:        String(row.title),
     description:  String(row.description),
