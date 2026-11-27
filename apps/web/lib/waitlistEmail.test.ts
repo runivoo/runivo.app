@@ -5,7 +5,7 @@ const ENV = { ...process.env };
 
 beforeEach(() => {
   process.env.RESEND_API_KEY = 're_test_key';
-  process.env.WAITLIST_FROM = 'Runivo <hello@runivo.in>';
+  process.env.WAITLIST_FROM = 'Mehtab from Runivo <mehtab@runivo.in>';
   delete process.env.WAITLIST_REPLY_TO;
   vi.spyOn(console, 'error').mockImplementation(() => {});
 });
@@ -21,6 +21,12 @@ describe('renderWaitlistEmail', () => {
     const m = renderWaitlistEmail('Pune');
     expect(m.text).toContain('in Pune');
     expect(m.html).toContain('in Pune');
+  });
+
+  it('is signed by Mehtab', () => {
+    const m = renderWaitlistEmail(null);
+    expect(m.text.trim().endsWith('Mehtab\nRunivo')).toBe(true);
+    expect(m.html).toContain('Mehtab<br>');
   });
 
   it('falls back to "your city" without one', () => {
@@ -59,7 +65,7 @@ describe('sendWaitlistWelcome', () => {
     expect(headers.Authorization).toBe('Bearer re_test_key');
     expect(headers['Idempotency-Key']).toMatch(/^waitlist-welcome-[0-9a-f]{32}$/);
     const body = JSON.parse(init.body as string);
-    expect(body.from).toBe('Runivo <hello@runivo.in>');
+    expect(body.from).toBe('Mehtab from Runivo <mehtab@runivo.in>');
     expect(body.to).toEqual(['runner@example.com']);
     expect(body.subject).toContain('waitlist');
     expect(body.html).toContain('Pune');

@@ -7,7 +7,7 @@ import { SITE_NAME, SUPPORT_EMAIL } from './site';
  *
  * Env (Vercel → Project Settings → Environment Variables):
  *   RESEND_API_KEY   a Resend API key with "Sending access"
- *   WAITLIST_FROM    e.g. 'Runivo <hello@runivo.in>'; the domain must be verified in Resend
+ *   WAITLIST_FROM    e.g. 'Mehtab from Runivo <mehtab@runivo.in>'; the domain must be verified in Resend
  *   WAITLIST_REPLY_TO  optional; replies go here (defaults to SUPPORT_EMAIL)
  *
  * Without the first two it does nothing, so the waitlist keeps working while
@@ -30,6 +30,7 @@ export function renderWaitlistEmail(city: string | null): { subject: string; htm
     ``,
     `If this wasn't you, ignore this email and you won't hear from us again. Questions? Just reply.`,
     ``,
+    `Mehtab`,
     `${SITE_NAME}`,
   ].join('\n');
 
@@ -43,6 +44,7 @@ export function renderWaitlistEmail(city: string | null): { subject: string; htm
         <h1 style="margin:0 0 16px;font-size:24px;line-height:1.25;">You're on the list.</h1>
         <p style="margin:0 0 16px;font-size:16px;line-height:1.55;">Thanks for joining the ${escapeHtml(SITE_NAME)} waitlist${escapeHtml(where)}. We'll email you once more, the day ${escapeHtml(SITE_NAME)} opens${city ? ` in ${escapeHtml(city)}` : ' in your city'}. Nothing in between.</p>
         <p style="margin:0;font-size:13px;line-height:1.5;color:#5f635d;">If this wasn't you, ignore this email and you won't hear from us again. Questions? Just reply.</p>
+        <p style="margin:24px 0 0;font-size:16px;line-height:1.5;">Mehtab<br><span style="color:#5f635d;font-size:14px;">${escapeHtml(SITE_NAME)}</span></p>
       </td></tr>
     </table>
   </td></tr>
