@@ -11,7 +11,7 @@ export function Footer() {
           <div style={{ maxWidth: 300 }}>
             <Logo size={24} />
             <p className="muted" style={{ fontSize: 15, marginTop: 14 }}>
-              Run smarter. Track every run, train with PaceX and earn PACE.
+              Run more. Track every run, train with PaceX and earn PACE.
             </p>
           </div>
           <div style={{ display: 'flex', gap: 64, flexWrap: 'wrap' }}>

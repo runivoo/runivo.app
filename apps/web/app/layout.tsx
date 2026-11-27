@@ -13,7 +13,7 @@ const outfit = Outfit({
   display: 'swap',
 });
 
-const TITLE = 'Runivo — Run smarter';
+const TITLE = 'Runivo — Run more.';
 const DESCRIPTION = 'A GPS running app with PaceX, an AI coach, and PACE rewards you can spend in the PACE Store. Join the waitlist.';
 
 export const metadata: Metadata = {

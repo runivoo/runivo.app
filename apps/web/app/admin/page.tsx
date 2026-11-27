@@ -5,8 +5,13 @@ export const dynamic = 'force-dynamic';
  * Admin CMS — /admin
  *
  * Access: profiles.subscription_tier = 'admin'
- * To grant access, run in Supabase SQL editor:
- *   update profiles set subscription_tier = 'admin' where id = '<your-user-id>';
+ * To grant access, run in Supabase SQL editor (protect_profile_columns resets the
+ * tier on a plain update, so switch it off for that one statement):
+ *   begin;
+ *   alter table public.profiles disable trigger profiles_protect_columns;
+ *   update public.profiles set subscription_tier = 'admin' where id = '<user-id>';
+ *   alter table public.profiles enable trigger profiles_protect_columns;
+ *   commit;
  *
  * Promotions table — run once in Supabase SQL editor:
  *   create table if not exists promotions (
@@ -878,9 +883,8 @@ export default function AdminPage() {
           <p className="text-sm text-gray-500">
             This page is for Runivo admins only. Your account doesn&apos;t have admin access.
           </p>
-          <p className="text-xs text-gray-400 mt-4 text-left">
-            To grant access, run in the Supabase SQL editor:<br />
-            <code className="text-gray-600 break-words">update profiles set subscription_tier = &apos;admin&apos; where id = &apos;&lt;your-user-id&gt;&apos;;</code>
+          <p className="text-xs text-gray-400 mt-4">
+            Ask the Runivo team to grant your account admin access.
           </p>
           <div className="flex flex-col sm:flex-row gap-2 mt-6">
             <button onClick={() => router.push('/')} className={`${primaryBtn} flex-1`}>Back to home</button>
