@@ -113,12 +113,14 @@ describe('sync — postRunSync ordering', () => {
     // Make getRuns throw so pushUnsyncedRuns fails
     vi.mocked(store.getRuns).mockRejectedValueOnce(new Error('network error'));
     // Ensure navigator.onLine is true so we get 'error' not 'offline'
-    Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
+    // (Node 20 has no global navigator at all; Node 21+ does, so stub rather than patch it.)
+    vi.stubGlobal('navigator', { onLine: true });
 
     const captured: string[] = [];
     const unsub = onSyncStatusChange(s => captured.push(s));
     await postRunSync();
     unsub();
+    vi.unstubAllGlobals();
 
     expect(captured).toContain('error');
   });
