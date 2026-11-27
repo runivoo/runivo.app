@@ -17,4 +17,4 @@ export const SITE_NAME = 'Runivo';
  * Runivo's Instagram page, e.g. 'https://instagram.com/<handle>'. The footer shows the
  * link only when this is set, so nothing points at an account that is not ours.
  */
-export const INSTAGRAM_URL = '';
+export const INSTAGRAM_URL = 'https://www.instagram.com/runivo.app/';
