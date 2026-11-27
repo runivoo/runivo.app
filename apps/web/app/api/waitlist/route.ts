@@ -7,9 +7,12 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Public waitlist sign-up (runivo.in). No sign-in: it adds one row through
- * join_waitlist, which validates again and ignores repeats. The answer is the
- * same for a new and a repeat email, so the form cannot be used to find out
- * who has signed up. Errors are never returned verbatim.
+ * join_waitlist, which validates again and never saves an address twice (the
+ * email column is unique). A repeat address is answered with alreadyJoined: true
+ * so the form can say "you're already on the waitlist". That does tell a visitor
+ * whether a given address is on the list; the per-IP limit below and the hourly
+ * cap in join_waitlist keep it from being used to scan for addresses. Errors are
+ * never returned verbatim.
  *
  * A new address also gets a welcome email (lib/waitlistEmail.ts), sent after the
  * response so the form is not slowed down. A repeat address gets nothing, so the
@@ -60,6 +63,7 @@ export async function POST(req: Request): Promise<Response> {
       console.error('[waitlist]', error.message);
       return json({ ok: false, error: 'Something went wrong. Please try again.' }, 500);
     }
+    if (isNew === false) return json({ ok: true, alreadyJoined: true });
     if (isNew === true) after(() => sendWaitlistWelcome(email, city));
   } catch (e) {
     console.error('[waitlist]', e);

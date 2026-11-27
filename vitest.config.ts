@@ -9,6 +9,7 @@ export default defineConfig({
       'packages/shared/src/**/*.test.{ts,tsx}',
       'apps/mobile/src/**/*.test.{ts,tsx}',
       'apps/web/lib/**/*.test.ts',
+      'apps/web/app/**/*.test.ts',
       // Pure helpers of edge functions (no Deno APIs).
       'supabase/functions/**/*.test.ts',
     ],
@@ -24,6 +25,7 @@ export default defineConfig({
     // '@theme' (bare) must be listed before '@theme/' so the exact-match barrel
     // import isn't swallowed by the directory alias.
     alias: [
+      { find: /^@\/lib\//,        replacement: path.resolve(__dirname, 'apps/web/lib') + '/' },
       { find: /^@shared\//,        replacement: path.resolve(__dirname, 'packages/shared/src') + '/' },
       { find: /^@features\//,      replacement: path.resolve(__dirname, 'apps/mobile/src/features') + '/' },
       { find: /^@navigation\//,    replacement: path.resolve(__dirname, 'apps/mobile/src/navigation') + '/' },

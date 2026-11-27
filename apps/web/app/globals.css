@@ -252,6 +252,12 @@ button, input, select, textarea { font-family: inherit; }
 .waitlist-tick { flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff; }
 .waitlist-done-title { font-weight: 600; font-size: 17px; letter-spacing: -0.01em; color: var(--t1); }
 .waitlist-done-body { font-size: 15px; color: var(--t2); margin-top: 2px; }
+.waitlist-dialog { margin: auto; width: min(92vw, 380px); padding: 28px 24px 24px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg); color: var(--t1); text-align: center; box-shadow: 0 24px 60px rgba(23, 24, 26, .22); }
+.waitlist-dialog::backdrop { background: rgba(23, 24, 26, .45); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+.waitlist-dialog .waitlist-tick { margin: 0 auto 14px; width: 44px; height: 44px; }
+.waitlist-dialog .waitlist-done-title { font-size: 20px; margin: 0; }
+.waitlist-dialog .waitlist-done-body { margin: 8px 0 20px; }
+.waitlist-dialog .btn { width: 100%; }
 
 /* Phone menu: the text links are hidden under 720px, so a button opens them. */
 .menu-btn {
