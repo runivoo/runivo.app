@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Calendar, Plus, Trash2, Pencil } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { RemoveDialog } from '../RemoveDialog';
+import { ImageField } from '../ImageField';
 import { inputClass, labelClass, ErrorNote, FormCard, Spinner, Badge, Button, IconButton, SectionHeader, TableCard, EmptyState, StatusToggle } from '../ui';
 
 interface EventRow {
@@ -23,6 +24,7 @@ interface EventRow {
   discipline?: string | null;
   lat?: number | null;
   lng?: number | null;
+  image_url?: string | null;
   created_at: string;
 }
 
@@ -55,7 +57,7 @@ const EMPTY_EVENT = {
   title: '', event_type: 'community-run', starts_at: '', ends_at: '',
   location_name: '', distance_km: '', description: '', organizer: '',
   source: 'hosted' as 'hosted' | 'curated',
-  registration_url: '', source_name: '', discipline: '', lat: '', lng: '',
+  registration_url: '', source_name: '', discipline: '', lat: '', lng: '', image_url: '',
 };
 
 export default function EventsSection() {
@@ -107,6 +109,7 @@ export default function EventsSection() {
       discipline: e.discipline ?? '',
       lat: e.lat != null ? String(e.lat) : '',
       lng: e.lng != null ? String(e.lng) : '',
+      image_url: e.image_url ?? '',
     });
     setEditId(e.id);
     setError('');
@@ -140,6 +143,7 @@ export default function EventsSection() {
       discipline:        form.discipline || null,
       lat:               form.lat ? parseFloat(form.lat) : null,
       lng:               form.lng ? parseFloat(form.lng) : null,
+      image_url:         form.image_url || null,
     };
     const { error: err } = editId
       ? await supabase.from('events').update(payload).eq('id', editId)
@@ -193,6 +197,8 @@ export default function EventsSection() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <ImageField label="Cover image" kind="event" value={form.image_url} onChange={v => upd('image_url', v)}
+                hint="Shown on the event in the app." />
               <div className="sm:col-span-2">
                 <label htmlFor="adm-f1" className={labelClass}>Event title *</label>
                 <input id="adm-f1" type="text" value={form.title} onChange={e => upd('title', e.target.value)}

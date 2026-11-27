@@ -28,6 +28,7 @@ import ModerationSection from './sections/ModerationSection';
 import RacesSection from './sections/RacesSection';
 import PartnersSection from './sections/PartnersSection';
 import StoreSection from './sections/StoreSection';
+import ChallengesSection from './sections/ChallengesSection';
 import ReportsSection from './sections/ReportsSection';
 import CampaignsSection from './sections/CampaignsSection';
 import EventsSection from './sections/EventsSection';
@@ -42,6 +43,7 @@ const SECTIONS: Record<AdminTab, () => React.ReactNode> = {
   races:      () => <RacesSection />,
   partners:   () => <PartnersSection />,
   store:      () => <StoreSection />,
+  challenges: () => <ChallengesSection />,
   reports:    () => <ReportsSection />,
   campaigns:  () => <CampaignsSection />,
   events:     () => <EventsSection />,

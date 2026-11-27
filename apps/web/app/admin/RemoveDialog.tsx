@@ -12,7 +12,7 @@ import { Button, IconButton, Spinner, inputClass } from './ui';
  * server enforces the same rules, so this is guidance, not the only guard.
  */
 
-export type RemoveKind = 'reward' | 'event' | 'partner';
+export type RemoveKind = 'reward' | 'event' | 'partner' | 'challenge';
 
 interface Impact {
   label: string;
@@ -23,13 +23,14 @@ interface Impact {
   safer: { action: 'hide' | 'end'; label: string; description: string } | null;
 }
 
-const NOUN: Record<RemoveKind, string> = { reward: 'reward', event: 'event', partner: 'brand' };
+const NOUN: Record<RemoveKind, string> = { reward: 'reward', event: 'event', partner: 'brand', challenge: 'challenge' };
 
 // What each choice calls. Kept here so every section removes things the same way.
 const ACTIONS: Record<RemoveKind, { safer?: { path: (id: string) => string; body: object }; del?: (id: string) => string }> = {
   reward:  { safer: { path: id => `/rewards/${id}`, body: { status: 'hidden' } }, del: id => `/rewards/${id}` },
   event:   { safer: { path: id => `/events/${id}`, body: { is_active: false } }, del: id => `/events/${id}` },
   partner: { safer: { path: id => `/partners/${id}`, body: { status: 'ended' } } },
+  challenge: { safer: { path: id => `/challenges/${id}`, body: { status: 'ended' } }, del: id => `/challenges/${id}` },
 };
 
 export function RemoveDialog({ kind, id, name, onClose, onDone }: {

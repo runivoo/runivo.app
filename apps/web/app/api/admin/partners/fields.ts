@@ -1,4 +1,4 @@
-import { str, num, list, oneOf } from '@/lib/adminServer';
+import { str, num, list, oneOf, httpsUrl } from '@/lib/adminServer';
 
 export const PARTNER_CATEGORIES = ['shoes', 'apparel', 'gear', 'nutrition', 'cafe', 'physio', 'races', 'gym', 'insurance', 'tech', 'other'] as const;
 export const PARTNER_STATUSES = ['applied', 'active', 'paused', 'ended', 'rejected'] as const;
@@ -7,6 +7,7 @@ export const BILLING_MODELS = ['free_listing', 'cost_per_redemption'] as const;
 export function partnerPayload(b: Record<string, unknown>) {
   const billing = oneOf(b.billing_model, BILLING_MODELS, 'free_listing');
   return {
+    logo_url: httpsUrl(b.logo_url),
     name:               str(b.name, 120),
     category:           oneOf(b.category, PARTNER_CATEGORIES, 'other'),
     contact_name:       str(b.contact_name, 120),

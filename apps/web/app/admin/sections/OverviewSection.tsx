@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
 import { ErrorNote, Spinner, Button, SectionHeader } from '../ui';
 
@@ -23,6 +23,7 @@ interface Overview {
     available: boolean; reason?: string; capped: boolean;
     sent: number; delivered: number; opened: number; clicked: number; bounced: number; complained: number; other: number;
   };
+  lowCodes?: { id: string; title: string; brand: string; left: number }[];
 }
 
 const n = (v: number) => v.toLocaleString('en-IN');
@@ -54,6 +55,22 @@ export default function OverviewSection() {
 
       {loading && !data ? <Spinner /> : data && (
         <div className="space-y-6">
+          {data.lowCodes && data.lowCodes.length > 0 && (
+            <div role="status" className="rounded-2xl border border-amber-200 bg-amber-50 p-4 flex gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" aria-hidden />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-900">Rewards running out of codes</p>
+                <ul className="mt-1 space-y-0.5">
+                  {data.lowCodes.map(r => (
+                    <li key={r.id} className="text-sm text-gray-700">
+                      {r.brand} · {r.title}: <span className="font-semibold">{r.left === 0 ? 'none left' : `${r.left} left`}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs text-gray-500 mt-1.5">Upload more codes in PACE Store, or runners will see it as sold out.</p>
+              </div>
+            </div>
+          )}
           <Group title="Waitlist">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               <Stat label="People waiting" value={n(data.waitlist.total)} />

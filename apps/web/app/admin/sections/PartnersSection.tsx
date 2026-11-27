@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Plus, Pencil, Handshake, Ban } from 'lucide-react';
 import { RemoveDialog } from '../RemoveDialog';
+import { ImageField } from '../ImageField';
 import { adminFetch } from '@/lib/adminApi';
 import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, Button, IconButton, SectionHeader, TableCard, EmptyState } from '../ui';
 
@@ -20,6 +21,7 @@ export interface PartnerRow {
   billing_starts_on: string | null;
   status: 'applied' | 'active' | 'paused' | 'ended' | 'rejected';
   notes: string | null;
+  logo_url?: string | null;
   created_at: string;
   website?: string | null;
   offer?: string | null;
@@ -42,7 +44,7 @@ const STATUS_TONE: Record<PartnerRow['status'], 'green' | 'blue' | 'orange' | 'g
 const EMPTY = {
   name: '', category: 'shoes', contact_name: '', contact_email: '', cities: '', countries: 'IN',
   billing_model: 'free_listing', fee_per_redemption: '1.00', fee_currency: 'USD', billing_starts_on: '',
-  status: 'applied', notes: '',
+  status: 'applied', notes: '', logo_url: '',
 };
 
 export default function PartnersSection() {
@@ -73,6 +75,7 @@ export default function PartnersSection() {
       cities: (r.cities ?? []).join(', '), countries: (r.countries ?? []).join(', '),
       billing_model: r.billing_model, fee_per_redemption: String(r.fee_per_redemption ?? 0), fee_currency: r.fee_currency,
       billing_starts_on: r.billing_starts_on ?? '', status: r.status, notes: r.notes ?? '',
+      logo_url: r.logo_url ?? '',
     });
     setEditId(r.id); setError(''); setShowForm(true);
   };
@@ -155,6 +158,8 @@ export default function PartnersSection() {
                 {STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
             </Field>
+            <ImageField label="Logo" kind="partner" aspect="square" value={form.logo_url} onChange={v => upd('logo_url', v)}
+              hint="Square works best. Used on this brand's rewards and challenges that have no image of their own." />
             <Field label="Notes" hint="Agreed terms, review notes" wide>
               <textarea className={`${inputClass} resize-none`} rows={3} value={form.notes} onChange={e => upd('notes', e.target.value)} maxLength={2000}
                 placeholder="Offer, stock, dates, cities, how codes work. Review: fits runners? at least 15% off or a free item? can honour codes?" />

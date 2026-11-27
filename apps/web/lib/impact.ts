@@ -7,8 +7,8 @@ import { serviceClient } from './adminServer';
  * dialog can't be bypassed by calling the API directly.
  */
 
-export type ImpactKind = 'reward' | 'event' | 'partner';
-export const IMPACT_KINDS: readonly ImpactKind[] = ['reward', 'event', 'partner'];
+export type ImpactKind = 'reward' | 'event' | 'partner' | 'challenge';
+export const IMPACT_KINDS: readonly ImpactKind[] = ['reward', 'event', 'partner', 'challenge'];
 
 export interface Impact {
   kind: ImpactKind;
@@ -68,6 +68,16 @@ export async function getImpact(kind: ImpactKind, id: string): Promise<Impact> {
     if (claimed) effects.push({ text: `${plural(claimed, 'runner keeps', 'runners keep')} the codes they already claimed.`, loss: false });
     if (c.status !== 'ended') {
       safer = { action: 'end', label: 'End the partnership', description: 'Every offer from this brand leaves the app at once. Their history stays; you can reactivate them.' };
+    }
+  }
+
+  if (kind === 'challenge') {
+    const joined = n(c.joined), completed = n(c.completed), won = n(c.codes_won);
+    if (joined) blockers.push(`${plural(joined, 'runner has', 'runners have')} joined, ${completed.toLocaleString('en-IN')} finished.`);
+    if (won) effects.push({ text: `${plural(won, 'runner keeps', 'runners keep')} the code they already won.`, loss: false });
+    if (joined) effects.push({ text: 'It leaves the app; progress so far is kept.', loss: false });
+    if (c.status !== 'ended') {
+      safer = { action: 'end', label: 'End it early', description: 'It stops showing and nobody new can join or finish. Codes already won stay valid.' };
     }
   }
 

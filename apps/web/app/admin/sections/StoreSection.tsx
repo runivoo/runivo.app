@@ -4,11 +4,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { Plus, Trash2, Pencil, ShoppingBag, ChevronUp, ChevronDown, Upload, Crown, Lock } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
 import { RemoveDialog } from '../RemoveDialog';
+import { ImageField } from '../ImageField';
 import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, toLocalInput, fromLocalInput, Button, IconButton, SectionHeader, TableCard } from '../ui';
 import type { PartnerRow } from './PartnersSection';
 
 interface StoreRow {
   id: string;
+  image_url?: string | null;
   partner_id: string | null;
   brand: string;
   brand_initial: string;
@@ -41,7 +43,7 @@ const EMPTY = {
   category: 'gear', tier: 'entry', status: 'coming_soon',
   pace_cost: '', sort_order: '0', plus_only: false, min_rank: '',
   countries: '', cities: '', starts_at: '', expires_at: '',
-  code_mode: 'pool', static_code: '', stock: '',
+  code_mode: 'pool', static_code: '', stock: '', image_url: '',
 };
 
 const STATUS_TONE: Record<StoreRow['status'], 'green' | 'blue' | 'orange' | 'gray'> = {
@@ -105,6 +107,7 @@ export default function StoreSection() {
       countries: (r.countries ?? []).join(', '), cities: (r.cities ?? []).join(', '),
       starts_at: toLocalInput(r.starts_at), expires_at: toLocalInput(r.expires_at),
       code_mode: r.code_mode, static_code: r.static_code ?? '', stock: r.stock == null ? '' : String(r.stock),
+      image_url: r.image_url ?? '',
     });
     setEditId(r.id); setError(''); setShowForm(true); setCodesFor(null);
   };
@@ -205,6 +208,8 @@ export default function StoreSection() {
               <div className="flex-1"><Field label="Brand colour"><input className={inputClass} value={form.brand_color} onChange={e => upd('brand_color', e.target.value)} maxLength={7} placeholder="#0084D6" /></Field></div>
             </div>
             <Field label="Reward title *" wide><input className={inputClass} value={form.title} onChange={e => upd('title', e.target.value)} maxLength={100} placeholder="e.g. 20% off Brooks Running" /></Field>
+            <ImageField label="Reward image" kind="reward" value={form.image_url} onChange={v => upd('image_url', v)}
+              hint="Shown on the reward card in the app. Leave empty to use the brand's logo." />
             <Field label="Description *" wide><textarea className={`${inputClass} resize-none`} rows={2} value={form.description} onChange={e => upd('description', e.target.value)} maxLength={400} /></Field>
             <Field label="Value label *"><input className={inputClass} value={form.value_label} onChange={e => upd('value_label', e.target.value)} maxLength={30} placeholder="20% off" /></Field>
             <Field label="How to use" hint="Shown with the code"><input className={inputClass} value={form.how_to_use} onChange={e => upd('how_to_use', e.target.value)} maxLength={400} placeholder="Enter at checkout on brooksrunning.co.in" /></Field>

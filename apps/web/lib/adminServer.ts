@@ -104,6 +104,11 @@ export function list(v: unknown, max = 50): string[] | null {
   return out.length ? out : null;
 }
 
+/** An https URL (an uploaded image), or null. Anything else is dropped. */
+export function httpsUrl(v: unknown): string | null {
+  return typeof v === 'string' && /^https:\/\/[^\s"'<>]+$/.test(v.trim()) ? v.trim().slice(0, 500) : null;
+}
+
 export function isoDate(v: unknown): string | null {
   if (typeof v !== 'string' || !v.trim()) return null;
   const d = new Date(v);

@@ -1,4 +1,4 @@
-import { str, num, list, isoDate, oneOf } from '@/lib/adminServer';
+import { str, num, list, isoDate, oneOf, httpsUrl } from '@/lib/adminServer';
 
 export const REWARD_STATUSES = ['available', 'coming_soon', 'sold_out', 'hidden'] as const;
 export const REWARD_TIERS = ['entry', 'mid', 'premium'] as const;
@@ -20,6 +20,7 @@ export function rewardPayload(b: Record<string, unknown>) {
     description:   str(b.description, 400),
     value_label:   str(b.value_label, 30),
     how_to_use:    str(b.how_to_use, 400),
+    image_url:     httpsUrl(b.image_url),
     category:      oneOf(b.category, REWARD_CATEGORIES, 'gear'),
     tier:          oneOf(b.tier, REWARD_TIERS, 'entry'),
     status:        oneOf(b.status, REWARD_STATUSES, 'coming_soon'),
