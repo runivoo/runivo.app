@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Logo } from './Logo';
 import { GetAppLink } from './GetAppLink';
-import { SUPPORT_EMAIL } from '@/lib/site';
+import { INSTAGRAM_URL, SUPPORT_EMAIL } from '@/lib/site';
 
 export function Footer() {
   return (
@@ -11,7 +11,7 @@ export function Footer() {
           <div style={{ maxWidth: 300 }}>
             <Logo size={24} />
             <p className="muted" style={{ fontSize: 15, marginTop: 14 }}>
-              Run smarter. AI coaching, live crews and your city.
+              Run smarter. Track every run, train with PaceX and earn PACE.
             </p>
           </div>
           <div style={{ display: 'flex', gap: 64, flexWrap: 'wrap' }}>
@@ -29,6 +29,7 @@ export function Footer() {
               <h4>Company</h4>
               <Link className="fl" href="/partners">Partners</Link>
               <Link className="fl" href="/support">Support</Link>
+              {INSTAGRAM_URL && <a className="fl" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Instagram</a>}
             </div>
           </div>
         </div>

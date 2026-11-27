@@ -1,0 +1,36 @@
+/* Home page only. Uses the tokens from globals.css; adds nothing to the design language. */
+
+/* "And it is fun": three plain columns with a hairline on top, no cards. */
+.extras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.extra { border-top: 1px solid var(--border); padding-top: 22px; }
+.extra h3 { font-size: 20px; letter-spacing: -0.03em; margin-bottom: 8px; }
+.extra p { color: var(--t2); font-size: 15.5px; line-height: 1.6; }
+@media (max-width: 920px) { .extras { grid-template-columns: 1fr; gap: 28px; } }
+
+/* FAQ: heading on the left, answers on the right; stacked on phones. */
+.faq-wrap { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 56px; align-items: start; }
+@media (max-width: 920px) { .faq-wrap { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+
+.faq { border-top: 1px solid var(--border); }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-item summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 20px 2px; font-size: 18px; font-weight: 500; letter-spacing: -0.02em; color: var(--t1); min-height: 44px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: ''; flex: none; width: 10px; height: 10px; margin-right: 4px;
+  border-right: 2px solid var(--t3); border-bottom: 2px solid var(--t3);
+  transform: rotate(45deg) translateY(-2px); transition: transform .2s ease;
+}
+.faq-item[open] summary::after { transform: rotate(-135deg) translateY(-2px); border-color: var(--accent); }
+.faq-item p { color: var(--t2); font-size: 16px; line-height: 1.7; padding: 0 2px 22px; max-width: 620px; }
+@media (prefers-reduced-motion: reduce) { .faq-item summary::after { transition: none; } }
+
+/* Sports: plain outlined pills. */
+.sports { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
+.sports li {
+  padding: 11px 20px; border-radius: 999px; background: var(--card); border: 1px solid var(--border);
+  font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--t1);
+}
+.sports li.sports-alt { background: transparent; border-style: dashed; color: var(--t2); }

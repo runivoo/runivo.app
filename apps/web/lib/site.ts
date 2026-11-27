@@ -12,3 +12,9 @@ export const APP_STORE_URL = 'https://apps.apple.com';
 export const WAITLIST_HREF = '/#waitlist';
 export const SUPPORT_EMAIL = 'runivo.official@gmail.com';
 export const SITE_NAME = 'Runivo';
+
+/**
+ * Runivo's Instagram page, e.g. 'https://instagram.com/<handle>'. The footer shows the
+ * link only when this is set, so nothing points at an account that is not ours.
+ */
+export const INSTAGRAM_URL = '';
