@@ -6,7 +6,7 @@ import Svg, { Path } from 'react-native-svg';
  * Same shape as the app icon (assets/icon.png); drawn in a 100-unit box.
  */
 export const MARK_RADIUS = 31;
-export const MARK_STROKE = 6.5;
+export const MARK_STROKE = 3.5;
 
 function hexPath(r: number): string {
   const pts = [-90, -30, 30, 90, 150, 210].map(a => {
@@ -31,7 +31,7 @@ export function RunivoMark({ size = 32, color = '#F2A43A', strokeWidth = MARK_ST
   if (inline) {
     return (
       <Svg width={size} height={size} viewBox="0 0 64 64" accessibilityElementsHidden importantForAccessibility="no">
-        <Path d={INLINE_PATH} fill="none" stroke={color} strokeWidth={7} strokeLinejoin="round" />
+        <Path d={INLINE_PATH} fill="none" stroke={color} strokeWidth={3.5} strokeLinejoin="round" />
       </Svg>
     );
   }

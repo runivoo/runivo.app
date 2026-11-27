@@ -147,7 +147,7 @@ button, input, select, textarea { font-family: inherit; }
 @media (max-width: 720px) { .nav-link { display: none; } }
 
 .logo { display: inline-flex; align-items: center; gap: 8px; }
-.wordmark { font-weight: 700; letter-spacing: -0.045em; color: var(--t1); line-height: 1; }
+.wordmark { font-weight: 300; letter-spacing: 0.02em; color: var(--t1); line-height: 1; }
 
 /* ── Hero ─────────────────────────────────────────────────────────────────── */
 .hero { padding: 132px 0 72px; }

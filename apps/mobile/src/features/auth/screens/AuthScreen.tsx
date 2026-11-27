@@ -297,7 +297,7 @@ function mkStyles(C: AppColors) {
     nav:           { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 18, paddingBottom: 8 },
     backBtn:       { width: 36, height: 36, borderRadius: 18, backgroundColor: C.card, alignItems: 'center', justifyContent: 'center' },
     backSpacer:    { width: 40 },
-    logo:          { fontFamily: Fonts.wordmark, fontSize: 22, letterSpacing: -0.4, color: C.t1 },
+    logo:          { fontFamily: Fonts.wordmark, fontSize: 22, letterSpacing: 0.6, color: C.t1 },
     body:          { paddingHorizontal: 22, paddingTop: 24 },
     eyebrow:       { fontFamily: Fonts.semiBold, fontSize: 13, color: C.red, marginBottom: 10 },
     hero:          { ...Type.hero, fontSize: 52, lineHeight: 48, color: C.t1 },

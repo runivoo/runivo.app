@@ -91,7 +91,7 @@ const s = StyleSheet.create({
   root:      { flex: 1, backgroundColor: Colors.bg },
   top:       { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, marginBottom: 14 },
   logo:      { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  word:      { fontFamily: Fonts.wordmark, fontSize: 23, letterSpacing: -0.8, color: Colors.t1 },
+  word:      { fontFamily: Fonts.wordmark, fontSize: 23, letterSpacing: 0.6, color: Colors.t1 },
   signIn:    { height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: Colors.card, justifyContent: 'center' },
   signInTxt: { fontFamily: Fonts.semiBold, fontSize: 15, color: Colors.t1 },
   // Mock AuthWelcome: dark pill, top-left of the photo, lime dot.

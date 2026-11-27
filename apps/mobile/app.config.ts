@@ -84,7 +84,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: 'runivo',
   splash: {
     // One launch look: a thin orange hexagon over the runivo wordmark, still (no pulse).
-    // The in-app SplashView shows the same image at the same size (280 pt), so the hand-off is invisible.
+    // The image is blank (plain white launch screen); the in-app SplashView then draws the thin hexagon with "runivo" and "Run more.".
     image: './assets/splash-icon.png',
     resizeMode: 'contain',
     backgroundColor: '#FFFFFF',

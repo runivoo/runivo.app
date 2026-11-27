@@ -6,13 +6,13 @@ import { PostHogProvider } from './PostHogProvider';
 // The one typeface of the app (apps/mobile/src/theme/typography.ts): Outfit 400-700.
 const outfit = Outfit({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['200', '300', '400', '500', '600', '700'],
   variable: '--font-outfit',
   display: 'swap',
 });
 
 const TITLE = 'Runivo — Run smarter';
-const DESCRIPTION = 'AI coaching, live crews and your city. Every run you record can claim real ground on the map.';
+const DESCRIPTION = 'A GPS running app with PaceX, an AI coach, and PACE rewards you can spend in the PACE Store. Join the waitlist.';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://runivo.in'),

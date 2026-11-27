@@ -286,7 +286,7 @@ function mkStyles(C: AppColors) {
     backSpacer: { width: 40 },
     backText:{ fontFamily: Fonts.medium, fontSize: 14, color: C.t1 },
     logoRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    logoWord:{ fontFamily: Fonts.wordmark, fontSize: 22, letterSpacing: -0.4, color: C.t1 },
+    logoWord:{ fontFamily: Fonts.wordmark, fontSize: 22, letterSpacing: 0.6, color: C.t1 },
 
     // Scroll / hero
     scroll:  { paddingHorizontal: 22, flexGrow: 1 },

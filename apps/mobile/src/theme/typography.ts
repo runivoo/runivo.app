@@ -26,7 +26,7 @@ export const Fonts = {
   /** Hero moments (Run complete, reward value, Plus): Outfit semibold, sentence case. */
   hero:      'Outfit_600SemiBold',
   /** The runivo logotype. */
-  wordmark:  'Outfit_700Bold',
+  wordmark:  'Outfit_300Light',
 } as const;
 
 const tabular: TextStyle['fontVariant'] = ['tabular-nums'];

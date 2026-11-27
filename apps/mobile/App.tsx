@@ -12,6 +12,7 @@ import { View, StyleSheet, AppState } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 // One file per weight: the package's index requires all nine weights.
+import { Outfit_300Light } from '@expo-google-fonts/outfit/300Light';
 import { Outfit_400Regular } from '@expo-google-fonts/outfit/400Regular';
 import { Outfit_500Medium } from '@expo-google-fonts/outfit/500Medium';
 import { Outfit_600SemiBold } from '@expo-google-fonts/outfit/600SemiBold';
@@ -242,6 +243,7 @@ function Root({ fontsReady }: { fontsReady: boolean }) {
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
+    Outfit_300Light,
     Outfit_400Regular,
     Outfit_500Medium,
     Outfit_600SemiBold,

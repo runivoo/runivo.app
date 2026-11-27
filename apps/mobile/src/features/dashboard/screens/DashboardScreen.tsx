@@ -269,7 +269,7 @@ function mkStyles(C: AppColors) {
 
     header:      { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     logo:        { flexDirection: 'row', alignItems: 'center', gap: 7 },
-    word:        { fontFamily: Fonts.wordmark, fontSize: 21, letterSpacing: -0.6, color: C.t1 },
+    word:        { fontFamily: Fonts.wordmark, fontSize: 21, letterSpacing: 0.6, color: C.t1 },
     terrCard:    { backgroundColor: C.card, borderRadius: 30, overflow: 'hidden' },
     terrBody:    { flexDirection: 'row', alignItems: 'flex-end', gap: 12, padding: 16, paddingTop: 14 },
     terrSub:     { fontFamily: Fonts.regular, fontSize: 13, color: C.t2 },
