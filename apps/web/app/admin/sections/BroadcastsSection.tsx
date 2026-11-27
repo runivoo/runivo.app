@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Mail, Pencil, Plus, Send, Trash2 } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
+import { AiDraft } from '../AiDraft';
 import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, Button, IconButton, SectionHeader, TableCard, EmptyState } from '../ui';
 
 /*
@@ -140,6 +141,8 @@ export default function BroadcastsSection() {
         <FormCard title={editId ? 'Edit broadcast' : 'New broadcast'} onClose={close}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 content-start">
+              <AiDraft<{ subject: string; preheader: string; heading: string; body: string }> kind="email" placeholder="e.g. Runivo is live in Bengaluru, get the app and claim your first street"
+                onDraft={d => setForm(f => ({ ...f, subject: d.subject, preheader: d.preheader, heading: d.heading, body: d.body }))} />
               <Field label="Internal name *" hint="Only you see this." wide><input className={inputClass} value={form.name} onChange={e => upd('name', e.target.value)} maxLength={100} placeholder="e.g. Launch day" /></Field>
               <Field label="City">
                 <select className={inputClass} value={form.city} onChange={e => upd('city', e.target.value)}>

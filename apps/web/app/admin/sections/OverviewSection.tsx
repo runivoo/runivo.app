@@ -27,6 +27,8 @@ interface Overview {
     sent: number; delivered: number; opened: number; clicked: number; bounced: number; complained: number; other: number;
   };
   lowCodes?: { id: string; title: string; brand: string; left: number }[];
+  cheating?: { last7: number; prev7: number; reasons: Named[]; repeat: { username: string; count: number }[] } | null;
+  launchTarget?: number;
 }
 
 const n = (v: number) => v.toLocaleString('en-IN');
@@ -113,7 +115,9 @@ export default function OverviewSection() {
               Tag links in bios and posts to see them here, e.g. runivo.in/?utm_source=instagram&amp;utm_campaign=launch. Sign-ups from before 28 Nov show as Unknown.
             </p>
             <div className="grid md:grid-cols-2 gap-3">
-              <Card title="Cities"><Ranked rows={data.waitlist.cities} total={data.waitlist.total} /></Card>
+              <Card title="City launch tracker" subtitle={`Goal: ${n(data.launchTarget ?? 200)} per city`}>
+                <Launch rows={data.waitlist.cities.filter(c => c.name !== 'Not given')} target={data.launchTarget ?? 200} />
+              </Card>
               <Card title="Where they came from" subtitle="Platform, all time">
                 <Ranked rows={(data.waitlist.platforms ?? []).map(p => ({ ...p, name: PLATFORM_LABEL[p.name] ?? p.name }))} total={data.waitlist.total} />
               </Card>
@@ -156,6 +160,7 @@ export default function OverviewSection() {
             <Card title="New runners per day" subtitle="Last 30 days">
               <Bars days={data.runners.daily_new} />
             </Card>
+            {data.cheating && <Cheating c={data.cheating} />}
           </Group>
         </div>
       )}
@@ -216,6 +221,56 @@ function Bars({ days }: { days: Day[] }) {
   );
 }
 
+/** Waitlist per city against the launch goal; a city at the goal is marked ready. */
+function Launch({ rows, target }: { rows: Named[]; target: number }) {
+  if (rows.length === 0) return <p className="text-sm text-gray-400 py-4 text-center">No cities yet.</p>;
+  return (
+    <ul className="space-y-2.5">
+      {rows.map(r => {
+        const pctDone = Math.min(1, r.count / target);
+        return (
+          <li key={r.name}>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-700 truncate">{r.name}{pctDone >= 1 && <span className="ml-2 text-xs font-semibold text-[#4E7F1F]">Ready to launch</span>}</span>
+              <span className="text-gray-500 tabular-nums">{n(r.count)} <span className="text-gray-300">/ {n(target)}</span></span>
+            </div>
+            <div className="h-1.5 rounded-full bg-gray-50 mt-1 overflow-hidden">
+              <div className="h-full rounded-full" style={{ width: `${pctDone * 100}%`, background: pctDone >= 1 ? '#4E7F1F' : 'rgba(78,127,31,0.5)' }} />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+const REASON: Record<string, string> = {
+  simulated_gps: 'Fake GPS (simulator)', vehicle: 'Too fast (vehicle)', teleport: 'Jumps in the route', excluded: 'Excluded from scoring',
+};
+
+/** Flagged runs this week vs last week, why, and runners flagged more than once. */
+function Cheating({ c }: { c: { last7: number; prev7: number; reasons: Named[]; repeat: { username: string; count: number }[] } }) {
+  const up = c.last7 > c.prev7 * 1.5 && c.last7 >= 5;
+  return (
+    <div className={`rounded-2xl border p-5 ${up ? 'border-amber-200 bg-amber-50' : 'border-gray-100 bg-white'}`}>
+      <div className="flex items-baseline justify-between gap-3 mb-3">
+        <p className="text-sm font-semibold text-gray-900">Cheating checks</p>
+        <p className="text-xs text-gray-400">Last 7 days</p>
+      </div>
+      <p className="text-sm text-gray-700">
+        <span className="text-2xl font-semibold tracking-tight text-gray-900 mr-2">{n(c.last7)}</span>
+        flagged run{c.last7 === 1 ? '' : 's'} · {n(c.prev7)} the week before{up ? ' · rising, worth a look' : ''}
+      </p>
+      {c.reasons.length > 0 && (
+        <p className="text-xs text-gray-500 mt-2">{c.reasons.map(r => `${REASON[r.name] ?? r.name.replace(/_/g, ' ')} ${n(r.count)}`).join(' · ')}</p>
+      )}
+      {c.repeat.length > 0 && (
+        <p className="text-xs text-gray-500 mt-1">Flagged more than once: {c.repeat.map(r => `@${r.username} (${r.count})`).join(', ')}. Check them in People.</p>
+      )}
+    </div>
+  );
+}
+
 /** A short ranked list with a share bar. */
 function Ranked({ rows, total }: { rows: Named[]; total: number }) {
   if (rows.length === 0) return <p className="text-sm text-gray-400 py-4 text-center">Nothing yet.</p>;
@@ -224,7 +279,7 @@ function Ranked({ rows, total }: { rows: Named[]; total: number }) {
       {rows.map(r => (
         <li key={r.name}>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-700 truncate capitalize">{r.name}</span>
+            <span className="text-gray-700 truncate">{r.name.charAt(0).toUpperCase() + r.name.slice(1)}</span>
             <span className="text-gray-500 tabular-nums">{n(r.count)} <span className="text-gray-300">· {pct(r.count, total)}</span></span>
           </div>
           <div className="h-1.5 rounded-full bg-gray-50 mt-1 overflow-hidden">

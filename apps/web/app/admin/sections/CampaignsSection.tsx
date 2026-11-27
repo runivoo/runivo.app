@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Plus, Pencil, Ban, BellRing } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
+import { AiDraft } from '../AiDraft';
 import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, toLocalInput, fromLocalInput, Button, IconButton, SectionHeader, TableCard } from '../ui';
 
 interface CampaignRow {
@@ -111,6 +112,8 @@ export default function CampaignsSection() {
       {showForm && (
         <FormCard title={editId ? 'Edit campaign' : 'New campaign'} onClose={close}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <AiDraft<{ title: string; body: string }> kind="push" placeholder="e.g. Get Bengaluru runners out this weekend for double zones"
+              onDraft={d => setForm(f => ({ ...f, title: d.title, body: d.body }))} />
             <Field label="Internal name *" wide><input className={inputClass} value={form.name} onChange={e => upd('name', e.target.value)} maxLength={120} placeholder="Diwali 2026 double-zone week" /></Field>
             <Field label="Push title *" hint={`${form.title.length}/80`} wide><input className={inputClass} value={form.title} onChange={e => upd('title', e.target.value)} maxLength={80} placeholder="Diwali double-zone week" /></Field>
             <Field label="Push message *" hint={`${form.body.length}/240`} wide>

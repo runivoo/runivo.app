@@ -1,6 +1,6 @@
 import { adminRoute, serviceClient, json } from '@/lib/adminServer';
 import { renderWaitlistEmail } from '@/lib/waitlistEmail';
-import { lowCodeRewards } from '@/lib/adminStats';
+import { lowCodeRewards, cheatingStats } from '@/lib/adminStats';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,13 +71,15 @@ async function welcomeEmailStats(): Promise<EmailStats> {
 }
 
 export const GET = adminRoute(async () => {
-  const [{ data, error }, email, lowCodes] = await Promise.all([
+  const [{ data, error }, email, lowCodes, cheating] = await Promise.all([
     serviceClient().rpc('admin_overview'),
     welcomeEmailStats().catch((): EmailStats => ({
       available: false, reason: 'Could not reach Resend.', sent: 0, delivered: 0, opened: 0, clicked: 0, bounced: 0, complained: 0, other: 0, capped: false,
     })),
     lowCodeRewards().catch(() => []),
+    cheatingStats().catch(() => null),
   ]);
   if (error) return json({ error: error.message }, 400);
-  return json({ ...(data as Record<string, unknown>), email, lowCodes });
+  const launchTarget = Math.max(1, Number(process.env.LAUNCH_CITY_TARGET) || 200);
+  return json({ ...(data as Record<string, unknown>), email, lowCodes, cheating, launchTarget });
 });

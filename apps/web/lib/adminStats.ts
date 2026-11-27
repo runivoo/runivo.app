@@ -75,3 +75,38 @@ export async function digestData(now = new Date()): Promise<DigestData> {
     lowCodes: lowCodes.map(({ title, brand, left }) => ({ title, brand, left })),
   };
 }
+
+export interface CheatingStats {
+  last7: number; prev7: number;
+  reasons: { name: string; count: number }[];
+  repeat: { username: string; count: number }[];
+}
+
+/** Runs flagged by the integrity checks (or excluded): this week vs last week, why, and who keeps getting flagged. */
+export async function cheatingStats(now = new Date()): Promise<CheatingStats> {
+  const db = serviceClient();
+  const week = 7 * 86_400_000;
+  const from = new Date(now.getTime() - 2 * week).toISOString();
+  const { data } = await db.from('runs').select('user_id, started_at, integrity_reason')
+    .gte('started_at', from).or('excluded.eq.true,integrity_status.neq.ok').limit(5000);
+  const rows = (data ?? []) as { user_id: string; started_at: string; integrity_reason: string | null }[];
+  const split = now.getTime() - week;
+  const recent = rows.filter(r => new Date(r.started_at).getTime() >= split);
+  const tally = (keys: string[]) => {
+    const m = new Map<string, number>();
+    for (const k of keys) m.set(k, (m.get(k) ?? 0) + 1);
+    return [...m].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+  };
+  const byUser = tally(recent.map(r => r.user_id)).filter(u => u.count >= 2).slice(0, 5);
+  const names = new Map<string, string>();
+  if (byUser.length) {
+    const { data: people } = await db.from('profiles').select('id, username').in('id', byUser.map(u => u.name));
+    for (const p of people ?? []) names.set(p.id as string, (p.username as string) ?? 'runner');
+  }
+  return {
+    last7: recent.length,
+    prev7: rows.length - recent.length,
+    reasons: tally(recent.map(r => r.integrity_reason ?? 'excluded')).slice(0, 5),
+    repeat: byUser.map(u => ({ username: names.get(u.name) ?? 'runner', count: u.count })),
+  };
+}

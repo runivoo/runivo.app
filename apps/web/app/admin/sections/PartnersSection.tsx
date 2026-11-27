@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Plus, Pencil, Handshake, Ban } from 'lucide-react';
+import { Plus, Pencil, Handshake, Ban, Sparkles } from 'lucide-react';
 import { RemoveDialog } from '../RemoveDialog';
 import { ImageField } from '../ImageField';
 import { adminFetch } from '@/lib/adminApi';
@@ -56,6 +56,14 @@ export default function PartnersSection() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [removing, setRemoving] = useState<PartnerRow | null>(null);
+  const [screens, setScreens] = useState<Record<string, { summary: string; fit: number; why: string; questions: string[] } | 'loading' | { error: string }>>({});
+  const screen = async (id: string) => {
+    setScreens(s => ({ ...s, [id]: 'loading' }));
+    try {
+      const r = await adminFetch<{ summary: string; fit: number; why: string; questions: string[] }>(`/partners/${id}/screen`, { method: 'POST' });
+      setScreens(s => ({ ...s, [id]: r }));
+    } catch (e) { setScreens(s => ({ ...s, [id]: { error: (e as Error).message } })); }
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -199,8 +207,23 @@ export default function PartnersSection() {
                       {r.applied_at ? ` · applied ${new Date(r.applied_at).toLocaleDateString()}` : ''}
                     </p>
                     {r.offer && <p className="text-sm text-gray-700 mt-2 whitespace-pre-line">{r.offer}</p>}
+                    {(() => {
+                      const sc = screens[r.id];
+                      if (!sc) return null;
+                      if (sc === 'loading') return <p className="text-xs text-gray-400 mt-3">Reading the application…</p>;
+                      if ('error' in sc) return <p role="alert" className="text-xs text-red-600 mt-3">{sc.error}</p>;
+                      return (
+                        <div className="mt-3 rounded-xl bg-gray-50 p-3 text-sm">
+                          <p className="text-gray-900"><span className="font-semibold">AI fit {sc.fit}/5</span> · {sc.summary}</p>
+                          {sc.why && <p className="text-gray-600 mt-1">{sc.why}</p>}
+                          {sc.questions.length > 0 && <ul className="mt-2 space-y-0.5">{sc.questions.map(q => <li key={q} className="text-gray-600">· {q}</li>)}</ul>}
+                          <p className="text-xs text-gray-400 mt-2">AI advice from the application only. You decide.</p>
+                        </div>
+                      );
+                    })()}
                   </div>
                   <div className="flex gap-2 shrink-0">
+                    <Button variant="secondary" size="sm" onClick={() => screen(r.id)} disabled={screens[r.id] === 'loading'} icon={<Sparkles className="w-4 h-4" aria-hidden />}>AI check</Button>
                     <Button variant="secondary" size="sm" onClick={() => openEdit(r)}>Edit</Button>
                     <Button variant="secondary" size="sm" onClick={() => decide(r, 'rejected')} disabled={deciding === r.id}>Reject</Button>
                     <Button size="sm" onClick={() => decide(r, 'active')} disabled={deciding === r.id}>Approve</Button>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { adminFetch } from '@/lib/adminApi';
+import { Sparkles } from 'lucide-react';
 import { ErrorNote, Spinner, Badge, Button, SectionHeader, EmptyState } from '../ui';
 
 interface Item {
@@ -20,6 +21,13 @@ const LABEL: Record<Item['source'], string> = {
   comment: 'Comment', club: 'Club', event: 'Event', post: 'Post', user: 'Runner', club_message: 'Club chat message',
 };
 
+type Verdict = 'spam' | 'harmful' | 'probably_fine' | 'needs_human';
+const VERDICT: Record<Verdict, { label: string; tone: 'red' | 'orange' | 'green' | 'gray' }> = {
+  harmful: { label: 'AI: harmful', tone: 'red' }, spam: { label: 'AI: spam', tone: 'orange' },
+  needs_human: { label: 'AI: needs a look', tone: 'gray' }, probably_fine: { label: 'AI: probably fine', tone: 'green' },
+};
+const ORDER: Verdict[] = ['harmful', 'spam', 'needs_human', 'probably_fine'];
+
 const ago = (iso: string) => {
   const h = Math.floor((Date.now() - new Date(iso).getTime()) / 3_600_000);
   return h < 1 ? 'under an hour ago' : h < 24 ? `${h}h ago` : `${Math.floor(h / 24)}d ago`;
@@ -36,6 +44,8 @@ export default function ModerationSection() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [triage, setTriage] = useState<Record<string, { verdict: Verdict; reason: string }>>({});
+  const [sorting, setSorting] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -62,6 +72,22 @@ export default function ModerationSection() {
     setBusy(null);
   };
 
+  // AI sorts the queue (harmful first); the actions stay with the admin.
+  const sortWithAi = async () => {
+    setSorting(true); setError('');
+    try {
+      const r = await adminFetch<{ results: Record<string, { verdict: Verdict; reason: string }> }>('/moderation/triage', {
+        method: 'POST',
+        body: JSON.stringify({ items: items.map(i => ({ key: i.key, kind: i.source, preview: i.preview, reasons: i.reasons, report_count: i.report_count })) }),
+      });
+      setTriage(r.results);
+    } catch (e) { setError((e as Error).message); }
+    setSorting(false);
+  };
+  const shown = Object.keys(triage).length
+    ? [...items].sort((a, b) => ORDER.indexOf(triage[a.key]?.verdict ?? 'needs_human') - ORDER.indexOf(triage[b.key]?.verdict ?? 'needs_human'))
+    : items;
+
   if (loading) return <Spinner />;
 
   return (
@@ -69,14 +95,16 @@ export default function ModerationSection() {
       <SectionHeader
         title="Moderation"
         description={<>Open reports, oldest first. Act within 24 hours. Removing deletes the content; suspending also stops its author from posting.</>}
+        action={items.length > 0 && <Button variant="secondary" onClick={sortWithAi} disabled={sorting} icon={<Sparkles className="w-4 h-4" aria-hidden />}>{sorting ? 'Sorting…' : 'Sort with AI'}</Button>}
       />
+      {Object.keys(triage).length > 0 && <p className="text-xs text-gray-400 -mt-3 mb-4">Sorted by AI: harmful first. AI only suggests; check each item before acting.</p>}
       <ErrorNote message={error} />
 
       {items.length === 0 ? (
         <EmptyState title="Nothing to review." hint="New reports appear here." />
       ) : (
         <ul className="space-y-3">
-          {items.map(item => {
+          {shown.map(item => {
             const overdue = Date.now() - new Date(item.first_reported_at).getTime() > 24 * 3_600_000;
             return (
               <li key={item.key} className="p-4 rounded-2xl border border-gray-100 bg-white">
@@ -85,7 +113,9 @@ export default function ModerationSection() {
                   <Badge tone={item.report_count >= 3 ? 'red' : 'gray'}>{item.report_count} report{item.report_count === 1 ? '' : 's'}</Badge>
                   {overdue && <Badge tone="orange">over 24h</Badge>}
                   <span className="text-xs text-gray-400">first reported {ago(item.first_reported_at)}</span>
+                  {triage[item.key] && <Badge tone={VERDICT[triage[item.key].verdict].tone}>{VERDICT[triage[item.key].verdict].label}</Badge>}
                 </div>
+                {triage[item.key]?.reason && <p className="text-xs text-gray-500 mb-1.5">{triage[item.key].reason}</p>}
                 <p className="text-[15px] text-gray-900 whitespace-pre-wrap break-words">
                   {item.preview ?? <span className="text-gray-400">(content already removed)</span>}
                 </p>
