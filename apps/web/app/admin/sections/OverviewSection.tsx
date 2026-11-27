@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Mail, RefreshCw } from 'lucide-react';
 import { adminFetch } from '@/lib/adminApi';
 import { ErrorNote, Spinner, Button, SectionHeader } from '../ui';
 
@@ -41,6 +41,7 @@ export default function OverviewSection() {
   const [data, setData] = useState<Overview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [digest, setDigest] = useState<'idle' | 'sending' | string>('idle');
 
   const load = useCallback(() => {
     setLoading(true);
@@ -52,13 +53,27 @@ export default function OverviewSection() {
   }, []);
   useEffect(load, [load]);
 
+  const sendDigest = async () => {
+    setDigest('sending');
+    try {
+      const r = await adminFetch<{ to: string; ai: boolean }>('/digest', { method: 'POST' });
+      setDigest(`Sent to ${r.to}${r.ai ? '' : ' (without the AI note: add ANTHROPIC_API_KEY in Vercel)'}.`);
+    } catch (e) { setDigest(`Couldn’t send: ${(e as Error).message}`); }
+  };
+
   return (
     <div>
       <SectionHeader
         title="Overview"
         description={data ? `How Runivo is doing. Updated ${new Date(data.generated_at).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}.` : 'How Runivo is doing.'}
-        action={<Button variant="secondary" onClick={load} disabled={loading} icon={<RefreshCw className="w-4 h-4" aria-hidden />}>Refresh</Button>}
+        action={<>
+          <Button variant="secondary" onClick={sendDigest} disabled={digest === 'sending'} icon={<Mail className="w-4 h-4" aria-hidden />}>
+            {digest === 'sending' ? 'Sending…' : 'Email me the daily digest'}
+          </Button>
+          <Button variant="secondary" onClick={load} disabled={loading} icon={<RefreshCw className="w-4 h-4" aria-hidden />}>Refresh</Button>
+        </>}
       />
+      {digest !== 'idle' && digest !== 'sending' && <p role="status" className="text-sm text-gray-500 -mt-3 mb-5">{digest} The digest also arrives every morning at 8:00.</p>}
       <ErrorNote message={error} />
 
       {loading && !data ? <Spinner /> : data && (

@@ -1,5 +1,6 @@
 import { adminRoute, serviceClient, json } from '@/lib/adminServer';
 import { renderWaitlistEmail } from '@/lib/waitlistEmail';
+import { lowCodeRewards } from '@/lib/adminStats';
 
 export const dynamic = 'force-dynamic';
 
@@ -67,22 +68,6 @@ async function welcomeEmailStats(): Promise<EmailStats> {
   }
   emailCache = { at: Date.now(), stats };
   return stats;
-}
-
-const LOW_CODES = 10;
-
-/** Live code-pool rewards with fewer than LOW_CODES unused codes: top them up before runners see "sold out". */
-async function lowCodeRewards() {
-  const db = serviceClient();
-  const { data: rewards } = await db.from('pace_store_rewards').select('id, title, brand').eq('status', 'available').eq('code_mode', 'pool');
-  if (!rewards?.length) return [];
-  const { data: codes } = await db.from('reward_codes').select('reward_id').in('reward_id', rewards.map(r => r.id)).is('assigned_to', null);
-  const left = new Map<string, number>();
-  for (const c of codes ?? []) left.set(c.reward_id as string, (left.get(c.reward_id as string) ?? 0) + 1);
-  return rewards
-    .map(r => ({ id: r.id as string, title: r.title as string, brand: r.brand as string, left: left.get(r.id as string) ?? 0 }))
-    .filter(r => r.left < LOW_CODES)
-    .sort((a, b) => a.left - b.left);
 }
 
 export const GET = adminRoute(async () => {

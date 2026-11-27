@@ -47,6 +47,7 @@ export function json(body: unknown, status = 200): Response {
 
 // The signed-in admin for a request that passed adminRoute's check.
 const ADMIN_OF = new WeakMap<Request, string>();
+export const adminIdOf = (req: Request): string | undefined => ADMIN_OF.get(req);
 
 /**
  * Records an admin change in public.admin_actions (Studio → Activity).
