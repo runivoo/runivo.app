@@ -23,6 +23,7 @@ import { AccessDeniedScreen, LoadingScreen, SignInScreen } from './AuthScreens';
 import { DEFAULT_TAB, asTab, type AdminTab } from './nav';
 import OverviewSection from './sections/OverviewSection';
 import ActivitySection from './sections/ActivitySection';
+import WebsiteSection from './sections/WebsiteSection';
 import PeopleSection from './sections/PeopleSection';
 import BroadcastsSection from './sections/BroadcastsSection';
 import ModerationSection from './sections/ModerationSection';
@@ -38,6 +39,7 @@ import WaitlistSection from './sections/WaitlistSection';
 // One component per tab. Add a section here and in nav.ts.
 const SECTIONS: Record<AdminTab, () => React.ReactNode> = {
   overview:   () => <OverviewSection />,
+  website:    () => <WebsiteSection />,
   people:     () => <PeopleSection />,
   activity:   () => <ActivitySection />,
   moderation: () => <ModerationSection />,

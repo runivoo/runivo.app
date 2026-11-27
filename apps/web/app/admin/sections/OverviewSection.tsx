@@ -177,7 +177,7 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function Stat({ label, value, hint, tone }: { label: string; value: string; hint?: string; tone?: 'warn' }) {
+export function Stat({ label, value, hint, tone }: { label: string; value: string; hint?: string; tone?: 'warn' }) {
   return (
     <div className="rounded-2xl border border-gray-100 bg-white px-5 py-4 min-w-0">
       <p className="text-xs font-medium text-gray-500 truncate">{label}</p>
@@ -187,7 +187,7 @@ function Stat({ label, value, hint, tone }: { label: string; value: string; hint
   );
 }
 
-function Card({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
+export function Card({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
     <div className="rounded-2xl border border-gray-100 bg-white p-5">
       <div className="flex items-baseline justify-between gap-3 mb-4">
@@ -200,13 +200,13 @@ function Card({ title, subtitle, children }: { title: string; subtitle?: string;
 }
 
 /** Daily counts as bars. Hover (or long-press) a bar for its day and number. */
-function Bars({ days }: { days: Day[] }) {
+export function Bars({ days, empty = 'Nothing yet in the last 30 days.' }: { days: Day[]; empty?: string }) {
   const max = Math.max(1, ...days.map(d => d.count));
   const label = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-  if (days.every(d => d.count === 0)) return <p className="text-sm text-gray-400 py-6 text-center">Nothing yet in the last 30 days.</p>;
+  if (days.every(d => d.count === 0)) return <p className="text-sm text-gray-400 py-6 text-center">{empty}</p>;
   return (
     <div>
-      <div className="flex items-end gap-[3px] h-28" role="img" aria-label={`Daily counts, last 30 days, highest ${max}`}>
+      <div className="flex items-end gap-[3px] h-28" role="img" aria-label={`Daily counts, last ${days.length} days, highest ${max}`}>
         {days.map(d => (
           <div key={d.day} title={`${label(d.day)}: ${d.count}`} className="flex-1 h-full flex items-end">
             <div className="w-full rounded-t-[3px] bg-[#4E7F1F]/80 hover:bg-[#4E7F1F]"
@@ -272,7 +272,7 @@ function Cheating({ c }: { c: { last7: number; prev7: number; reasons: Named[]; 
 }
 
 /** A short ranked list with a share bar. */
-function Ranked({ rows, total }: { rows: Named[]; total: number }) {
+export function Ranked({ rows, total }: { rows: Named[]; total: number }) {
   if (rows.length === 0) return <p className="text-sm text-gray-400 py-4 text-center">Nothing yet.</p>;
   return (
     <ul className="space-y-2.5">
