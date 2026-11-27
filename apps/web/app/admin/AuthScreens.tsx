@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { ShieldAlert } from 'lucide-react';
 import { Logo } from '@/components/Logo';
+import { supabase } from '@/lib/supabase';
 import { Button, inputClass, labelClass } from './ui';
 
 const SHELL = 'min-h-screen bg-gray-50 flex flex-col items-center justify-center px-6 py-10';
@@ -28,6 +30,21 @@ export function SignInScreen({
   email: string; password: string; error: string | null; busy: boolean;
   onEmail: (v: string) => void; onPassword: (v: string) => void; onSubmit: () => void;
 }) {
+  // Forgot password / first password: Supabase emails a link to /reset-password, where a new
+  // password is set. The page there is on the allowed redirect list (Authentication → URL Configuration).
+  const [resetState, setResetState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const sendReset = async () => {
+    if (!email.trim()) return;
+    setResetState('sending');
+    const host = window.location.hostname;
+    const redirectTo = host === 'runivo.in' || host.endsWith('.runivo.in')
+      ? 'https://runivo.in/reset-password'
+      : `${window.location.origin}/reset-password`;
+    const { error: err } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo });
+    // Same message whether or not the address has an account, so this can't be used to find accounts.
+    setResetState(err && !/rate|limit/i.test(err.message) ? 'error' : 'sent');
+  };
+
   return (
     <main id="main" className={SHELL}>
       <div className={CARD}>
@@ -59,6 +76,20 @@ export function SignInScreen({
             {busy ? 'Signing in…' : 'Sign in'}
           </Button>
         </form>
+        <div className="mt-4 text-center">
+          {resetState === 'sent' ? (
+            <p role="status" className="text-sm text-gray-500">If that email has an admin account, a link to set a password is on its way. Check spam too.</p>
+          ) : (
+            <button
+              type="button" onClick={sendReset} disabled={!email.trim() || resetState === 'sending'}
+              className="text-sm font-medium text-gray-500 hover:text-gray-900 disabled:opacity-40 min-h-[44px] px-2"
+            >
+              {resetState === 'sending' ? 'Sending…' : 'Forgot password or first time? Email me a link'}
+            </button>
+          )}
+          {resetState === 'error' && <p role="alert" className="text-sm text-red-600 mt-1">Couldn’t send the email. Try again in a minute.</p>}
+          {!email.trim() && resetState === 'idle' && <p className="text-xs text-gray-400">Enter your email above first.</p>}
+        </div>
       </div>
     </main>
   );
