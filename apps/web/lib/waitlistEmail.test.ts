@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderWaitlistEmail, sendWaitlistWelcome } from './waitlistEmail';
+import { renderWaitlistEmail, sendWaitlistWelcome, FOUNDER_QUOTE } from './waitlistEmail';
 
 const ENV = { ...process.env };
 
@@ -27,6 +27,18 @@ describe('renderWaitlistEmail', () => {
     const m = renderWaitlistEmail(null);
     expect(m.text.trim().endsWith('Mehtab\nRunivo')).toBe(true);
     expect(m.html).toContain('Mehtab<br>');
+  });
+
+  it('carries the founder quote in both versions', () => {
+    const m = renderWaitlistEmail(null);
+    expect(m.text).toContain(FOUNDER_QUOTE);
+    expect(m.html).toContain('Founder, Runivo');
+  });
+
+  it('loads its images from runivo.in over https', () => {
+    const srcs = [...renderWaitlistEmail(null).html.matchAll(/src="([^"]+)"/g)].map(x => x[1]);
+    expect(srcs.length).toBe(2);
+    for (const s of srcs) expect(s.startsWith('https://runivo.in/email/')).toBe(true);
   });
 
   it('falls back to "your city" without one', () => {
