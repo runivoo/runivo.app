@@ -250,11 +250,16 @@ content_path = "./supabase/templates/email_change.html"
 subject = "Your Runivo verification code"
 content_path = "./supabase/templates/reauthentication.html"
 
-# Uncomment to customize notification email template
-# [auth.email.notification.password_changed]
-# enabled = true
-# subject = "Your password has been changed"
-# content_path = "./templates/password_changed_notification.html"
+# Security notifications: sent after the change, so a runner knows if someone else did it.
+[auth.email.notification.password_changed]
+enabled = true
+subject = "Your Runivo password was changed"
+content_path = "./supabase/templates/password_changed_notification.html"
+
+[auth.email.notification.email_changed]
+enabled = true
+subject = "Your Runivo email was changed"
+content_path = "./supabase/templates/email_changed_notification.html"
 
 [auth.sms]
 # Allow/disallow new user signups via SMS to your project.
