@@ -101,3 +101,11 @@ describe('autoPauseFromFix', () => {
     expect(s.lastMovingFixAt).toBe(9000);
   });
 });
+
+describe('pause breaks', () => {
+  it('an auto-resume marks the next point as the start of a new stretch', () => {
+    const s = session({ isPaused: true, autoPaused: true, pauseStart: 1000 });
+    expect(autoPauseFromFix(s, 60_000, 3, true)).toBe('resumed');
+    expect(s.breakNext).toBe(true);
+  });
+});

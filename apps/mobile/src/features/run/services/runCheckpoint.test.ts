@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { checkpointWrites, readCheckpoint, PART_SIZE, isPartKey } from './runCheckpoint';
+import { checkpointWrites, readCheckpoint, PART_SIZE, isPartKey, packPoint, unpackPoint } from './runCheckpoint';
 import type { GPSPoint } from '../hooks/useActiveRun';
 
 const START = 1_790_000_000_000;
@@ -46,5 +46,14 @@ describe('run checkpoint', () => {
   it('tells part rows from meta rows', () => {
     expect(isPartKey('run_checkpoint_abc#0')).toBe(true);
     expect(isPartKey('run_checkpoint_abc')).toBe(false);
+  });
+});
+
+describe('pause marks in checkpoints', () => {
+  it('keeps the first point after a pause marked through a crash', () => {
+    const p: GPSPoint = { lat: 12.97, lng: 77.59, timestamp: 5000, speed: 3, accuracy: 5, altitude: 900, brk: true };
+    expect(unpackPoint(packPoint(p, 0), 0).brk).toBe(true);
+    const q: GPSPoint = { ...p, brk: undefined };
+    expect(unpackPoint(packPoint(q, 0), 0).brk).toBeUndefined();
   });
 });

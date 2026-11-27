@@ -758,7 +758,6 @@ export default function ActiveRunScreen() {
           distance={run.distance}
           elapsed={run.elapsed}
           verb={sport.verb}
-          bottomInset={insets.bottom}
           unit={distanceUnit}
           onKeepRunning={() => setShowConfirm(false)}
           onFinish={doFinish}

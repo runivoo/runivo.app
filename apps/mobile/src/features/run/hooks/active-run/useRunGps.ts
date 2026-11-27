@@ -4,7 +4,7 @@
  * task buffered (on foreground resume and when the run finishes).
  */
 import { useCallback, useEffect, useRef } from 'react';
-import { AppState, type AppStateStatus } from 'react-native';
+import { AppState, Platform, type AppStateStatus } from 'react-native';
 import * as Location from 'expo-location';
 import { activateKeepAwakeAsync } from 'expo-keep-awake';
 import {
@@ -17,9 +17,33 @@ import { maxSpeedFor } from './gpsConfig';
 import { clearLiveShare } from './liveShare';
 import type { RunSession, RunUi } from './types';
 import { captureHandledError } from '@shared/services/errorReporting';
+import { isLocationSimulated } from '../../../../../modules/runivo-location';
+
+const SIM_CHECK_MS = 120_000;
 
 export function useRunGps(s: RunSession, ui: RunUi, activityType: string) {
   const locationSubRef = useRef<Location.LocationSubscription | null>(null);
+  const simCheckRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const simFirstRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /**
+   * iOS anti-spoofing: asks the system whether the location is simulated by
+   * software, shortly after the start and every two minutes. One "yes" marks the
+   * run like Android's mock-location flag (it earns nothing; see useActiveRun).
+   */
+  const stopSimCheck = useCallback(() => {
+    if (simCheckRef.current) clearInterval(simCheckRef.current);
+    if (simFirstRef.current) clearTimeout(simFirstRef.current);
+    simCheckRef.current = null;
+    simFirstRef.current = null;
+  }, []);
+  const startSimCheck = useCallback(() => {
+    if (Platform.OS !== 'ios') return;
+    stopSimCheck();
+    const check = () => { isLocationSimulated().then(sim => { if (sim === true) s.mocked = true; }, () => {}); };
+    simFirstRef.current = setTimeout(check, 20_000);
+    simCheckRef.current = setInterval(check, SIM_CHECK_MS);
+  }, [s, stopSimCheck]);
   const appStateSubRef = useRef<ReturnType<typeof AppState.addEventListener> | null>(null);
 
   const detachAppState = useCallback(() => {
@@ -54,6 +78,7 @@ export function useRunGps(s: RunSession, ui: RunUi, activityType: string) {
     });
     if (!sub) return false;
     locationSubRef.current = sub;
+    startSimCheck();
 
     // The background task records with the screen off.
     startBackgroundTracking(s.runId, accuracy).catch(err => {
@@ -61,13 +86,14 @@ export function useRunGps(s: RunSession, ui: RunUi, activityType: string) {
       ui.setBackgroundWarning("Screen-off tracking couldn't start. Keep Runivo open until you finish.");
     });
     return true;
-  }, [s, ui, activityType]);
+  }, [s, ui, activityType, startSimCheck]);
 
   const stopWatching = useCallback(() => {
     locationSubRef.current?.remove();
     locationSubRef.current = null;
+    stopSimCheck();
     detachAppState();
-  }, [detachAppState]);
+  }, [detachAppState, stopSimCheck]);
 
   /**
    * Finish: stops the background task, then merges whatever it still holds. A run
@@ -80,6 +106,8 @@ export function useRunGps(s: RunSession, ui: RunUi, activityType: string) {
 
   useEffect(() => () => {
     locationSubRef.current?.remove();
+    if (simCheckRef.current) clearInterval(simCheckRef.current);
+    if (simFirstRef.current) clearTimeout(simFirstRef.current);
     appStateSubRef.current?.remove();
     stopBackgroundTracking().catch(err => captureHandledError(err, { domain: 'gps', operation: 'background-tracking-stop' }));
     clearBgGpsBuffer(s.runId);

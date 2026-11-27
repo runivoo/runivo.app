@@ -7,6 +7,7 @@ import { Play, Pause, ArrowCounterClockwise, CaretLeft } from 'phosphor-react-na
 import type { RootStackParamList } from '@navigation/AppNavigator';
 import { useTheme, Fonts, type AppColors, useIsDark } from '@theme';
 import { useDistanceUnit } from '@mobile/shared/hooks/useDistanceUnit';
+import { trailGeometry } from '@shared/engine/runEngine';
 import { convertKm, convertPaceMinPerKm } from '@mobile/shared/lib/formatters';
 
 import MapLibreGL from '@maplibre/maplibre-react-native';
@@ -90,7 +91,7 @@ export default function RunReplayScreen() {
     type: 'FeatureCollection',
     features: [{
       type: 'Feature',
-      geometry: { type: 'LineString', coordinates: gpsRoute.map(p => [p.lng, p.lat]) },
+      geometry: trailGeometry(gpsRoute),
       properties: {},
     }],
   }), [gpsRoute]);
@@ -99,10 +100,7 @@ export default function RunReplayScreen() {
     type: 'FeatureCollection',
     features: [{
       type: 'Feature',
-      geometry: {
-        type: 'LineString',
-        coordinates: gpsRoute.slice(0, currentIdx + 1).map(p => [p.lng, p.lat]),
-      },
+      geometry: trailGeometry(gpsRoute.slice(0, currentIdx + 1)),
       properties: {},
     }],
   }), [gpsRoute, currentIdx]);

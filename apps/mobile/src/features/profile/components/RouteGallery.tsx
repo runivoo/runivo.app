@@ -4,13 +4,13 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Image, useWindowDimensions } from 'react-native';
-import Svg, { Polyline } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import type { StoredRun } from '@shared/services/store';
 import { useTheme, Fonts, type AppColors } from '@theme';
 import { useDistanceUnit } from '@mobile/shared/hooks/useDistanceUnit';
 import { convertKm } from '@mobile/shared/lib/formatters';
 import { fmtKm } from './YouSections';
-import { routePolyline } from '../utils/routeShape';
+import { routePath } from '../utils/routeShape';
 import { signPhotoUrls } from '@features/run/services/activityEditService';
 import { Segmented } from '@mobile/shared/components/Segmented';
 
@@ -86,7 +86,7 @@ export function RouteGallery({ runs, onOpen }: { runs: StoredRun[]; onOpen: (run
       {header}
       <View style={s.grid}>
       {list.map((r, i) => {
-        const line = routePolyline(r.gpsPoints, size);
+        const line = routePath(r.gpsPoints, size);
         const bg = C[TILE_BG[i % TILE_BG.length]];
         const ink = (r.territoriesClaimed?.length ?? 0) > 0 ? C.brandGreen : C.t1;
         return (
@@ -96,7 +96,7 @@ export function RouteGallery({ runs, onOpen }: { runs: StoredRun[]; onOpen: (run
           >
             {line && (
               <Svg width={size} height={size}>
-                <Polyline points={line} fill="none" stroke={ink} strokeWidth={3.2} strokeLinecap="round" strokeLinejoin="round" />
+                <Path d={line} fill="none" stroke={ink} strokeWidth={3.2} strokeLinecap="round" strokeLinejoin="round" />
               </Svg>
             )}
             <Text style={s.label}>{fmtKm(convertKm(r.distanceMeters / 1000, unit))} {unit}</Text>

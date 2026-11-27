@@ -7,13 +7,14 @@ import { Fonts } from '@theme';
 /**
  * Launch screen while the app checks the session.
  *
- * The native launch screen is plain white (assets/splash-icon.png is blank),
- * so this picks up from an empty screen: the thin amber hexagon draws itself
- * (one stroke, clockwise from the top), then "runivo" and "Run more." fade in
- * beneath it. It stays at least MIN_SHOW_MS so the moment reads, then fades
- * into the app once the session is known.
+ * The native launch screen (assets/splash-icon.png, 280 pt wide) shows a faint
+ * hexagon outline at exactly this size and place, so this starts where it ends:
+ * the amber line fills the outline (one stroke, clockwise from the top), then
+ * "runivo" and "Run more." fade in beneath it. One screen, no blank frame. It
+ * stays at least MIN_SHOW_MS so the moment reads, then fades into the app.
  */
-const HEX_SIZE = 112;
+const HEX_SIZE = 168;          // 168 of the launch image's 280 pt: same size as the native frame
+const OUTLINE = '#FBE5C4';     // the faint outline both screens show first
 const STROKE = 3.5;
 const PERIMETER = 6 * MARK_RADIUS; // a regular hexagon's side equals its radius
 const DRAW_MS = 700;
@@ -56,6 +57,7 @@ export function SplashView({ ready, onLayout, onHidden }: Props) {
   return (
     <Animated.View style={[s.root, { opacity: root }]} onLayout={onLayout} accessibilityLabel="Runivo. Run more." accessible>
       <Svg width={HEX_SIZE} height={HEX_SIZE} viewBox="0 0 100 100">
+        <Path d={MARK_PATH} fill="none" stroke={OUTLINE} strokeWidth={STROKE} strokeLinejoin="round" />
         <AnimatedPath
           d={MARK_PATH}
           fill="none"
@@ -83,7 +85,8 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 9999,
   },
-  words: { alignItems: 'center', marginTop: 4 },
+  // The hexagon stays dead centre (where the native frame put it); the words sit under it.
+  words: { position: 'absolute', left: 0, right: 0, top: '50%', marginTop: HEX_SIZE * 0.31 + 22, alignItems: 'center' },
   wordmark: { fontFamily: Fonts.wordmark, fontSize: 30, letterSpacing: 1, color: '#17181A' },
   tagline: { fontFamily: Fonts.wordmark, fontSize: 16, marginTop: 8, color: '#6B6E68' },
 });

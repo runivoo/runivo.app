@@ -264,13 +264,13 @@ export default function StoreSection() {
             </Field>
             <Field label="Sort order" hint="Lower = first"><input className={inputClass} type="number" min="0" value={form.sort_order} onChange={e => upd('sort_order', e.target.value)} /></Field>
           </div>
-          <p className="text-[11px] text-gray-400 mt-3">
+          <p className="text-xs text-gray-400 mt-3">
             Every reward: one redemption per runner, accounts older than 14 days with at least 3 runs, PACE never expires (rewards do).
           </p>
           <ErrorNote message={error} />
           <div className="flex gap-2 mt-4">
             <button onClick={close} className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-500 bg-white">Cancel</button>
-            <button onClick={save} disabled={!canSave || saving} className="flex-1 py-2.5 rounded-xl bg-[#4E7F1F] text-white text-sm font-bold disabled:opacity-40">
+            <button onClick={save} disabled={!canSave || saving} className="flex-1 py-2.5 rounded-full bg-gray-900 text-white min-h-[44px] text-sm font-bold disabled:opacity-40">
               {saving ? 'Saving…' : editId ? 'Update reward' : 'Create reward'}
             </button>
           </div>
@@ -322,7 +322,7 @@ export default function StoreSection() {
                         <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-xs font-bold" style={{ backgroundColor: r.brand_color }}>{r.brand_initial}</div>
                         <div className="min-w-0">
                           <p className="font-semibold text-gray-900 leading-tight text-sm truncate">{r.title}</p>
-                          <p className="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                          <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
                             <span>{partnerName(r.partner_id) ?? r.brand}</span>
                             {r.plus_only && <span className="inline-flex items-center gap-0.5 text-amber-600"><Crown className="w-2.5 h-2.5" />Plus</span>}
                             {r.min_rank && <span className="inline-flex items-center gap-0.5"><Lock className="w-2.5 h-2.5" />{r.min_rank}+</span>}
@@ -347,10 +347,10 @@ export default function StoreSection() {
                             <Upload className="w-3 h-3 inline -mt-0.5" /> Codes
                           </button>
                         )}
-                        <button onClick={() => reorder(r, 'up')} disabled={idx === 0} className="w-7 h-7 rounded-lg border border-gray-100 bg-white flex items-center justify-center disabled:opacity-30" aria-label="Move up"><ChevronUp className="w-3 h-3 text-gray-400" /></button>
-                        <button onClick={() => reorder(r, 'down')} disabled={idx === rewards.length - 1} className="w-7 h-7 rounded-lg border border-gray-100 bg-white flex items-center justify-center disabled:opacity-30" aria-label="Move down"><ChevronDown className="w-3 h-3 text-gray-400" /></button>
-                        <button onClick={() => openEdit(r)} className="w-7 h-7 rounded-lg border border-gray-100 bg-white flex items-center justify-center" aria-label={`Edit ${r.title}`}><Pencil className="w-3 h-3 text-gray-400" /></button>
-                        <button onClick={() => del(r)} className="w-7 h-7 rounded-lg border border-red-100 bg-red-50 flex items-center justify-center" aria-label={`Delete ${r.title}`}><Trash2 className="w-3 h-3 text-red-400" /></button>
+                        <button onClick={() => reorder(r, 'up')} disabled={idx === 0} className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center disabled:opacity-30" aria-label="Move up"><ChevronUp className="w-3 h-3 text-gray-400" /></button>
+                        <button onClick={() => reorder(r, 'down')} disabled={idx === rewards.length - 1} className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center disabled:opacity-30" aria-label="Move down"><ChevronDown className="w-3 h-3 text-gray-400" /></button>
+                        <button onClick={() => openEdit(r)} className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center" aria-label={`Edit ${r.title}`}><Pencil className="w-4 h-4 text-gray-400" /></button>
+                        <button onClick={() => del(r)} className="w-11 h-11 rounded-full border border-red-100 bg-red-50 flex items-center justify-center" aria-label={`Delete ${r.title}`}><Trash2 className="w-4 h-4 text-red-400" /></button>
                       </div>
                     </td>
                   </tr>

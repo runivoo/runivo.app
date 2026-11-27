@@ -31,6 +31,7 @@ import { CheerSheet, type CheerTarget } from '@features/cheers/CheerSheet';
 import { ENGINE } from '@shared/engine/runEngine';
 import { PositionArrow } from '@mobile/shared/components/PositionArrow';
 import { MapAttribution } from '@theme/MapAttribution';
+import { PrimaryButton } from '@mobile/shared/components/PrimaryButton';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -330,13 +331,9 @@ export default function TerritoryMapScreen() {
             During a run you start, it keeps tracking with the screen locked or the app in the background, until you finish.
           </Text>
           {locationStatus === 'denied' ? (
-            <Pressable style={ss.emptyBtn} onPress={() => Linking.openSettings()}>
-              <Text style={ss.emptyBtnText}>Open Settings</Text>
-            </Pressable>
+            <PrimaryButton label="Open Settings" onPress={() => { Linking.openSettings(); }} />
           ) : (
-            <Pressable style={ss.emptyBtn} onPress={requestLocation}>
-              <Text style={ss.emptyBtnText}>Turn on location</Text>
-            </Pressable>
+            <PrimaryButton label="Turn on location" onPress={requestLocation} />
           )}
           <Pressable onPress={() => setLocationCardDismissed(true)} hitSlop={8}>
             <Text style={ss.notNow}>Not now</Text>
@@ -349,10 +346,7 @@ export default function TerritoryMapScreen() {
           <MapPin size={40} color={C.brandGreen} weight="fill" />
           <Text style={ss.emptyTitle}>No zones yet</Text>
           <Text style={ss.emptyBody}>Run a loop to claim the ground inside it. Any run of 200 m or more claims the street you ran.</Text>
-          <Pressable style={ss.emptyBtn}
-            onPress={() => navigation.navigate('Main', { screen: 'Run' })}>
-            <Text style={ss.emptyBtnText}>Start a run</Text>
-          </Pressable>
+          <PrimaryButton label="Start a run" onPress={() => navigation.navigate('Main', { screen: 'Run' })} />
         </View>
       )}
 
@@ -426,8 +420,6 @@ function mkStyles(C: AppColors) {
     emptyState:   { position: 'absolute', left: 18, right: 18, top: '30%', alignItems: 'center', backgroundColor: C.card, borderRadius: 20, gap: 8, paddingVertical: 24, paddingHorizontal: 22, shadowColor: '#000', shadowOpacity: 0.10, shadowRadius: 20, shadowOffset: { width: 0, height: 6 }, elevation: 8 },
     emptyTitle:   { fontFamily: Fonts.semiBold, fontSize: 22, lineHeight: 24, letterSpacing: -0.5, color: C.t1, textAlign: 'center' },
     emptyBody:    { fontFamily: Fonts.regular, fontSize: 13.5, lineHeight: 19, color: C.t2, textAlign: 'center', marginBottom: 8 },
-    emptyBtn:     { backgroundColor: C.alwaysDark, borderRadius: 999, height: 46, justifyContent: 'center', paddingHorizontal: 26 },
-    emptyBtnText: { fontFamily: Fonts.semiBold, fontSize: 15, color: C.alwaysLight },
     notNow:       { fontFamily: Fonts.medium, fontSize: 14, color: C.t2, marginTop: 4 },
   });
 }

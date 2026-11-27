@@ -9,6 +9,7 @@ import {
   computeRunPace,
   isOnFoot,
   lineToWKT,
+  looksSimulated,
   ringToWKT,
   tierForArea,
   updateStreak,
@@ -172,15 +173,17 @@ Deno.serve(async (req) => {
     return json({ error }, status);
   };
 
-  // The phone saw mock/simulated location. The run stays on the runner's
-  // history, but earns nothing and claims nothing. Recorded as scored, so the
-  // app stops retrying and drops the PACE it showed optimistically.
-  if (body.mockedLocation === true) {
+  // The phone saw mock/simulated location, or the trace itself looks generated
+  // (looksSimulated: constant accuracy at a machine-steady speed). The run stays
+  // on the runner's history, but earns nothing and claims nothing. Recorded as
+  // scored, so the app stops retrying and drops the PACE it showed optimistically.
+  const simulatedTrace = body.mockedLocation !== true && Array.isArray(body.gpsPoints) && looksSimulated(body.gpsPoints);
+  if (body.mockedLocation === true || simulatedTrace) {
     const flagged = {
       territoryGenerated: false, territoryWkt: null, territoryAreaM2: 0, claimedAreaM2: 0, isLoop: false,
       newZonesClaimed: 0, rivalZonesStolen: 0, verifiedDistanceKm: 0, paceAdjustment: 0, paceBreakdown: {},
       paceCapped: false, streakDays: 0, stolenFromUserIds: [] as string[], territoryCapReached: false,
-      newAwards: [] as string[], flagged: 'mock_location',
+      newAwards: [] as string[], flagged: simulatedTrace ? 'simulated_gps' : 'mock_location',
     };
     try {
       await supabase.from('pace_discrepancy_log').insert({

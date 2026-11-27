@@ -109,7 +109,7 @@ export default function ReportsSection() {
               ['Fee owed', `${report.partner.fee_currency} ${Number(report.fee_owed).toFixed(2)}`],
             ].map(([k, v]) => (
               <div key={k} className="rounded-2xl border border-gray-100 bg-white p-4">
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">{k}</p>
+                <p className="text-xs font-semibold text-gray-400">{k}</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1 tabular-nums">{v}</p>
               </div>
             ))}

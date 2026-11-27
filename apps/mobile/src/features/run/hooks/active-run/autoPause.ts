@@ -68,6 +68,7 @@ export function autoPauseFromFix(s: RunSession, now: number, gpsSpeed: number, s
   s.autoPaused = false;
   s.totalPausedMs += now - s.pauseStart;
   s.filter = { base: null, outliers: 0 };
+  s.breakNext = true;
   s.isPaused = false;
   return 'resumed';
 }

@@ -12,6 +12,7 @@ import { ShoeCard } from '@features/gear/components/ShoeCard';
 import type { StoredShoe } from '@shared/services/store';
 import { useToast } from '@mobile/shared/hooks/useToast';
 import { ScreenHeader } from '@mobile/shared/components/ScreenHeader';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -82,13 +83,11 @@ export default function GearScreen() {
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={C.red} />}
           ListEmptyComponent={
-            <View style={s.empty}>
-              <Text style={s.emptyTitle}>No shoes yet</Text>
-              <Text style={s.emptyText}>Add your running shoes to track mileage.</Text>
-              <Pressable style={s.emptyBtn} onPress={() => navigation.navigate('GearAdd')}>
-                <Text style={s.emptyBtnLabel}>Add first shoe</Text>
-              </Pressable>
-            </View>
+            <EmptyState
+              title="No shoes yet"
+              body="Add your running shoes to track mileage."
+              cta={{ label: 'Add first shoe', onPress: () => navigation.navigate('GearAdd') }}
+            />
           }
         />
       )}
@@ -101,11 +100,6 @@ function mkStyles(C: AppColors) {
     root:          { flex: 1, backgroundColor: C.stone },
     addBtn:        { width: 32, height: 32, borderRadius: 8, backgroundColor: C.alwaysDark, alignItems: 'center', justifyContent: 'center' },
     list:          { paddingHorizontal: Spacing.gutter, paddingTop: 8, paddingBottom: 100, gap: 10 },
-    empty:         { alignItems: 'center', paddingVertical: 48 },
-    emptyTitle:    { fontFamily: Fonts.semiBold, fontSize: 18, color: C.black, marginBottom: 6 },
-    emptyText:     { fontFamily: Fonts.regular, fontSize: 12, color: C.t2, textAlign: 'center', marginBottom: 16 },
-    emptyBtn:      { backgroundColor: C.alwaysDark, borderRadius: 8, paddingHorizontal: 20, paddingVertical: 10 },
-    emptyBtnLabel: { fontFamily: Fonts.medium, fontSize: 12, color: C.alwaysLight, letterSpacing: 0.5 },
     sectionLabel:  { ...Type.overline, color: C.t3, marginTop: 8, marginBottom: 4, paddingLeft: 4 },
   });
 }

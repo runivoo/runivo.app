@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, Pressable, Share, Image, ScrollView } from 'react-native';
 import { Heart, MessageCircle, MoreHorizontal, Share2 } from '@mobile/shared/icons/lucideCompat';
-import Svg, { Polyline, Polygon, Circle } from 'react-native-svg';
+import Svg, { Path, Polygon, Circle } from 'react-native-svg';
+import { pieceStarts, svgPath } from '@mobile/shared/lib/trailPieces';
 import { CityBackdrop } from '@mobile/shared/components/CityBackdrop';
 import { Avatar } from '@mobile/shared/components/Avatar';
 import { avatarColor } from '@shared/lib/avatarUtils';
@@ -74,7 +75,7 @@ const PAD   = 22;
 type HeroKind = 'run' | 'claim' | 'steal';
 
 /** Route thumbnail over a drawn city, as on the mock's feed cards. */
-function RouteMapHero({ points, seed, kind }: { points: { lat: number; lng: number }[]; seed: string; kind: HeroKind }) {
+function RouteMapHero({ points, seed, kind }: { points: { lat: number; lng: number; brk?: boolean }[]; seed: string; kind: HeroKind }) {
   const H = kind === 'steal' ? STEAL_MAP_H : MAP_H;
   const C  = useTheme();
   const zone = territoryPalette(useIsDark());
@@ -98,7 +99,9 @@ function RouteMapHero({ points, seed, kind }: { points: { lat: number; lng: numb
     const first = pts[0], last = pts[pts.length - 1];
     const diag = Math.hypot(rangeW * scale, rangeH * scale);
     const closed = Math.hypot(first.x - last.x, first.y - last.y) < Math.max(18, diag * 0.15);
-    return { poly: pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '), start: first, closed };
+    // The route lifts the pen at a pause resumed somewhere else.
+    const path = svgPath(pts.map(p => [p.x, p.y]), pts.map((_, i) => i), pieceStarts(points));
+    return { poly: pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '), path, start: first, closed };
   }, [points, H]);
 
   const stroke = kind === 'run' ? C.t1 : zone.trail;
@@ -112,7 +115,7 @@ function RouteMapHero({ points, seed, kind }: { points: { lat: number; lng: numb
         {geo.closed
           ? <Polygon points={geo.poly} fill={fill} fillOpacity={fillOpacity} stroke={stroke} strokeWidth={kind === 'steal' ? 2.5 : 3}
               strokeDasharray={kind === 'steal' ? '6 4' : undefined} strokeLinejoin="round" />
-          : <Polyline points={geo.poly} fill="none" stroke={stroke} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />}
+          : <Path d={geo.path} fill="none" stroke={stroke} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />}
         <Circle cx={geo.start.x} cy={geo.start.y} r="5" fill="#FFFFFF" stroke={stroke} strokeWidth="2.5" />
       </Svg>
     </View>

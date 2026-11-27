@@ -47,6 +47,8 @@ export function useRunTimer(s: RunSession, ui: RunUi) {
     s.totalPausedMs += Date.now() - s.pauseStart;
     // Reset the last position so the first point after resume doesn't create a large delta.
     s.filter = { base: null, outliers: 0 };
+    // The first point after the pause starts a new stretch: the gap is never trail.
+    s.breakNext = true;
     s.manualPause = false;
     s.stoppedSince = null;
     s.lastMovingFixAt = Date.now();

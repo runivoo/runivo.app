@@ -14,6 +14,7 @@ import { supabase } from '@shared/services/supabase';
 import { fetchFollowingIds, setFollow } from '@features/social/services/feedService';
 import { useTheme, Fonts, type AppColors } from '@theme';
 import { ScreenHeader } from '@mobile/shared/components/ScreenHeader';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -98,11 +99,11 @@ export default function NotificationsScreen() {
         ListEmptyComponent={
           loading ? <ActivityIndicator style={{ marginTop: 64 }} color={C.t2} accessibilityLabel="Loading activity" />
           : error ? <ErrorState title="Couldn't load your activity" onRetry={refresh} />
-          : <View style={s.empty}>
-            <View style={s.emptyIcon}><Bell size={28} color={C.t1} weight="regular" /></View>
-            <Text style={s.emptyTitle}>Nothing yet</Text>
-            <Text style={s.emptyText}>Zone steals, kudos, follows and rank ups will show up here.</Text>
-          </View>
+          : <EmptyState
+            icon={<View style={s.emptyIcon}><Bell size={28} color={C.t1} weight="regular" /></View>}
+            title="Nothing yet"
+            body="Zone steals, kudos, follows and rank ups will show up here."
+          />
         }
       />
     </SafeAreaView>
@@ -115,8 +116,5 @@ function mkStyles(C: AppColors) { return StyleSheet.create({
   section:     { fontFamily: Fonts.medium, fontSize: 14, color: C.t2, paddingTop: 12, paddingBottom: 10, paddingHorizontal: 2 },
   markAllText: { fontFamily: Fonts.regular, fontSize: 14, color: C.t1 },
   list:        { paddingHorizontal: 20, paddingBottom: 100 },
-  empty:       { alignItems: 'center' as const, paddingVertical: 64 },
   emptyIcon:   { width: 64, height: 64, borderRadius: 32, backgroundColor: C.card, alignItems: 'center', justifyContent: 'center', marginBottom: 14 },
-  emptyTitle:  { fontFamily: Fonts.bold, fontSize: 18, color: C.t1, marginBottom: 6 },
-  emptyText:   { fontFamily: Fonts.regular, fontSize: 13, color: C.t2, textAlign: 'center', paddingHorizontal: 32, lineHeight: 19 },
 }); }

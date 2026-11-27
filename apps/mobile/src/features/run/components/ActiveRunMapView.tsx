@@ -8,6 +8,7 @@ import type { GPSPoint } from '../hooks/useActiveRun';
 import type { LiveFriendRunner } from '../hooks/useLiveFriendRuns';
 import { LiveFriendMarker } from './LiveFriendMarker';
 import type { TerritoryPolygon } from '@shared/types/game';
+import { trailGeometry } from '@shared/engine/runEngine';
 import { ZoneLayers } from './ZoneLayers';
 import { PositionArrow } from '@mobile/shared/components/PositionArrow';
 
@@ -70,13 +71,10 @@ export default function ActiveRunMapView({ gpsPoints, ghostRoutePoints, closestI
   const displayPath = gpsPoints;
 
   // Build GeoJSON LineString from smoothed display path
-  const trailGeoJSON = useMemo((): GeoJSON.Feature<GeoJSON.LineString> | null => {
+  // A pause resumed somewhere else is a break in the line, never a straight jump.
+  const trailGeoJSON = useMemo((): GeoJSON.Feature<GeoJSON.LineString | GeoJSON.MultiLineString> | null => {
     if (displayPath.length < 2) return null;
-    return {
-      type: 'Feature',
-      geometry: { type: 'LineString', coordinates: displayPath.map(p => [p.lng, p.lat]) },
-      properties: {},
-    };
+    return { type: 'Feature', geometry: trailGeometry(displayPath), properties: {} };
   }, [displayPath]);
 
   // Start dot (first GPS point) — pin lat/lng primitives in dep array (not the object)

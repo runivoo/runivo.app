@@ -10,13 +10,14 @@
  * start, ~45 bytes) in parts of PART_SIZE points. Only parts that changed are
  * written. Keys:
  *   `<prefix><runId>`        meta: { v: 2, startTime, activityType, parts }
- *   `<prefix><runId>#<n>`    part n: [[lat, lng, dtMs, speed, accuracy, altitude], …]
+ *   `<prefix><runId>#<n>`    part n: [[lat, lng, dtMs, speed, accuracy, altitude, brk?], …]
+ *                            (a 7th element 1 marks the first point after a pause)
  * A checkpoint written by an older build (one row with `points`) still reads.
  */
 import type { GPSPoint } from '../hooks/useActiveRun';
 
 export const PART_SIZE = 4000;
-export type PackedPoint = [number, number, number, number, number, number];
+export type PackedPoint = [number, number, number, number, number, number] | [number, number, number, number, number, number, 1];
 
 export interface CheckpointMeta {
   v: 2; startTime: number; activityType: string; parts: number;
@@ -27,11 +28,13 @@ export interface CheckpointMeta {
 const r = (n: number, dp: number) => { const f = 10 ** dp; return Math.round(n * f) / f; };
 
 export function packPoint(p: GPSPoint, startTime: number): PackedPoint {
-  return [r(p.lat, 6), r(p.lng, 6), p.timestamp - startTime, r(p.speed, 1), Math.round(p.accuracy), Math.round(p.altitude)];
+  const base: [number, number, number, number, number, number] =
+    [r(p.lat, 6), r(p.lng, 6), p.timestamp - startTime, r(p.speed, 1), Math.round(p.accuracy), Math.round(p.altitude)];
+  return p.brk ? [...base, 1] : base;
 }
 
 export function unpackPoint(a: PackedPoint, startTime: number): GPSPoint {
-  return { lat: a[0], lng: a[1], timestamp: startTime + a[2], speed: a[3], accuracy: a[4], altitude: a[5] };
+  return { lat: a[0], lng: a[1], timestamp: startTime + a[2], speed: a[3], accuracy: a[4], altitude: a[5], ...(a[6] === 1 && { brk: true as const }) };
 }
 
 export const partKey = (metaKey: string, n: number) => `${metaKey}#${n}`;

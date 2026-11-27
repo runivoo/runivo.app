@@ -4,6 +4,7 @@ import { useTheme } from '@theme';
 import type { ClubMember } from '@features/clubs/types';
 import { MemberRow } from './MemberRow';
 import { mkCommonStyles } from './clubDetailStyles';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 interface Props {
   loading: boolean;
@@ -36,9 +37,7 @@ export function ClubLeaderboardTab({ loading, leaderboard, onOpenProfile }: Prop
         <Text style={s.sectionLabel}>Ranked by total km</Text>
       }
       ListEmptyComponent={
-        <View style={s.empty}>
-          <Text style={s.emptyTitle}>No members yet</Text>
-        </View>
+        <EmptyState title="No members yet" />
       }
     />
   );

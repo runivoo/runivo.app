@@ -51,7 +51,10 @@ export function uploadTrace(points: Points): Points {
   let last = points[0];
   points.forEach((p, i) => {
     const far = haversineM(last, p) >= MAX_UPLOAD_GAP_M;
-    if (i === 0 || i === points.length - 1 || keep.has(p.timestamp) || far) {
+    // A pause is kept exactly: the point it starts on and the point before it.
+    // Dropping either would join the trail across the gap on the server.
+    const pause = !!p.brk || !!points[i + 1]?.brk;
+    if (i === 0 || i === points.length - 1 || keep.has(p.timestamp) || far || pause) {
       out.push(p);
       last = p;
     }

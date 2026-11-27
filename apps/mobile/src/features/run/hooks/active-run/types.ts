@@ -21,6 +21,8 @@ export interface GPSPoint {
   speed: number;
   accuracy: number;
   altitude: number;
+  /** First point after a pause: no distance, and no line from the point before it (runEngine). */
+  brk?: true;
 }
 
 /** The React state the screen renders from (the rest is in RunSession). */
@@ -52,6 +54,8 @@ export interface RunSession {
   startTime: number;
   pauseStart: number;
   totalPausedMs: number;
+  /** Set on resume: the next point recorded starts a new stretch of trail (brk). */
+  breakNext: boolean;
   elapsed: number;
   pace: string;
   isPaused: boolean;

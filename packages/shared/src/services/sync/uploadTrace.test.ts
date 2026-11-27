@@ -37,3 +37,14 @@ describe('uploadTrace', () => {
     expect(out.some(p => p.timestamp === corner.timestamp)).toBe(true);
   });
 });
+
+describe('uploadTrace pauses', () => {
+  it('always keeps the point a pause starts on and the point before it', () => {
+    const pts: ReturnType<typeof straight> & { brk?: boolean }[] = straight(300);
+    (pts[150] as { brk?: boolean }).brk = true;
+    const out = uploadTrace(pts);
+    const i = out.findIndex(p => (p as { brk?: boolean }).brk);
+    expect(i).toBeGreaterThan(0);
+    expect(out[i - 1].timestamp).toBe(pts[149].timestamp);
+  });
+});

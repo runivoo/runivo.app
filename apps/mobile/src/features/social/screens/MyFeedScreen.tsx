@@ -11,6 +11,7 @@ import { fetchMyFeed, toggleLike, deletePost } from '../services/feedService';
 import { FeedPostCard } from '../components/FeedPostCard';
 import CommentSheet from '../components/CommentSheet';
 import type { FeedPost } from '../types';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -85,10 +86,10 @@ export default function MyFeedScreen() {
           onEndReachedThreshold={0.5}
           onEndReached={() => { if (cursor) load(false); }}
           ListEmptyComponent={
-            <View style={s.empty}>
-              <Text style={s.emptyTitle}>{error ? "Couldn't load your feed" : 'Nothing posted yet'}</Text>
-              <Text style={s.emptyBody}>{error ? 'Pull down to try again.' : 'Every run you finish shows up here, with your battle cards and milestones.'}</Text>
-            </View>
+            <EmptyState
+              title={error ? "Couldn't load your feed" : 'Nothing posted yet'}
+              body={error ? 'Pull down to try again.' : 'Every run you finish shows up here, with your battle cards and milestones.'}
+            />
           }
         />
       )}
@@ -103,8 +104,5 @@ function mkStyles(C: AppColors) {
     header:     { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.gutter, height: 52 },
     back:       { width: 44, height: 44, justifyContent: 'center' },
     title:      { flex: 1, textAlign: 'center', fontFamily: Fonts.semiBold, fontSize: 17, color: C.t1 },
-    empty:      { alignItems: 'center', paddingHorizontal: 32, paddingTop: 64, gap: 8 },
-    emptyTitle: { fontFamily: Fonts.semiBold, fontSize: 16, color: C.t1 },
-    emptyBody:  { fontFamily: Fonts.regular, fontSize: 14, lineHeight: 20, color: C.t2, textAlign: 'center' },
   });
 }

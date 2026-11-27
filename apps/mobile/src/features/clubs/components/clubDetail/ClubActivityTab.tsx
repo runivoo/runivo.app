@@ -7,6 +7,7 @@ import type { FeedPost } from '@features/social/types';
 import type { ActivityItem } from '@features/clubs/types';
 import { ActivityRow } from './ActivityRow';
 import { mkCommonStyles } from './clubDetailStyles';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 interface Props {
   loading: boolean;
@@ -56,11 +57,11 @@ export function ClubActivityTab({ loading, activity, clubPosts, currentUserId, o
         </>
       }
       ListEmptyComponent={clubPosts.length > 0 ? null : (
-        <View style={s.empty}>
-          <ClipboardText size={36} color={C.t3} weight="light" />
-          <Text style={s.emptyTitle}>No activity yet</Text>
-          <Text style={s.emptyText}>Club runs and events will appear here.</Text>
-        </View>
+        <EmptyState
+          icon={<ClipboardText size={36} color={C.t3} weight="light" />}
+          title="No activity yet"
+          body="Club runs and events will appear here."
+        />
       )}
     />
   );

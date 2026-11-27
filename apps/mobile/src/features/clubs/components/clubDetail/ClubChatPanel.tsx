@@ -6,6 +6,7 @@ import { ChatInput } from '@features/clubs/components/ChatInput';
 import type { LobbyMessage } from '@features/clubs/services/lobbyChatService';
 import { ClubInitialsTile } from '../ClubHeroCard';
 import { mkCommonStyles } from './clubDetailStyles';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 interface Props {
   listRef: RefObject<FlatList<LobbyMessage> | null>;
@@ -41,14 +42,15 @@ export function ClubChatPanel({
       ) : messages.length === 0 && error ? (
         // A failed load is not "No messages yet".
         <View style={s.empty}>
-          <Text style={s.emptyTitle}>Couldn't load the chat</Text>
-          <Text style={s.emptyText}>{error}</Text>
+          <EmptyState title="Couldn't load the chat" body={error} />
         </View>
       ) : messages.length === 0 ? (
         <View style={s.empty}>
-          <ClubInitialsTile name={clubName} size={48} uri={clubAvatar} shape="hex" />
-          <Text style={s.emptyTitle}>No messages yet</Text>
-          <Text style={s.emptyText}>Start the conversation with your club!</Text>
+          <EmptyState
+            icon={<ClubInitialsTile name={clubName} size={48} uri={clubAvatar} shape="hex" />}
+            title="No messages yet"
+            body="Start the conversation with your club!"
+          />
         </View>
       ) : (
         <FlatList

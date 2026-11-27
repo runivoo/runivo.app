@@ -148,7 +148,7 @@ export default function CampaignsSection() {
           <ErrorNote message={error} />
           <div className="flex gap-2 mt-4">
             <button onClick={close} className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-500 bg-white">Cancel</button>
-            <button onClick={save} disabled={!canSave || saving} className="flex-1 py-2.5 rounded-xl bg-[#4E7F1F] text-white text-sm font-bold disabled:opacity-40">
+            <button onClick={save} disabled={!canSave || saving} className="flex-1 py-2.5 rounded-full bg-gray-900 text-white min-h-[44px] text-sm font-bold disabled:opacity-40">
               {saving ? 'Saving…' : editId ? 'Update campaign' : 'Schedule campaign'}
             </button>
           </div>
@@ -178,7 +178,7 @@ export default function CampaignsSection() {
                 <tr key={r.id}>
                   <td className="px-4 py-3">
                     <p className="font-semibold text-gray-900 text-sm">{r.name}</p>
-                    <p className="text-[11px] text-gray-500 mt-0.5 line-clamp-1">{r.title}: {r.body}</p>
+                    <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{r.title}: {r.body}</p>
                   </td>
                   <td className="px-4 py-3 text-xs text-gray-500 hidden sm:table-cell whitespace-nowrap">
                     {new Date(r.send_at).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
@@ -192,10 +192,10 @@ export default function CampaignsSection() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
                       {r.sent_count === 0 && (r.status === 'scheduled' || r.status === 'draft') && (
-                        <button onClick={() => openEdit(r)} className="w-7 h-7 rounded-lg border border-gray-100 bg-white flex items-center justify-center" aria-label={`Edit ${r.name}`}><Pencil className="w-3 h-3 text-gray-400" /></button>
+                        <button onClick={() => openEdit(r)} className="w-11 h-11 rounded-full border border-gray-100 bg-white flex items-center justify-center" aria-label={`Edit ${r.name}`}><Pencil className="w-4 h-4 text-gray-400" /></button>
                       )}
                       {(r.status === 'scheduled' || r.status === 'draft') && (
-                        <button onClick={() => cancelCampaign(r)} className="w-7 h-7 rounded-lg border border-red-100 bg-red-50 flex items-center justify-center" aria-label={`Cancel ${r.name}`}><Ban className="w-3 h-3 text-red-400" /></button>
+                        <button onClick={() => cancelCampaign(r)} className="w-11 h-11 rounded-full border border-red-100 bg-red-50 flex items-center justify-center" aria-label={`Cancel ${r.name}`}><Ban className="w-3 h-3 text-red-400" /></button>
                       )}
                     </div>
                   </td>

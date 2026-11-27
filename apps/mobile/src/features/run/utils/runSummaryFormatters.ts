@@ -50,6 +50,7 @@ export function rejectionText(reason: string): string {
     case 'run_too_short':     return 'Runs shorter than a minute aren\'t scored.';
     case 'insufficient_gps':  return 'The phone recorded too few GPS points to check this run.';
     case 'mock_location':     return 'This phone reported a simulated location during the run, so it earns no PACE or ground.';
+    case 'simulated_gps':     return 'This run\'s GPS looked generated rather than recorded, so it earns no PACE or ground. If that\'s wrong, tell us from Settings → Help and contact.';
     case 'trace_too_large':   return 'This run\'s GPS trace was too large to check.';
     case 'activity_type':
     case 'duration':

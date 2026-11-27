@@ -1,7 +1,9 @@
 import './globals.css';
+import './motion.css';
 import { Outfit } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import { PostHogProvider } from './PostHogProvider';
+import { Motion } from '@/components/Motion';
 
 // The one typeface of the app (apps/mobile/src/theme/typography.ts): Outfit 400-700.
 const outfit = Outfit({
@@ -44,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a href="#main" className="skip-link">Skip to content</a>
         <PostHogProvider>{children}</PostHogProvider>
+        <Motion />
       </body>
     </html>
   );

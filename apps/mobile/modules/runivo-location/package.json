@@ -1,0 +1,9 @@
+{
+  "name": "runivo-location",
+  "version": "1.0.0",
+  "description": "Asks iOS whether the current location is simulated by software (anti-spoofing)",
+  "main": "index.ts",
+  "license": "UNLICENSED",
+  "author": "Runivo",
+  "homepage": "https://runivo.in"
+}

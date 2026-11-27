@@ -1,14 +1,15 @@
-import { serviceClient, str, num, list, json } from '@/lib/adminServer';
-import { PARTNER_CATEGORIES } from '@/app/api/admin/partners/fields';
+import { serviceClient, str, json } from '@/lib/adminServer';
 import { makeLimiter, clientIp, EMAIL_RE } from '@/lib/rateLimit';
+import { SUPPORT_EMAIL } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
 /**
- * Public partner application (runivo.in/partners). No sign-in: it writes
- * one partners row with status 'applied' through submit_partner_application,
- * which validates again and caps applications per email per day. The team
- * reviews it in the admin. Errors are never returned verbatim.
+ * Public partner application (runivo.in/partners): company, contact name, work
+ * email and website. No sign-in: it writes one partners row with status 'applied'
+ * through submit_partner_application, which validates again and caps applications
+ * per email per day. The team contacts the brand and fills in the rest in the admin.
+ * Errors are never returned verbatim.
  */
 
 // Per-IP limit: 5 applications per 10 minutes per server instance.
@@ -36,38 +37,30 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const name = str(body.name, 120);
-  const category = typeof body.category === 'string' && (PARTNER_CATEGORIES as readonly string[]).includes(body.category)
-    ? body.category : null;
   const contactName = str(body.contact_name, 120);
   const email = str(body.contact_email, 200)?.toLowerCase() ?? null;
   const websiteRaw = str(body.website, 300);
   const website = websiteRaw && /^https?:\/\//i.test(websiteRaw) ? websiteRaw : websiteRaw ? `https://${websiteRaw}` : null;
-  const countries = list(body.countries, 20)?.map(c => c.toUpperCase().slice(0, 2)).filter(c => /^[A-Z]{2}$/.test(c)) ?? null;
-  const cities = list(body.cities, 50)?.map(c => c.slice(0, 60)) ?? null;
-  const offer = str(body.offer, 1000);
-  const stockN = num(body.estimated_stock);
-  const stock = stockN === null ? null : Math.max(0, Math.min(1_000_000, Math.round(stockN)));
 
   const missing: string[] = [];
-  if (!name || name.length < 2) missing.push('company name');
-  if (!category) missing.push('category');
+  if (!name || name.length < 2) missing.push('your company name');
   if (!email || !EMAIL_RE.test(email)) missing.push('a valid email');
-  if (!offer || offer.length < 5) missing.push('your offer');
   if (missing.length) {
-    return json({ ok: false, error: `Please add ${missing.join(', ')}.` }, 400);
+    return json({ ok: false, error: `Please add ${missing.join(' and ')}.` }, 400);
   }
 
   try {
+    // The offer, category, stock and cities are worked out with the brand after we get in touch.
     const { error } = await serviceClient().rpc('submit_partner_application', {
       p_name: name,
-      p_category: category,
+      p_category: null,
       p_contact_name: contactName,
       p_contact_email: email,
       p_website: website,
-      p_countries: countries && countries.length ? countries : null,
-      p_cities: cities && cities.length ? cities : null,
-      p_offer: offer,
-      p_estimated_stock: stock,
+      p_countries: null,
+      p_cities: null,
+      p_offer: null,
+      p_estimated_stock: null,
     });
     if (error) {
       if (/rate_limited/.test(error.message)) {
@@ -77,11 +70,11 @@ export async function POST(req: Request): Promise<Response> {
         return json({ ok: false, error: 'Some details look wrong. Check the form and try again.' }, 400);
       }
       console.error('[partners/apply]', error.message);
-      return json({ ok: false, error: 'Something went wrong. Please try again, or email runivo.official@gmail.com.' }, 500);
+      return json({ ok: false, error: `Something went wrong. Please try again, or email ${SUPPORT_EMAIL}.` }, 500);
     }
   } catch (e) {
     console.error('[partners/apply]', e);
-    return json({ ok: false, error: 'Something went wrong. Please try again, or email runivo.official@gmail.com.' }, 500);
+    return json({ ok: false, error: `Something went wrong. Please try again, or email ${SUPPORT_EMAIL}.` }, 500);
   }
 
   return json({ ok: true }, 201);

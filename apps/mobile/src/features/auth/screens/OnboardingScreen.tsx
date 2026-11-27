@@ -7,7 +7,7 @@
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { notifyOnboardingComplete } from '@mobile/shared/lib/onboardingEvents';
-import { View, Text, Pressable, StyleSheet, ActivityIndicator, Animated, Dimensions, KeyboardAvoidingView, Platform, BackHandler } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Animated, Dimensions, KeyboardAvoidingView, Platform, BackHandler } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -37,6 +37,7 @@ import { startPreview } from '../startPlan';
 import { paceXToneFor } from '@shared/engine/onboarding';
 import { localToday } from '@features/training/services/planService';
 import { parseFiveKTime } from '@shared/engine/onboarding';
+import { PrimaryButton } from '@mobile/shared/components/PrimaryButton';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 const { width: SCREEN_W } = Dimensions.get('window');
@@ -211,14 +212,7 @@ export default function OnboardingScreen() {
       <View style={[s.footer, { paddingBottom: Math.max(insets.bottom, 16) + 4 }]}>
         <FooterFade />
         {ob.stepKey === 'mission' && !!ob.error && <Text style={s.error}>{ob.error}</Text>}
-        <Pressable
-          accessibilityRole="button"
-          style={({ pressed }) => [s.cta, (cta.disabled || busy) && s.ctaOff, pressed && s.pressed]}
-          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}); cta.onPress(); }}
-          disabled={cta.disabled || busy}
-        >
-          {busy ? <ActivityIndicator color={C.alwaysLight} /> : <Text style={s.ctaText}>{cta.label}</Text>}
-        </Pressable>
+        <PrimaryButton label={cta.label} onPress={cta.onPress} disabled={cta.disabled} loading={busy} size="lg" fullWidth />
         {ob.optional && (
           <Pressable onPress={ob.skip} hitSlop={8} style={s.skip} accessibilityRole="button">
             <Text style={s.skipText}>{skipLabel}</Text>
@@ -235,9 +229,6 @@ function mkStyles(C: AppColors) {
     body:     { flex: 1 },
     footer:   { paddingHorizontal: 22, paddingTop: 10 },
     cta:      { height: 56, borderRadius: 999, backgroundColor: C.alwaysDark, alignItems: 'center', justifyContent: 'center' },
-    ctaOff:   { opacity: 0.4 },
-    pressed:  { opacity: 0.92, transform: [{ scale: 0.985 }] },
-    ctaText:  { fontFamily: Fonts.semiBold, fontSize: 16, color: C.alwaysLight },
     skip:     { alignItems: 'center', paddingTop: 14, paddingBottom: 2 },
     skipText: { fontFamily: Fonts.semiBold, fontSize: 14, color: C.t2 },
     error:    { fontFamily: Fonts.medium, fontSize: 13, color: C.danger, textAlign: 'center', marginBottom: 10 },

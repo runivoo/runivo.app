@@ -9,6 +9,7 @@ import type { ActivityType } from '../types';
 import { activityMetaFor, sportFor } from '../constants/activities';
 import { useTheme, Type, Fonts, type AppColors } from '@theme';
 import { RunPrefChips } from './RunPrefChips';
+import { PrimaryButton } from '@mobile/shared/components/PrimaryButton';
 
 /** Route and Beat Pacer pickers are not in the v1 design; they stay built for later. */
 const RUN_OPTIONS = false;
@@ -165,9 +166,11 @@ export default function RunSetupSheet({
               ? 'Runivo needs your location to track the route and claim ground.'
               : 'Location is switched off on this phone. Turn on Location Services to track a run.'}
           </Text>
-          <TouchableOpacity style={ss.settingsBtn} onPress={() => { Linking.openSettings().catch(() => {}); }} activeOpacity={0.85} testID="run-gps-settings-btn">
-            <Text style={ss.settingsLabel}>{gpsProblem === 'denied' ? 'Allow location in Settings' : 'Open Settings'}</Text>
-          </TouchableOpacity>
+          <PrimaryButton
+            label={gpsProblem === 'denied' ? 'Allow location in Settings' : 'Open Settings'}
+            onPress={() => { Linking.openSettings().catch(() => {}); }}
+            size="lg" fullWidth style={ss.settingsBtn}
+          />
         </>) : (
           <View style={ss.controls}>
             <TouchableOpacity style={ss.side} onPress={() => { Haptics.selectionAsync(); onMoreSports(); }} accessibilityRole="button" accessibilityLabel={`Sport: ${sport.label}. Change`} testID="run-sport-picker">
@@ -210,8 +213,7 @@ function mkStyles(C: AppColors) {
     side:             { width: 76, alignItems: 'center', gap: 6 },
     sideIcon:         { width: 56, height: 56, borderRadius: 28, backgroundColor: C.bg, alignItems: 'center', justifyContent: 'center' },
     sideTxt:          { fontFamily: Fonts.medium, fontSize: 13, color: C.t1 },
-    settingsBtn:      { backgroundColor: C.alwaysDark, borderRadius: 999, height: 56, alignItems: 'center', justifyContent: 'center', marginBottom: 6 },
-    settingsLabel:    { fontFamily: Fonts.semiBold, fontSize: 16, color: C.alwaysLight },
+    settingsBtn:      { marginBottom: 6 },
     selectorRow:      { ...card, flexDirection: 'row', marginHorizontal: 18, marginBottom: 10, overflow: 'hidden' },
     selectorBtn:      { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 12, paddingHorizontal: 14 },
     selectorBtnBorder:{ borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: C.border },

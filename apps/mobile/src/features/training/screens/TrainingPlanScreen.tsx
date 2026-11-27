@@ -27,6 +27,7 @@ import { fetchActivePlan, getCachedPlan, savePlan, endPlan, localToday, catchUpP
 import { WeekCheckIn } from '../components/WeekCheckIn';
 import { PrimaryButton } from '@mobile/shared/components/PrimaryButton';
 import { Segmented } from '@mobile/shared/components/Segmented';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 const DAY_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -75,9 +76,11 @@ export default function TrainingPlanScreen() {
         <ScreenHeader title="Training" onBack={() => navigation.goBack()} />
         {loadError ? <ErrorState title="Couldn't load your plan" onRetry={load} /> : (
         <View style={s.empty}>
-          <Text style={s.emptyTitle}>No plan yet</Text>
-          <Text style={s.emptySub}>Pick a race and a date. We'll build weeks of sessions around the days you can run.</Text>
-          <PrimaryButton label="Build a plan" onPress={() => navigation.replace('PlanBuilder')} fullWidth style={{ marginTop: 16 }} />
+          <EmptyState
+            title="No plan yet"
+            body="Pick a race and a date. We'll build weeks of sessions around the days you can run."
+            cta={{ label: 'Build a plan', onPress: () => navigation.replace('PlanBuilder') }}
+          />
         </View>
         )}
       </SafeAreaView>
@@ -281,9 +284,7 @@ function mkStyles(C: AppColors) {
     tag:      { fontFamily: Fonts.medium, fontSize: 12, color: C.t3 },
     ease:     { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, height: 50, borderRadius: 25, backgroundColor: C.card },
     easeTxt:  { fontFamily: Fonts.semiBold, fontSize: 14, color: C.t1 },
-    empty:    { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 },
-    emptyTitle: { fontFamily: Fonts.semiBold, fontSize: 20, color: C.t1 },
-    emptySub: { fontFamily: Fonts.regular, fontSize: 14, lineHeight: 20, color: C.t2, textAlign: 'center', marginTop: 8, marginBottom: 20 },
+    empty:    { flex: 1, justifyContent: 'center' },
     steps:    { marginTop: 14, gap: 8 },
     stepRow:  { flexDirection: 'row', alignItems: 'center', gap: 10 },
     stepDot:  { width: 8, height: 8, borderRadius: 4, backgroundColor: C.t3 },

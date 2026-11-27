@@ -2,7 +2,7 @@ import type { RunSession } from './types';
 
 export function createRunSession(): RunSession {
   return {
-    startTime: 0, pauseStart: 0, totalPausedMs: 0, elapsed: 0, pace: '0:00', isPaused: false,
+    startTime: 0, pauseStart: 0, totalPausedMs: 0, breakNext: false, elapsed: 0, pace: '0:00', isPaused: false,
     runId: '', isFinishing: false, isStarting: false, appState: 'active',
     filter: { base: null, outliers: 0 }, gpsPoints: [], pendingDistance: 0, totalDistance: 0,
     lastGpsStateUpdate: 0, gpsLocked: false, lastGoodFixAt: 0, consecutiveGoodPoints: 0,
@@ -22,6 +22,7 @@ export function beginRunSession(s: RunSession, now: number, runId: string): void
   s.startTime = now;
   s.pauseStart = 0;
   s.totalPausedMs = 0;
+  s.breakNext = false;
   s.filter = { base: null, outliers: 0 };
   s.runId = runId;
   s.mocked = false;

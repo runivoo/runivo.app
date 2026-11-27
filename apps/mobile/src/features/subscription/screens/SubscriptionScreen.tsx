@@ -14,6 +14,7 @@ import { PLANS, PAYWALL_COPY } from '../types';
 import { paywallRows, displayPrice } from '@shared/engine/entitlements';
 import { FEATURES } from '../../../config/features';
 import { useTheme, Fonts, Type, Spacing, type AppColors } from '@theme';
+import { PrimaryButton } from '@mobile/shared/components/PrimaryButton';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -115,14 +116,7 @@ export default function SubscriptionScreen() {
                   />
                 ))}
               </View>
-              <Pressable
-                onPress={onBuy}
-                disabled={purchasing}
-                accessibilityRole="button"
-                style={({ pressed }) => [s.cta, (pressed || purchasing) && { opacity: 0.88 }]}
-              >
-                {purchasing ? <ActivityIndicator color="#FFFFFF" /> : <Text style={s.ctaLabel}>{ctaLabel}</Text>}
-              </Pressable>
+              <PrimaryButton label={ctaLabel} onPress={onBuy} loading={purchasing} size="lg" fullWidth style={s.cta} />
               <Text style={s.ctaSub}>{ctaSub} Cancel any time in {Platform.OS === 'ios' ? 'your Apple ID settings' : 'Google Play'}.</Text>
             </>
           )}
@@ -181,8 +175,7 @@ function mkStyles(C: AppColors) {
     footFree:    { width: 64, textAlign: 'center', fontFamily: Fonts.regular, fontSize: 12, color: C.t2 },
     footPlus:    { width: 86, textAlign: 'right', fontFamily: Fonts.medium, fontSize: 12, color: C.t1 },
     plans:       { flexDirection: 'row', gap: 10, marginTop: 16 },
-    cta:         { marginTop: 14, height: 56, borderRadius: 999, backgroundColor: C.alwaysDark, alignItems: 'center', justifyContent: 'center' },
-    ctaLabel:    { fontFamily: Fonts.semiBold, fontSize: 16, color: C.alwaysLight },
+    cta:         { marginTop: 14 },
     ctaSub:      { fontFamily: Fonts.regular, fontSize: 12.5, lineHeight: 18, color: C.t2, textAlign: 'center', marginTop: 10 },
     legal:       { fontFamily: Fonts.regular, fontSize: 11.5, lineHeight: 16, color: C.t3, textAlign: 'center', marginTop: 18 },
     links:       { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 10 },

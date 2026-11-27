@@ -24,6 +24,7 @@ import { searchRaces, fmtRaceDate, type RaceResult } from '@features/training/se
 import { positionIfAllowed } from '@mobile/shared/location/devicePosition';
 import { ModalSheet } from '@mobile/shared/components/ModalSheet';
 import { Segmented } from '@mobile/shared/components/Segmented';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -441,12 +442,10 @@ export default function EventsScreen({ embedded = false }: { embedded?: boolean 
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={C.red} />}
           ListEmptyComponent={
             loadError ? <ErrorState title="Couldn't load events" onRetry={refresh} /> :
-            <View style={s.empty}>
-              <Text style={s.emptyTitle}>
-                {tab === 'going' ? "Nothing yet. Join or save an event and it shows here." : tab === 'past' ? 'No past events.' : 'No events coming up.'}
-              </Text>
-              <Text style={s.emptyText}>Group runs from clubs and official races near you show up here.</Text>
-            </View>
+            <EmptyState
+              title={tab === 'going' ? 'Nothing yet. Join or save an event and it shows here.' : tab === 'past' ? 'No past events.' : 'No events coming up.'}
+              body="Group runs from clubs and official races near you show up here."
+            />
           }
         />
       )}
@@ -496,8 +495,5 @@ function mkStyles(C: AppColors) {
     raceSub:    { fontFamily: Fonts.regular, fontSize: 14, color: C.t2 },
     trainBtn:   { flexDirection: 'row', alignItems: 'center', gap: 10, alignSelf: 'flex-start', marginTop: 8, height: 44, paddingLeft: 12, paddingRight: 18, borderRadius: 22, backgroundColor: C.lavender },
     trainTxt:   { fontFamily: Fonts.medium, fontSize: 14, color: C.lavenderInk },
-    empty:      { alignItems: 'center' as const, paddingVertical: 56, paddingHorizontal: 32, gap: 8 },
-    emptyTitle: { fontFamily: Fonts.semiBold, fontSize: 16, color: C.t1, textAlign: 'center' },
-    emptyText:  { fontFamily: Fonts.regular, fontSize: 13, color: C.t2, textAlign: 'center', lineHeight: 18 },
   });
 }

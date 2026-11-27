@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, TextInput } from 'react-native';
 import { useTheme, Fonts, Type, Spacing, type AppColors } from '@theme';
 import { ClubImagesPicker } from '../ClubImagesPicker';
 import type { ChatReport } from '@features/clubs/services/clubService';
@@ -7,6 +7,7 @@ import type { JoinRequest } from '@features/clubs/types';
 import { ClubReportsSection } from './ClubReportsSection';
 import { ClubJoinRequestsSection } from './ClubJoinRequestsSection';
 import { mkCommonStyles } from './clubDetailStyles';
+import { PrimaryButton } from '@mobile/shared/components/PrimaryButton';
 
 interface Props {
   clubName: string;
@@ -55,17 +56,7 @@ export function ClubAdminTab(p: Props) {
           multiline
           maxLength={280}
         />
-        <Pressable
-          style={[a.saveBtn, p.savingDescription && a.saveBtnDisabled]}
-          onPress={p.onSaveDescription}
-          disabled={p.savingDescription}
-        >
-          {p.savingDescription ? (
-            <ActivityIndicator size="small" color={C.alwaysLight} />
-          ) : (
-            <Text style={a.saveBtnText}>Save</Text>
-          )}
-        </Pressable>
+        <PrimaryButton label="Save" onPress={p.onSaveDescription} loading={p.savingDescription} style={a.saveBtn} />
       </View>
 
       <ClubReportsSection
@@ -92,8 +83,6 @@ function mkStyles(C: AppColors) {
   return StyleSheet.create({
     adminContent:{ paddingHorizontal: Spacing.gutter, paddingTop: 16, paddingBottom: 100, gap: 0 },
     descInput:   { fontFamily: Fonts.regular, fontSize: 13, color: C.t1, minHeight: 72, textAlignVertical: 'top', lineHeight: 20 },
-    saveBtn:     { marginTop: 10, backgroundColor: C.alwaysDark, borderRadius: 999, height: 44, justifyContent: 'center', alignItems: 'center' },
-    saveBtnDisabled: { opacity: 0.5 },
-    saveBtnText: { ...Type.button, fontSize: 14, color: C.alwaysLight },
+    saveBtn:     { marginTop: 10 },
   });
 }

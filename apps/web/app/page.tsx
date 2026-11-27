@@ -33,7 +33,15 @@ const FEATURES = [
   },
 ] as const;
 
-const SPORTS = ['Run', 'Trail run', 'Walk', 'Hike', 'Ride', 'Wheelchair', 'Stroller run'] as const;
+// Four labelled groups, each item real: the sport picker (SPORTS in run/constants/activities.ts),
+// the plan session kinds (SessionKind in engine/training.ts), the plan goals and the run tools
+// from the store listing. Garmin/COROS/Polar are left out until WATCH_OAUTH is on.
+const KIT = [
+  { label: 'Track with GPS', note: 'Seven sports', items: ['Run', 'Trail run', 'Walk', 'Hike', 'Ride', 'Wheelchair', 'Stroller run'], extra: 'Treadmill, logged by hand' },
+  { label: 'Workouts in your plan', note: 'Six session types', items: ['Easy run', 'Long run', 'Tempo', 'Intervals', 'Recovery run', 'Race'] },
+  { label: 'Plans for', note: 'Four race goals', items: ['5K', '10K', 'Half marathon', 'Marathon'] },
+  { label: 'While you run', note: 'Built in', items: ['GPS route', 'Pace and splits', 'Elevation', 'Auto-pause', 'Voice updates', 'Lock-screen live stats'] },
+] as const;
 
 const STEPS = [
   ['Tell PaceX your goal', 'Get fit, train for a race or just run more. PaceX builds a plan around the days you can run.'],
@@ -129,17 +137,27 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Sports */}
-        <section className="section-sm">
+        {/* Sports and workouts */}
+        <section className="section-sm" id="sports">
           <div className="container">
-            <p className="eyebrow">Your sport</p>
-            <h2 className="h-section" style={{ maxWidth: 620, marginBottom: 28 }}>
-              Seven sports to track. Treadmill runs you can log by hand.
+            <p className="eyebrow">What you can do</p>
+            <h2 className="h-section" style={{ maxWidth: 620, marginBottom: 32 }}>
+              Built for every kind of run.
             </h2>
-            <ul className="sports" aria-label="Sports you can track">
-              {SPORTS.map(s => <li key={s}>{s}</li>)}
-              <li className="sports-alt">Treadmill, logged by hand</li>
-            </ul>
+            <div className="card kit">
+              {KIT.map(g => (
+                <div key={g.label} className="kit-row">
+                  <div className="kit-label">
+                    <h3>{g.label}</h3>
+                    <p>{g.note}</p>
+                  </div>
+                  <ul className="sports" aria-label={g.label}>
+                    {g.items.map(s => <li key={s}>{s}</li>)}
+                    {'extra' in g && <li className="sports-alt">{g.extra}</li>}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 

@@ -34,3 +34,15 @@
   font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--t1);
 }
 .sports li.sports-alt { background: transparent; border-style: dashed; color: var(--t2); }
+
+/* Sports and workouts: one card, a labelled row per group (label left, pills right). */
+.kit { padding: 0; }
+.kit-row { display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; padding: 26px 32px; border-bottom: 1px solid var(--border); }
+.kit-row:last-child { border-bottom: 0; }
+.kit-label h3 { font-size: 18px; letter-spacing: -0.02em; margin-bottom: 4px; }
+.kit-label p { font-size: 14px; color: var(--t3); }
+.kit .sports li { background: var(--bg); padding: 9px 16px; font-size: 15px; }
+.kit .sports li.sports-alt { background: transparent; }
+@media (max-width: 760px) {
+  .kit-row { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 22px 20px; }
+}

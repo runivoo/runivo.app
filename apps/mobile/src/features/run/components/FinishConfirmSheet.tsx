@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
-import { View, Pressable, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useTheme, Fonts, type AppColors } from '@theme';
 import { convertKm } from '@mobile/shared/lib/formatters';
+import { ModalSheet } from '@mobile/shared/components/ModalSheet';
+import { PrimaryButton } from '@mobile/shared/components/PrimaryButton';
 
 function fmt(s: number): string {
   const h = Math.floor(s / 3600);
@@ -16,46 +18,35 @@ interface FinishConfirmSheetProps {
   elapsed: number;
   /** "run" / "walk" / "ride" — names the activity in the title. */
   verb?: string;
-  bottomInset: number;
   /** Display unit; distance stays km-native. */
   unit?: 'km' | 'mi';
   onKeepRunning: () => void;
   onFinish: () => void;
 }
 
+/** "Finish run?" on the app's one bottom sheet, with the app's buttons. */
 export default function FinishConfirmSheet({
-  distance, elapsed, verb = 'run', bottomInset, unit = 'km', onKeepRunning, onFinish,
+  distance, elapsed, verb = 'run', unit = 'km', onKeepRunning, onFinish,
 }: FinishConfirmSheetProps) {
   const C = useTheme();
   const ss = useMemo(() => mkStyles(C), [C]);
   return (
-    <Pressable style={ss.overlay} onPress={onKeepRunning}>
-      <Pressable style={[ss.sheet, { paddingBottom: bottomInset + 16 }]}>
-        <Text style={ss.title}>Finish {verb}?</Text>
-        <Text style={ss.sub}>{convertKm(distance, unit).toFixed(2)} {unit} · {fmt(elapsed)}</Text>
-        <View style={ss.actions}>
-          <Pressable style={ss.cancel} onPress={onKeepRunning} accessibilityRole="button">
-            <Text style={ss.cancelText}>Keep going</Text>
-          </Pressable>
-          <Pressable style={ss.finish} onPress={onFinish} accessibilityRole="button">
-            <Text style={ss.finishText}>Finish</Text>
-          </Pressable>
-        </View>
-      </Pressable>
-    </Pressable>
+    <ModalSheet visible onClose={onKeepRunning}>
+      <Text style={ss.title}>Finish {verb}?</Text>
+      <Text style={ss.sub}>{convertKm(distance, unit).toFixed(2)} {unit} · {fmt(elapsed)}</Text>
+      <View style={ss.actions}>
+        <PrimaryButton label="Keep going" variant="surface" onPress={onKeepRunning} style={ss.action} />
+        <PrimaryButton label="Finish" onPress={onFinish} style={ss.action} />
+      </View>
+    </ModalSheet>
   );
 }
 
 function mkStyles(C: AppColors) {
   return StyleSheet.create({
-    overlay:    { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end', zIndex: 100 },
-    sheet:      { backgroundColor: C.card, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24 },
-    title:      { fontFamily: Fonts.bold, fontSize: 18, color: C.black, textAlign: 'center', marginBottom: 8 },
-    sub:        { fontFamily: Fonts.regular, fontSize: 13, color: C.muted, textAlign: 'center', marginBottom: 24, fontVariant: ['tabular-nums'] },
-    actions:    { flexDirection: 'row', gap: 12 },
-    cancel:     { flex: 1, paddingVertical: 14, borderRadius: 14, borderWidth: 0.5, borderColor: C.mid, alignItems: 'center' },
-    cancelText: { fontFamily: Fonts.semiBold, fontSize: 14, color: C.black },
-    finish:     { flex: 1, paddingVertical: 14, borderRadius: 14, backgroundColor: C.red, alignItems: 'center' },
-    finishText: { fontFamily: Fonts.semiBold, fontSize: 14, color: C.white },
+    title:   { fontFamily: Fonts.bold, fontSize: 18, color: C.black, textAlign: 'center', marginBottom: 8 },
+    sub:     { fontFamily: Fonts.regular, fontSize: 13, color: C.muted, textAlign: 'center', marginBottom: 24, fontVariant: ['tabular-nums'] },
+    actions: { flexDirection: 'row', gap: 12 },
+    action:  { flex: 1 },
   });
 }

@@ -27,6 +27,15 @@ export const ENGINE = {
   MAX_RIDE_SEGMENT_SPEED_MS: 22,
   /** Faster than this is not running; such stretches don't claim territory. */
   MAX_TERRITORY_SPEED_MS: 5.5,
+  /**
+   * A run resumed this far from where it was paused is two pieces of trail:
+   * the gap is never distance, territory or a line on the map. Closer than this
+   * (a traffic light, a drink) it stays one trail.
+   */
+  PAUSE_BREAK_M: 50,
+  /** looksSimulated: fixes needed before judging, and the steadiest speed a real run shows. */
+  SIM_MIN_POINTS: 60,
+  SIM_MAX_SPEED_CV: 0.03,
   MIN_GPS_POINTS: 20,
 
   // Territory
@@ -80,7 +89,16 @@ export interface EnginePoint {
   timestamp: number;
   accuracy?: number;
   speed?: number;
+  /**
+   * First point after a pause. The stretch from the point before it is never
+   * counted as distance, and splits the trail when it is longer than
+   * ENGINE.PAUSE_BREAK_M. Marking points this way only ever removes distance and
+   * ground, so a client gains nothing by setting it.
+   */
+  brk?: boolean;
 }
+
+type BreakPoint = { lat: number; lng: number; brk?: boolean };
 
 // ── Geometry basics ───────────────────────────────────────────────────────────
 
@@ -232,10 +250,42 @@ export function coverageAreaM2(line: LngLat[], ring: LngLat[] | null, halfWidthM
   return covered.size * cell * cell;
 }
 
-export function pathLengthM(points: { lat: number; lng: number }[]): number {
+/** Length along the trail. The stretch into a point marked `brk` (a pause) is skipped. */
+export function pathLengthM(points: BreakPoint[]): number {
   let d = 0;
-  for (let i = 1; i < points.length; i++) d += haversineM(points[i - 1], points[i]);
+  for (let i = 1; i < points.length; i++) {
+    if (points[i].brk) continue;
+    d += haversineM(points[i - 1], points[i]);
+  }
   return d;
+}
+
+/**
+ * The trail in pieces: a new piece starts at a pause the runner resumed more than
+ * ENGINE.PAUSE_BREAK_M away from. One piece for a run with no such pause.
+ */
+export function splitAtBreaks<T extends BreakPoint>(points: T[]): T[][] {
+  const out: T[][] = [];
+  let cur: T[] = [];
+  for (let i = 0; i < points.length; i++) {
+    const p = points[i];
+    if (cur.length && p.brk && haversineM(cur[cur.length - 1], p) > ENGINE.PAUSE_BREAK_M) {
+      out.push(cur);
+      cur = [];
+    }
+    cur.push(p);
+  }
+  if (cur.length) out.push(cur);
+  return out;
+}
+
+/** GeoJSON geometry for drawing a trail: a LineString, or a MultiLineString when a pause split it. */
+export function trailGeometry(points: BreakPoint[]):
+  | { type: 'LineString'; coordinates: LngLat[] }
+  | { type: 'MultiLineString'; coordinates: LngLat[][] } {
+  const pieces = splitAtBreaks(points).filter(seg => seg.length >= 2).map(seg => seg.map(p => [p.lng, p.lat] as LngLat));
+  if (pieces.length <= 1) return { type: 'LineString', coordinates: pieces[0] ?? points.map(p => [p.lng, p.lat] as LngLat) };
+  return { type: 'MultiLineString', coordinates: pieces };
 }
 
 /** Ramer–Douglas–Peucker in metres. */
@@ -273,19 +323,52 @@ export function simplifyPath<T extends { lat: number; lng: number }>(pts: T[], t
 export function cleanPoints<T extends EnginePoint>(points: T[], maxSpeedMs: number = ENGINE.MAX_SEGMENT_SPEED_MS): T[] {
   const sorted = points
     .filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lng))
-    .filter(p => (p.accuracy ?? 0) <= ENGINE.GPS_ACCURACY_THRESHOLD_M)
     .slice()
     .sort((a, b) => a.timestamp - b.timestamp);
   const out: T[] = [];
+  // A dropped point that started a pause hands the mark on to the next kept one,
+  // so cleaning can never join two pieces of trail back together.
+  let carryBrk = false;
   for (const p of sorted) {
+    if ((p.accuracy ?? 0) > ENGINE.GPS_ACCURACY_THRESHOLD_M) { carryBrk ||= !!p.brk; continue; }
     const last = out[out.length - 1];
-    if (!last) { out.push(p); continue; }
+    if (!last) { out.push(p); carryBrk = false; continue; }
     const dt = (p.timestamp - last.timestamp) / 1000;
-    if (dt <= 0) continue;
-    if (haversineM(last, p) / dt > maxSpeedMs) continue;
-    out.push(p);
+    if (dt <= 0) { carryBrk ||= !!p.brk; continue; }
+    const brk = !!p.brk || carryBrk;
+    // Across a pause the gap carries no distance, so its speed says nothing.
+    if (!brk && haversineM(last, p) / dt > maxSpeedMs) continue;
+    out.push(brk && !p.brk ? { ...p, brk: true } : p);
+    carryBrk = false;
   }
   return out;
+}
+
+/**
+ * Whether a trace looks generated rather than recorded: a location-spoofing tool
+ * reports the same accuracy on every fix and moves at a machine-steady speed,
+ * while a real phone's accuracy wobbles and a runner's speed never holds that
+ * still. Both must hold, over enough moving fixes, so a real run with a very
+ * steady GPS chip is never caught. Pause gaps (brk) are left out.
+ */
+export function looksSimulated(points: EnginePoint[]): boolean {
+  const pts = points.filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lng) && Number.isFinite(p.timestamp));
+  if (pts.length < ENGINE.SIM_MIN_POINTS) return false;
+  const acc = pts.map(p => p.accuracy).filter((a): a is number => typeof a === 'number');
+  if (acc.length < ENGINE.SIM_MIN_POINTS) return false;
+  if (Math.max(...acc) - Math.min(...acc) > 0.001) return false;
+  const speeds: number[] = [];
+  for (let i = 1; i < pts.length; i++) {
+    if (pts[i].brk) continue;
+    const dt = (pts[i].timestamp - pts[i - 1].timestamp) / 1000;
+    if (dt <= 0) continue;
+    const v = haversineM(pts[i - 1], pts[i]) / dt;
+    if (v >= 1) speeds.push(v); // moving: standing still says nothing
+  }
+  if (speeds.length < ENGINE.SIM_MIN_POINTS) return false;
+  const mean = speeds.reduce((n, v) => n + v, 0) / speeds.length;
+  const sd = Math.sqrt(speeds.reduce((n, v) => n + (v - mean) ** 2, 0) / speeds.length);
+  return sd / mean < ENGINE.SIM_MAX_SPEED_CV;
 }
 
 /**
@@ -381,7 +464,10 @@ export interface TerritoryShape {
  */
 export function buildTerritoryShape(points: EnginePoint[], activityType: string): TerritoryShape | null {
   if (!ENGINE.TERRITORY_ACTIVITIES.includes(activityType)) return null;
-  const clean = cleanPoints(points, ENGINE.MAX_TERRITORY_SPEED_MS);
+  // A pause resumed somewhere else splits the trail; the ground comes from the
+  // longest piece, never from a line drawn across the gap.
+  const pieces = splitAtBreaks(cleanPoints(points, ENGINE.MAX_TERRITORY_SPEED_MS));
+  const clean = pieces.reduce((best, seg) => (pathLengthM(seg) > pathLengthM(best) ? seg : best), pieces[0] ?? []);
   if (clean.length < ENGINE.MIN_GPS_POINTS) return null;
   const length = pathLengthM(clean);
   if (length < ENGINE.MIN_TERRITORY_DIST_M) return null;

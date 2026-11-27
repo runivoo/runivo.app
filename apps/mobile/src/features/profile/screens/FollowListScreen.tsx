@@ -15,6 +15,7 @@ import { RANK_COLORS } from '@shared/constants/territory';
 import { Avatar } from '@mobile/shared/components/Avatar';
 import { useTheme, Fonts, Spacing, type AppColors } from '@theme';
 import { ScreenHeader } from '@mobile/shared/components/ScreenHeader';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = NativeStackScreenProps<RootStackParamList, 'Followers' | 'Following'>['route'];
@@ -203,9 +204,7 @@ export function FollowListScreen({ mode }: { mode: FollowListMode }) {
             );
           }}
           ListEmptyComponent={
-            <View style={s.empty}>
-              <Text style={s.emptyText}>{query ? 'No matches' : mode === 'followers' ? 'No followers yet' : 'Not following anyone yet'}</Text>
-            </View>
+            <EmptyState title={query ? 'No matches' : mode === 'followers' ? 'No followers yet' : 'Not following anyone yet'} />
           }
         />
       )}
@@ -229,7 +228,5 @@ function mkStyles(C: AppColors) {
     followBtnActive: { backgroundColor: C.alwaysDark, borderColor: C.alwaysDark },
     followBtnText: { fontFamily: Fonts.medium, fontSize: 12, color: C.black },
     followBtnTextActive: { color: C.alwaysLight },
-    empty:        { alignItems: 'center', paddingVertical: 40 },
-    emptyText:    { fontFamily: Fonts.regular, fontSize: 13, color: C.t2 },
   });
 }

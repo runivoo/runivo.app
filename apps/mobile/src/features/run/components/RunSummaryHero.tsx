@@ -5,6 +5,7 @@
  * the km · Time · Avg pace row.
  */
 import { safeRing, safeLine } from '@mobile/shared/map/geo';
+import { splitAtBreaks } from '@shared/engine/runEngine';
 import React, { useMemo } from 'react';
 import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
 import { CaretLeft, Export, Play, Trophy, EyeSlash } from 'phosphor-react-native';
@@ -21,7 +22,7 @@ interface Props {
   eyebrow:    string;
   /** Uppercase hero line, e.g. "Claimed a district." */
   headline:   string;
-  route:      { lat: number; lng: number }[];
+  route:      { lat: number; lng: number; brk?: boolean }[];
   /** Closed ring [lng, lat][] of the ground this run claimed, if any. */
   zoneRing?:  [number, number][] | null;
   /** e.g. "District · 0.18 km²" */
@@ -62,10 +63,14 @@ export default function RunSummaryHero({
   const ss = useMemo(() => mkStyles(C), [C]);
 
   // Bad points (NaN, out of range) are dropped before they reach the map.
-  const coords = useMemo<[number, number][]>(
-    () => safeLine(route.map(p => [p.lng, p.lat])) ?? [],
+  // A pause resumed somewhere else splits the route into pieces.
+  const pieces = useMemo<[number, number][][]>(
+    () => splitAtBreaks(route)
+      .map(seg => safeLine(seg.map(p => [p.lng, p.lat])) ?? [])
+      .filter(c => c.length >= 2),
     [route],
   );
+  const coords = useMemo(() => pieces.flat(), [pieces]);
   const ring = useMemo(() => safeRing(zoneRing), [zoneRing]);
   const all = useMemo(() => [...coords, ...(ring ?? [])], [coords, ring]);
   const bounds = useMemo(() => {
@@ -78,8 +83,10 @@ export default function RunSummaryHero({
     };
   }, [all]);
 
-  const routeShape = coords.length >= 2
-    ? { type: 'Feature' as const, properties: {}, geometry: { type: 'LineString' as const, coordinates: coords } }
+  const routeShape = pieces.length > 1
+    ? { type: 'Feature' as const, properties: {}, geometry: { type: 'MultiLineString' as const, coordinates: pieces } }
+    : pieces.length === 1
+    ? { type: 'Feature' as const, properties: {}, geometry: { type: 'LineString' as const, coordinates: pieces[0] } }
     : null;
   const zoneShape = ring
     ? { type: 'Feature' as const, properties: {}, geometry: { type: 'Polygon' as const, coordinates: [ring] } }

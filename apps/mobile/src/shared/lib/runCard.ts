@@ -3,6 +3,7 @@
  * story size (9:16). Same family as the profile card. Built as SVG and turned
  * into a PNG by the capture host, so it shares as a picture, not text.
  */
+import { pieceStarts } from './trailPieces';
 
 export interface RunCardData {
   name: string;
@@ -30,7 +31,7 @@ function hex(cx: number, cy: number, r: number): string {
 }
 
 /** The route fitted into a box, north up, with even scale on both axes. */
-export function routePath(route: { lat: number; lng: number }[], x: number, y: number, w: number, h: number, pad = 26): { d: string; start: [number, number]; end: [number, number] } | null {
+export function routePath(route: { lat: number; lng: number; brk?: boolean }[], x: number, y: number, w: number, h: number, pad = 26): { d: string; start: [number, number]; end: [number, number] } | null {
   const pts = route.filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lng));
   if (pts.length < 2) return null;
   const midLat = (Math.min(...pts.map(p => p.lat)) + Math.max(...pts.map(p => p.lat))) / 2;
@@ -41,7 +42,10 @@ export function routePath(route: { lat: number; lng: number }[], x: number, y: n
   const scale = Math.min((w - pad * 2) / spanX, (h - pad * 2) / spanY);
   const ox = x + (w - spanX * scale) / 2, oy = y + (h - spanY * scale) / 2;
   const xy = pts.map((_, i) => [ox + (xs[i] - minX) * scale, oy + (maxY - ys[i]) * scale] as [number, number]);
-  return { d: 'M' + xy.map(([a, b]) => `${a.toFixed(1)} ${b.toFixed(1)}`).join('L'), start: xy[0], end: xy[xy.length - 1] };
+  // The pen lifts at a pause resumed somewhere else (no line across the gap).
+  const starts = pieceStarts(pts);
+  const d = xy.map(([a, b], i) => `${i === 0 || starts.has(i) ? 'M' : 'L'}${a.toFixed(1)} ${b.toFixed(1)}`).join('');
+  return { d, start: xy[0], end: xy[xy.length - 1] };
 }
 
 export function buildRunCardSvg(d: RunCardData): string {

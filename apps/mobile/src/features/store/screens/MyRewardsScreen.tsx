@@ -13,6 +13,7 @@ import { useTheme, Fonts, type AppColors } from '@theme';
 import type { RootStackParamList } from '@navigation/AppNavigator';
 import { fetchMyRewards, setRewardUsed, type MyReward, type MyRewardStatus } from '../services/myRewardsService';
 import { ScreenHeader } from '@mobile/shared/components/ScreenHeader';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -58,16 +59,12 @@ export default function MyRewardsScreen() {
           keyExtractor={r => r.id}
           contentContainerStyle={s.list}
           ListEmptyComponent={
-            <View style={s.empty}>
-              <Gift size={36} color={C.t3} weight="light" />
-              <Text style={s.emptyTitle}>{failed ? "Couldn't load your rewards" : 'No rewards yet'}</Text>
-              <Text style={s.emptyText}>{failed ? 'Check your connection and try again.' : 'Spend PACE in the store and your codes will be kept here.'}</Text>
-              {!failed && (
-                <Pressable style={s.cta} onPress={() => navigation.navigate('PACEStore')} accessibilityRole="button">
-                  <Text style={s.ctaTxt}>Open the store</Text>
-                </Pressable>
-              )}
-            </View>
+            <EmptyState
+              icon={<Gift size={36} color={C.t3} weight="light" />}
+              title={failed ? "Couldn't load your rewards" : 'No rewards yet'}
+              body={failed ? 'Check your connection and try again.' : 'Spend PACE in the store and your codes will be kept here.'}
+              cta={failed ? undefined : { label: 'Open the store', onPress: () => navigation.navigate('PACEStore') }}
+            />
           }
           renderItem={({ item }) => {
             const t = tone(item.status);
@@ -141,10 +138,5 @@ function mkStyles(C: AppColors) {
     link:     { fontFamily: Fonts.semiBold, fontSize: 13, color: C.t1, textDecorationLine: 'underline' },
     meta:     { fontFamily: Fonts.regular, fontSize: 12, color: C.t2, marginTop: 8, flexShrink: 1 },
     foot:     { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-    empty:    { alignItems: 'center', paddingTop: 80, gap: 8, paddingHorizontal: 24 },
-    emptyTitle: { fontFamily: Fonts.semiBold, fontSize: 16, color: C.t1 },
-    emptyText:  { fontFamily: Fonts.regular, fontSize: 13, color: C.t2, textAlign: 'center' },
-    cta:      { marginTop: 10, height: 40, paddingHorizontal: 18, borderRadius: 20, backgroundColor: C.t1, justifyContent: 'center' },
-    ctaTxt:   { fontFamily: Fonts.semiBold, fontSize: 14, color: C.bg },
   });
 }

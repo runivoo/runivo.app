@@ -177,6 +177,8 @@ export interface StoredRun {
     altitude: number;
     /** Heart rate at this sample, from a watch (bpm). */
     hr?: number;
+    /** First point after a pause (runEngine EnginePoint.brk). */
+    brk?: boolean;
   }[];
   elevationGainM?: number;
   territoriesClaimed: string[];

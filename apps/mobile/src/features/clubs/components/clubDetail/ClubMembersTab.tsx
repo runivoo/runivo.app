@@ -4,6 +4,7 @@ import { useTheme } from '@theme';
 import type { ClubMember } from '@features/clubs/types';
 import { MemberRow } from './MemberRow';
 import { mkCommonStyles } from './clubDetailStyles';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 interface Props {
   loading: boolean;
@@ -39,9 +40,7 @@ export function ClubMembersTab({ loading, members, isModerator, isOwner, current
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={isModerator ? <Text style={s.sectionLabel}>Long press a member to remove them</Text> : null}
       ListEmptyComponent={
-        <View style={s.empty}>
-          <Text style={s.emptyTitle}>No members found</Text>
-        </View>
+        <EmptyState title="No members found" />
       }
       ListFooterComponent={!isOwner && members.some(m => m.id === currentUserId) ? (
         <Pressable style={s.dangerRow} onPress={onLeave} accessibilityRole="button">

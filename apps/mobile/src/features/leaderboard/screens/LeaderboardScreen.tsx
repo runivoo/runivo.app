@@ -13,6 +13,7 @@ import type { LeaderboardEntry } from '../types';
 import { useTheme, Fonts, type AppColors } from '@theme';
 import { Avatar } from '@mobile/shared/components/Avatar';
 import { ScreenHeader } from '@mobile/shared/components/ScreenHeader';
+import { EmptyState } from '@mobile/shared/components/EmptyState';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -173,10 +174,7 @@ export default function LeaderboardScreen() {
           removeClippedSubviews
           ListHeaderComponent={podium}
           ListEmptyComponent={
-            <View style={s.empty}>
-              <Text style={s.emptyTitle}>Nobody's claimed the board yet.</Text>
-              <Text style={s.emptyText}>Finish a run and be the first name up here.</Text>
-            </View>
+            <EmptyState title="Nobody's claimed the board yet." body="Finish a run and be the first name up here." />
           }
         />
       )}
@@ -205,9 +203,6 @@ function mkStyles(C: AppColors) {
     list:          { paddingBottom: 120 },
     skeletonWrap:  { paddingTop: 8 },
     skeletonRow:   { height: 60, marginHorizontal: 12, marginBottom: 8, borderRadius: 18 },
-    empty:         { alignItems: 'center' as const, paddingVertical: 48, paddingHorizontal: 16 },
-    emptyTitle:    { fontFamily: Fonts.bold, fontSize: 20, lineHeight: 25, color: C.t1, marginBottom: 6, textAlign: 'center' },
-    emptyText:     { fontFamily: Fonts.regular, fontSize: 13, color: C.t2, textAlign: 'center' },
     playerFooter:  { position: 'absolute', left: 14, right: 14, bottom: 14, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 14, paddingVertical: 12, backgroundColor: C.alwaysDark, borderRadius: 24, shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 14, shadowOffset: { width: 0, height: 8 }, elevation: 8 },
     playerRank:    { fontFamily: Fonts.numeric, fontSize: 24, color: C.alwaysLight, width: 30 },
     playerAvatar:  { width: 34, height: 34, borderRadius: 17, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },

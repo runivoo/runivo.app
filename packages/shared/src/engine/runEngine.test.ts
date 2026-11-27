@@ -3,6 +3,7 @@ import {
   ENGINE, ringAreaM2, enclosedAreaM2, buildTerritoryShape, verifiedDistance, computeRunPace,
   updateStreak, rankFor, weeklyCapFor, decayedFreshness, tierForArea, metresPerDegree,
   findLoopStart, paceWeekStartMs, weeklyPaceNow, zoneScore, lineToWKT, ringToWKT, type EnginePoint, type LngLat,
+  pathLengthM, splitAtBreaks, trailGeometry, cleanPoints, looksSimulated,
 } from './runEngine';
 
 // ── Trace helpers ─────────────────────────────────────────────────────────────
@@ -274,4 +275,90 @@ describe('weeklyPaceNow', () => {
     expect(weeklyPaceNow(undefined, '2026-11-16T00:00:00Z', wed)).toBe(0);
   });
   it('week starts Monday UTC', () => expect(new Date(paceWeekStartMs(wed)).toISOString()).toBe('2026-11-16T00:00:00.000Z'));
+});
+
+// ── Pauses ────────────────────────────────────────────────────────────────────
+
+/** Two traces joined by a pause: the second starts `pauseMin` later, flagged brk. */
+function withPause(a: EnginePoint[], b: EnginePoint[], pauseMin: number): EnginePoint[] {
+  const shift = a[a.length - 1].timestamp + pauseMin * 60_000 - b[0].timestamp;
+  return [...a, ...b.map((p, i) => ({ ...p, timestamp: p.timestamp + shift, ...(i === 0 && { brk: true }) }))];
+}
+
+describe('pause breaks', () => {
+  const lat0 = 12.97, lng0 = 77.59;
+  const m = metresPerDegree(lat0);
+  const first = trace(lat0, lng0, [[0, 0], [600, 0]]);
+  // Resumed 2 km east of where the pause began (a ride while paused).
+  const farAway = trace(lat0, lng0 + 2600 / m.lng, [[0, 0], [600, 0]]);
+  // Resumed on the spot (a traffic light).
+  const sameSpot = trace(lat0, lng0 + 600 / m.lng, [[0, 0], [600, 0]]);
+
+  it('never counts the stretch across a pause as distance', () => {
+    const run = withPause(first, farAway, 10);
+    const d = pathLengthM(run);
+    expect(d).toBeGreaterThan(1150);
+    expect(d).toBeLessThan(1250);
+    const v = verifiedDistance(run, 20 * 60, 'run').distanceM;
+    expect(v).toBeLessThan(1250);
+  });
+
+  it('keeps a pause on the spot as one trail, splits a pause resumed far away', () => {
+    expect(splitAtBreaks(withPause(first, sameSpot, 1))).toHaveLength(1);
+    expect(splitAtBreaks(withPause(first, farAway, 10))).toHaveLength(2);
+  });
+
+  it('draws a far pause as two lines and a pause on the spot as one', () => {
+    expect(trailGeometry(withPause(first, farAway, 10)).type).toBe('MultiLineString');
+    expect(trailGeometry(withPause(first, sameSpot, 1)).type).toBe('LineString');
+  });
+
+  it('cleaning never joins the pieces back together', () => {
+    const run = withPause(first, farAway, 10);
+    // The first point after the pause is inaccurate and gets dropped.
+    const i = first.length;
+    run[i] = { ...run[i], accuracy: 500 };
+    const clean = cleanPoints(run);
+    expect(splitAtBreaks(clean)).toHaveLength(2);
+  });
+
+  it('claims ground from the longest piece, never across the gap', () => {
+    const loop = trace(lat0, lng0 + 2600 / m.lng, square(200));
+    const run = withPause(first, loop, 10);
+    const shape = buildTerritoryShape(run, 'run');
+    expect(shape).not.toBeNull();
+    const lngs = shape!.line.map(c => c[0]);
+    // Every point of the claimed line is in the loop, east of the gap.
+    expect(Math.min(...lngs)).toBeGreaterThan(lng0 + 2500 / m.lng);
+  });
+});
+
+describe('looksSimulated', () => {
+  const lat0 = 12.97, lng0 = 77.59;
+  // A spoofing tool: same accuracy every fix, a machine-steady 3 m/s.
+  const spoofed = trace(lat0, lng0, [[0, 0], [400, 0], [400, 400]], 3, 3);
+  // Seeded wobble, so the test is repeatable.
+  let seed = 7;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+
+  it('flags a perfectly steady trace with constant accuracy', () => {
+    expect(looksSimulated(spoofed)).toBe(true);
+  });
+
+  it('passes the same route when the accuracy wobbles like a real phone', () => {
+    expect(looksSimulated(spoofed.map(p => ({ ...p, accuracy: 4 + rnd() * 8 })))).toBe(false);
+  });
+
+  it('passes a runner whose speed varies, even with a very steady GPS chip', () => {
+    let t = spoofed[0].timestamp;
+    const real = spoofed.map((p, i) => {
+      if (i > 0) t += (3 / (2.6 + rnd() * 0.9)) * 1000;
+      return { ...p, timestamp: t };
+    });
+    expect(looksSimulated(real)).toBe(false);
+  });
+
+  it('never judges a short trace', () => {
+    expect(looksSimulated(spoofed.slice(0, 40))).toBe(false);
+  });
 });

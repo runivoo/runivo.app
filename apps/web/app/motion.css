@@ -1,0 +1,96 @@
+/* Motion. Same look, now it moves. Only transform and opacity animate, nothing shifts layout.
+   Everything sits inside no-preference: globals.css already switches animation and transition
+   off for reduced motion, and components/Motion.tsx does nothing in that case either. */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  html { scroll-behavior: smooth; }
+
+  /* ── Scroll reveals (components/Motion.tsx sets data-rv) ───────────────── */
+  [data-rv='hide'] { opacity: 0; transform: translateY(22px); }
+  [data-rv='in'] {
+    opacity: 1; transform: none;
+    transition: opacity .7s cubic-bezier(.22,.8,.3,1) var(--rv-d, 0ms), transform .7s cubic-bezier(.22,.8,.3,1) var(--rv-d, 0ms);
+  }
+
+  /* ── Nav: a hairline shadow once the page has scrolled ──────────────────── */
+  html[data-motion] .nav { transition: box-shadow .25s ease, background-color .25s ease; }
+  html[data-scrolled] .nav { box-shadow: 0 10px 30px -22px rgba(23,24,26,.35); }
+
+  /* Nav links: underline that draws in from the left */
+  .nav-link { position: relative; }
+  .nav-link::after {
+    content: ''; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 2px; border-radius: 2px;
+    background: var(--accent-bright); transform: scaleX(0); transform-origin: left; transition: transform .25s cubic-bezier(.22,.8,.3,1);
+  }
+  .nav-link:hover::after { transform: scaleX(1); }
+
+  /* Logo hexagon turns a notch on hover */
+  .logo svg { transition: transform .5s cubic-bezier(.22,.8,.3,1); }
+  .logo:hover svg { transform: rotate(60deg); }
+
+  /* ── Hover and press feedback ───────────────────────────────────────────── */
+  @media (hover: hover) {
+    .btn:hover { transform: translateY(-2px); opacity: 1; box-shadow: 0 12px 24px -14px rgba(23,24,26,.5); }
+    .btn:active { transform: translateY(0) scale(.98); box-shadow: none; }
+
+    .card { transition: transform .3s cubic-bezier(.22,.8,.3,1), box-shadow .3s ease, border-color .3s ease; }
+    .card.feature:hover { transform: translateY(-5px); box-shadow: 0 22px 44px -28px rgba(23,24,26,.35); border-color: #d3d6ce; }
+    .tile { transition: transform .35s cubic-bezier(.22,.8,.3,1); }
+    .card.feature:hover .tile { transform: rotate(-7deg) scale(1.08); }
+
+    .sports li { transition: transform .2s ease, border-color .2s ease, background-color .2s ease; }
+    .sports li:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+    .step .step-no { transition: transform .3s cubic-bezier(.22,.8,.3,1); transform-origin: left bottom; }
+    .step:hover .step-no { transform: scale(1.06); }
+
+    .footer .fl { transition: color .15s ease, transform .2s ease; }
+    .footer .fl:hover { transform: translateX(3px); }
+  }
+  .btn { transition: transform .2s cubic-bezier(.22,.8,.3,1), opacity .15s ease, background-color .15s ease, box-shadow .2s ease; }
+
+  /* Inputs: a soft focus ring that eases in */
+  .field { transition: border-color .2s ease, box-shadow .2s ease; }
+  .field:focus { box-shadow: 0 0 0 4px rgba(78,127,31,.14); }
+
+  /* ── Waitlist success: the tick pops in ─────────────────────────────────── */
+  @keyframes pop-in { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+  @keyframes tick-in { 0% { transform: scale(.3); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
+  .waitlist-done { animation: pop-in .45s cubic-bezier(.22,.8,.3,1) both; }
+  .waitlist-tick { animation: tick-in .55s cubic-bezier(.22,.8,.3,1) .12s both; }
+
+  /* ── Ambient, very quiet ────────────────────────────────────────────────── */
+  /* The decorative hexagon in the dark band drifts round slowly. */
+  @keyframes hex-spin { to { transform: rotate(360deg); } }
+  .band > svg { animation: hex-spin 90s linear infinite; transform-origin: 50% 50%; }
+
+  /* The dot on the hero chip breathes. */
+  @keyframes dot-breathe { 0%, 100% { box-shadow: 0 0 0 0 rgba(201,240,107,.55); } 50% { box-shadow: 0 0 0 6px rgba(201,240,107,0); } }
+  .hero-art .chip i { animation: dot-breathe 2.4s ease-out infinite; }
+
+  /* ── FAQ: answers open and close smoothly where the browser can (Chromium) ─ */
+  @supports (interpolate-size: allow-keywords) { :root { interpolate-size: allow-keywords; } }
+  @supports selector(::details-content) {
+    .faq-item::details-content {
+      block-size: 0; overflow: hidden;
+      transition: block-size .35s cubic-bezier(.22,.8,.3,1), content-visibility .35s allow-discrete;
+    }
+    .faq-item[open]::details-content { block-size: auto; }
+  }
+
+  /* ── Scroll-driven, where supported (Chrome, Edge, Safari 26+); others just skip it ─ */
+  @supports (animation-timeline: scroll()) {
+    /* A thin progress line across the top of the page. */
+    @keyframes progress-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    html[data-motion] body::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 60; pointer-events: none;
+      background: linear-gradient(90deg, var(--accent), var(--accent-bright)); transform-origin: left;
+      animation: progress-grow linear both; animation-timeline: scroll(root);
+    }
+
+    /* The hero photo drifts up a little as you scroll away from it. */
+    @keyframes hero-drift { from { transform: scale(1.06) translateY(0); } to { transform: scale(1.06) translateY(-5%); } }
+    .hero-art img { animation: hero-drift linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
+  }
+}

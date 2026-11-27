@@ -30,7 +30,11 @@ export function mergeBgFixes(s: RunSession, bgPoints: BufferedFix[], maxSpeedMs:
   s.filter = { base: r.base, outliers: r.outliers };
   s.totalDistance += r.addedM / 1000;
   for (const pt of r.kept) {
-    s.gpsPoints.push({ lat: pt.lat, lng: pt.lng, timestamp: pt.timestamp, speed: pt.speed, accuracy: pt.accuracy, altitude: 0 });
+    s.gpsPoints.push({
+      lat: pt.lat, lng: pt.lng, timestamp: pt.timestamp, speed: pt.speed, accuracy: pt.accuracy, altitude: 0,
+      ...(s.breakNext && { brk: true as const }),
+    });
+    s.breakNext = false;
   }
   return r.kept.length > 0;
 }

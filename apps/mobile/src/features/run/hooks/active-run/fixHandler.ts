@@ -73,7 +73,11 @@ export function createFixHandler(s: RunSession, ui: RunUi, activityType: string)
     }
 
     trackElevation(s, altitude);
-    s.gpsPoints.push({ lat: latitude, lng: longitude, timestamp: now, speed: gpsSpeed, accuracy: accuracy ?? 10, altitude: altitude ?? 0 });
+    s.gpsPoints.push({
+      lat: latitude, lng: longitude, timestamp: now, speed: gpsSpeed, accuracy: accuracy ?? 10, altitude: altitude ?? 0,
+      ...(s.breakNext && { brk: true as const }),
+    });
+    s.breakNext = false;
     broadcastLivePosition(s, latitude, longitude, now);
 
     // Throttle React state updates to max 1/sec.

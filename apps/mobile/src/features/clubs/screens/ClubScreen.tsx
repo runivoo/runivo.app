@@ -20,6 +20,7 @@ import { FormScreen, FormField, ChoiceCards, FormButton } from '@mobile/shared/c
 import { NewClubPost } from '../components/NewClubPost';
 import { ScreenHeader } from '@mobile/shared/components/ScreenHeader';
 import { AlertLayer } from '@mobile/shared/components/AppAlert';
+import { PrimaryButton } from '@mobile/shared/components/PrimaryButton';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type ClubTab = 'my_clubs' | 'rankings';
@@ -278,9 +279,7 @@ export default function ClubScreen({ embedded = false }: { embedded?: boolean })
               <Users size={28} color={C.red} weight="light" style={{ marginBottom: 8 }} />
               <Text style={s.emptyTitleServe}>No pack to run with yet.</Text>
               <Text style={s.emptyText}>Join a club below, find more in Rankings, or create your own.</Text>
-              <Pressable style={s.emptyBtn} onPress={() => setShowCreate(true)}>
-                <Text style={s.emptyBtnLabel}>Create a club</Text>
-              </Pressable>
+              <PrimaryButton label="Create a club" onPress={() => setShowCreate(true)} />
             </View>
           }
         />
@@ -376,8 +375,6 @@ function mkStyles(C: AppColors) {
     emptyTitle:      { fontFamily: Fonts.medium, fontSize: 13, color: C.t1, marginBottom: 4 },
     emptyTitleServe: { ...Type.title, color: C.t1, marginBottom: 6, textAlign: 'center' },
     emptyText:       { ...Type.bodySm, color: C.t2, textAlign: 'center', marginBottom: 16 },
-    emptyBtn:        { backgroundColor: C.alwaysDark, paddingHorizontal: 22, height: 46, justifyContent: 'center', borderRadius: 999 },
-    emptyBtnLabel:   { ...Type.button, color: C.alwaysLight },
     // Rankings tab — one row (scope chip + search toggle) instead of pills + a
     // permanently-open search bar stacked above the list.
     rankList:        { paddingBottom: 130 },
