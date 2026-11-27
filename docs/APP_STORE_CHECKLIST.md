@@ -11,7 +11,7 @@ Status: **Done** = changed and verified here (typecheck, 435 tests, SQL on a scr
 | 1.2 Report content (comments, posts, clubs, events, chat, runners) | In the app, find "Report" on each; each lands in the admin Moderation tab | Done (client) / **Deploy** `20261115000015` |
 | 1.2 Block users, everywhere they appear | Block someone from a comment; they vanish from feed, comments and chat, both ways | Done / **Deploy** `20261115000016` (`chat_blocks.test.sql`); rosters and "clubs near you" do not hide blocked runners yet |
 | 1.2 Filter objectionable text | `supabase/tests/moderation.test.sql` (19 checks) | **Deploy**; **You**: load the full word list (`supabase/seed/blocked_terms.sql` is a starter) |
-| 1.2 Act on reports, publish contact | Admin → Moderation (24h target); `support@runivo.com` | Done; **You**: confirm the mailbox exists |
+| 1.2 Act on reports, publish contact | Admin → Moderation (24h target); `runivo.official@gmail.com` | Done; **You**: confirm the mailbox exists |
 | 1.2 Terms ban objectionable content, accepted at sign-up | Terms §6; line on the password sign-up form | Done |
 | 1.4 Health and safety wording | "Not medical advice" on Coach, Training Plan and the consent screen; "stay on public paths" on the run start screen; also Terms §8 | Done |
 | 1.4 / 5.1.4 Minors | One-time age screen (birth month and year, not stored) after sign-in; under 13 is refused and the account deleted; 13 to 17 start private with live sharing off | Done / **Deploy** `20261115000017`; `ageGateOutcome` has tests |

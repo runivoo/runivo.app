@@ -49,7 +49,7 @@ export default function AgeGateScreen({ userId, onConfirmed }: { userId: string;
   const deleteAccount = async () => {
     setBusy(true);
     const { error: err } = await supabase.functions.invoke('delete-account', { body: {} });
-    if (err) { setBusy(false); appAlert("Couldn't delete the account", 'Check your connection and try again, or email support@runivo.com.'); return; }
+    if (err) { setBusy(false); appAlert("Couldn't delete the account", 'Check your connection and try again, or email runivo.official@gmail.com.'); return; }
     await supabase.auth.signOut().catch(() => {});
     await clearAllLocalData().catch(() => {});
     setBusy(false);

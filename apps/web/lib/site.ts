@@ -10,5 +10,5 @@
 export const APP_LIVE = false;
 export const APP_STORE_URL = 'https://apps.apple.com';
 export const WAITLIST_HREF = '/#waitlist';
-export const SUPPORT_EMAIL = 'support@runivo.com';
+export const SUPPORT_EMAIL = 'runivo.official@gmail.com';
 export const SITE_NAME = 'Runivo';

@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: 'Is Runivo available on Android?',
-    a: 'Currently Runivo is iOS only. Android is on our roadmap. Join the waitlist by emailing support@runivo.com with the subject "Android Waitlist".',
+    a: 'Currently Runivo is iOS only. Android is on our roadmap. Join the waitlist by emailing runivo.official@gmail.com with the subject "Android Waitlist".',
   },
   {
     q: 'How does the AI Coach work?',
@@ -33,7 +33,7 @@ const faqs = [
   },
   {
     q: 'How do I report a bug or problem?',
-    a: 'Email support@runivo.com with a description of the issue, your device model, and iOS version. Screenshots or screen recordings are always helpful. We aim to respond within 24 hours on weekdays.',
+    a: 'Email runivo.official@gmail.com with a description of the issue, your device model, and iOS version. Screenshots or screen recordings are always helpful. We aim to respond within 24 hours on weekdays.',
   },
 ];
 

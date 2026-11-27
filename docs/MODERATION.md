@@ -7,7 +7,7 @@ Runivo has user-generated content (comments, posts, club chat, club and event te
 | Filter objectionable material | A database trigger rejects comments, chat, bios, display names, club and event text that contain a word in `blocked_terms` (whole-word match, common letter swaps folded). The app shows "That can't be posted". |
 | Report content | Visible **Report** actions on posts, comments (the `⋯` on each comment), club chat messages, clubs and events, and on runner profiles. |
 | Block abusive users | **Block** on comments, club chat messages and profiles. Blocking is two-way in the feed, comments, club chat and profiles, enforced in the database (chat: migration `20261115000016`). |
-| Act on reports and publish contact info | The admin **Moderation** tab, a 24-hour target, and `support@runivo.com` on the support page, in the Terms and in the privacy policy. |
+| Act on reports and publish contact info | The admin **Moderation** tab, a 24-hour target, and `runivo.official@gmail.com` on the support page, in the Terms and in the privacy policy. |
 
 ## Daily process
 
@@ -26,7 +26,7 @@ Lifting a ban: delete the row in `user_bans` (SQL editor, service role). Clients
 - Deploy migrations `20261115000015_moderation.sql` and `20261115000016_chat_blocks_two_way.sql`.
 - Load the word list: run `supabase/seed/blocked_terms.sql`, then add a maintained list for the languages you support. The starter list is short on purpose and has no hate-speech terms; a word filter is a floor, not a moderator.
 - Make sure at least two people have `profiles.subscription_tier = 'admin'`, so reports are not waiting on one person's holiday.
-- Check the `support@runivo.com` mailbox exists and someone reads it. Apple tests this.
+- Check the `runivo.official@gmail.com` mailbox exists and someone reads it. Apple tests this.
 
 ## What is still manual
 

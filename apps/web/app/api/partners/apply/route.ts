@@ -77,11 +77,11 @@ export async function POST(req: Request): Promise<Response> {
         return json({ ok: false, error: 'Some details look wrong. Check the form and try again.' }, 400);
       }
       console.error('[partners/apply]', error.message);
-      return json({ ok: false, error: 'Something went wrong. Please try again, or email partners@runivo.in.' }, 500);
+      return json({ ok: false, error: 'Something went wrong. Please try again, or email runivo.official@gmail.com.' }, 500);
     }
   } catch (e) {
     console.error('[partners/apply]', e);
-    return json({ ok: false, error: 'Something went wrong. Please try again, or email partners@runivo.in.' }, 500);
+    return json({ ok: false, error: 'Something went wrong. Please try again, or email runivo.official@gmail.com.' }, 500);
   }
 
   return json({ ok: true }, 201);

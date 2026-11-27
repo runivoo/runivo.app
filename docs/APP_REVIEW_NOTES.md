@@ -9,7 +9,7 @@ Fill the two `[ ]` fields last. Keep this file in step with the build you submit
 - [ ] Secrets set (`npx supabase secrets list`): `ANTHROPIC_API_KEY`; the four `APPLE_*` keys (Sign in with Apple revoke on deletion); `SUBSCRIPTIONS_ENABLED` absent or `false`.
 - [ ] Create the demo account in Supabase Auth (email + password, **email confirmed**), then run `supabase/seed/demo_data.sql` and `demo_data_v1.sql` with that email in `demo_cfg`. It seeds runs, 6 zones, a PACE balance, a club with chat, events and sample store rewards.
 - [ ] Test account deletion three ways: a fresh email account, a Sign in with Apple account that created a club, and a copy of the demo account. Each must end on the sign-in screen with no error.
-- [ ] `support@runivo.com` receives mail; `https://runivo.in/privacy`, `/terms` and `/support` open on a phone.
+- [ ] `runivo.official@gmail.com` receives mail; `https://runivo.in/privacy`, `/terms` and `/support` open on a phone.
 - [ ] No in-app purchase products attached to this version.
 - [ ] After approval, run `supabase/seed/demo_cleanup.sql` so real runners do not see seeded runners and sample partners.
 
@@ -33,7 +33,7 @@ Fill the two `[ ]` fields last. Keep this file in step with the build you submit
 
 **PACE and the Store.** PACE is a free reward point earned by running. It cannot be bought, sold or cashed out. The demo account's store rewards are sample offers from invented brands for review; real partner offers launch city by city.
 
-**User-generated content.** Report: on posts (⋯), comments (⋯), club chat messages, clubs, events and runner profiles. Block: on comments, club members and runner profiles (⋯ → Block); blocked runners are managed in Settings → Blocked runners. A server-side word filter rejects objectionable text in comments, chat, bios, names, post and run titles, clubs and events. Reports are reviewed within 24 hours and abusive accounts can be suspended. The Terms forbid objectionable content and are shown at sign-up. Contact: support@runivo.com (also in Settings → Support).
+**User-generated content.** Report: on posts (⋯), comments (⋯), club chat messages, clubs, events and runner profiles. Block: on comments, club members and runner profiles (⋯ → Block); blocked runners are managed in Settings → Blocked runners. A server-side word filter rejects objectionable text in comments, chat, bios, names, post and run titles, clubs and events. Reports are reviewed within 24 hours and abusive accounts can be suspended. The Terms forbid objectionable content and are shown at sign-up. Contact: runivo.official@gmail.com (also in Settings → Support).
 
 **Notifications.** Optional and never required. Promotional offers are off by default.
 

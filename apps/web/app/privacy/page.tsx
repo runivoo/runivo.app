@@ -130,7 +130,7 @@ export default function PrivacyPage() {
             </p>
             <p style={{ ...prose, marginTop: 12 }}>
               To exercise any of these rights, contact us at{' '}
-              <a href="mailto:support@runivo.com" style={{ color: 'var(--accent)' }}>support@runivo.com</a>.
+              <a href="mailto:runivo.official@gmail.com" style={{ color: 'var(--accent)' }}>runivo.official@gmail.com</a>.
               You can delete your account directly in the app: Profile → Settings (gear icon) → Delete account, at the bottom of the screen.
             </p>
 
@@ -152,7 +152,7 @@ export default function PrivacyPage() {
             <h2 style={h2Style}>10. Contact</h2>
             <p style={prose}>
               For privacy questions or requests, contact us at{' '}
-              <a href="mailto:support@runivo.com" style={{ color: 'var(--accent)' }}>support@runivo.com</a>.
+              <a href="mailto:runivo.official@gmail.com" style={{ color: 'var(--accent)' }}>runivo.official@gmail.com</a>.
             </p>
           </div>
         </article>

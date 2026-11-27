@@ -33,7 +33,7 @@ const VAPID_PRIVATE = Deno.env.get('VAPID_PRIVATE_KEY') ?? '';
 let webPushReady = false;
 if (VAPID_PUBLIC && VAPID_PRIVATE) {
   try {
-    webpush.setVapidDetails(Deno.env.get('VAPID_SUBJECT') ?? 'mailto:support@runivo.com', VAPID_PUBLIC, VAPID_PRIVATE);
+    webpush.setVapidDetails(Deno.env.get('VAPID_SUBJECT') ?? 'mailto:runivo.official@gmail.com', VAPID_PUBLIC, VAPID_PRIVATE);
     webPushReady = true;
   } catch (err) {
     console.error('[push] VAPID keys rejected; web push off:', err);

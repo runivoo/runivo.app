@@ -34,7 +34,7 @@ import { ScreenHeader } from '@mobile/shared/components/ScreenHeader';
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export const SUPPORT_URL = 'https://runivo.in/support';
-export const SUPPORT_MAILTO = 'mailto:support@runivo.com';
+export const SUPPORT_MAILTO = 'mailto:runivo.official@gmail.com';
 
 export default function SettingsScreen() {
   const C = useTheme();
@@ -239,7 +239,7 @@ export default function SettingsScreen() {
             <RowChevron />
           </Pressable>
           <Pressable style={s.linkRow} onPress={() => {
-            Linking.openURL(SUPPORT_MAILTO).catch(() => appAlert('No email app', 'Write to support@runivo.com from any email app.'));
+            Linking.openURL(SUPPORT_MAILTO).catch(() => appAlert('No email app', 'Write to runivo.official@gmail.com from any email app.'));
           }} accessibilityRole="link">
             <Text style={s.linkLabel}>Email support</Text>
             <RowChevron />

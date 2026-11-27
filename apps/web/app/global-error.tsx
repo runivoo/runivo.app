@@ -25,7 +25,7 @@ export default function GlobalError({
       }}>
         <div>
           <h1 style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.03em', margin: '0 0 12px' }}>Something went wrong.</h1>
-          <p style={{ color: '#5F635D', margin: '0 0 24px' }}>Try again, and if it keeps happening, email support@runivo.com.</p>
+          <p style={{ color: '#5F635D', margin: '0 0 24px' }}>Try again, and if it keeps happening, email runivo.official@gmail.com.</p>
           <button type="button" onClick={() => window.location.assign('/')} style={{
             display: 'inline-flex', alignItems: 'center', height: 52, padding: '0 26px', borderRadius: 999, border: 0, cursor: 'pointer',
             background: '#17181A', color: '#fff', fontWeight: 600, fontSize: 16, fontFamily: 'inherit',

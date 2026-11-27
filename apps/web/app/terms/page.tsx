@@ -88,7 +88,7 @@ export default function TermsPage() {
             </p>
             <p style={{ ...prose, marginTop: 12 }}>
               Anyone can report a comment, post, club, event, message or runner from inside the app, and can block any runner. We review reports and act on content that breaks these rules, usually within 24 hours: we may remove it, hide it, or suspend or end the account that posted it. To report something we have missed, email{' '}
-              <a href="mailto:support@runivo.com" style={{ color: 'var(--accent)' }}>support@runivo.com</a>.
+              <a href="mailto:runivo.official@gmail.com" style={{ color: 'var(--accent)' }}>runivo.official@gmail.com</a>.
             </p>
 
             <h2 style={h2Style}>7. Paid Features</h2>
@@ -124,7 +124,7 @@ export default function TermsPage() {
             <h2 style={h2Style}>13. Contact</h2>
             <p style={prose}>
               Questions about these Terms? Email{' '}
-              <a href="mailto:support@runivo.com" style={{ color: 'var(--accent)' }}>support@runivo.com</a>.
+              <a href="mailto:runivo.official@gmail.com" style={{ color: 'var(--accent)' }}>runivo.official@gmail.com</a>.
             </p>
           </div>
         </article>
