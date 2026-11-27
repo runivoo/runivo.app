@@ -24,12 +24,23 @@ const post = (body: unknown) =>
 beforeEach(() => { rpc.mockReset(); sendWelcome.mockClear(); });
 
 describe('POST /api/waitlist', () => {
+  it('records the platform and campaign that brought the sign-up', async () => {
+    rpc.mockResolvedValue({ data: true, error: null });
+    await post({ email: 'a@example.com', touch: { source: 'ig', campaign: 'Launch Week', referrer: 'l.instagram.com' } });
+    expect(rpc).toHaveBeenCalledWith('join_waitlist', expect.objectContaining({
+      p_platform: 'instagram', p_campaign: 'launch-week', p_referrer: 'l.instagram.com',
+    }));
+  });
+
   it('saves a new address, answers 201 and sends the welcome email', async () => {
     rpc.mockResolvedValue({ data: true, error: null });
     const res = await post({ email: 'New@Example.com', city: 'Pune' });
     expect(res.status).toBe(201);
     expect(await res.json()).toEqual({ ok: true });
-    expect(rpc).toHaveBeenCalledWith('join_waitlist', { p_email: 'new@example.com', p_city: 'Pune', p_source: 'web' });
+    expect(rpc).toHaveBeenCalledWith('join_waitlist', {
+      p_email: 'new@example.com', p_city: 'Pune', p_source: 'web',
+      p_platform: 'direct', p_campaign: null, p_medium: null, p_referrer: null,
+    });
     expect(sendWelcome).toHaveBeenCalledWith('new@example.com', 'Pune');
   });
 

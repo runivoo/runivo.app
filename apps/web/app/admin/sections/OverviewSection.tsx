@@ -14,7 +14,10 @@ interface Day { day: string; count: number }
 interface Named { name: string; count: number }
 interface Overview {
   generated_at: string;
-  waitlist: { total: number; today: number; last_7d: number; daily: Day[]; cities: Named[]; sources: Named[] };
+  waitlist: {
+    total: number; today: number; last_7d: number; daily: Day[]; cities: Named[]; sources: Named[];
+    platforms?: Named[]; platforms_7d?: Named[]; campaigns?: (Named & { platform: string | null })[];
+  };
   runners: { total: number; new_7d: number; active_7d: number; daily_new: Day[] };
   runs: { total: number; last_7d: number; km_7d: number; km_total: number };
   territory: { zones: number; claimed_7d: number };
@@ -27,6 +30,11 @@ interface Overview {
 }
 
 const n = (v: number) => v.toLocaleString('en-IN');
+const PLATFORM_LABEL: Record<string, string> = {
+  instagram: 'Instagram', x: 'X', linkedin: 'LinkedIn', facebook: 'Facebook', whatsapp: 'WhatsApp', youtube: 'YouTube',
+  threads: 'Threads', reddit: 'Reddit', strava: 'Strava', email: 'Email', search: 'Search engines',
+  direct: 'Direct (typed or no link info)', 'other-site': 'Other websites', unknown: 'Unknown (before tracking)',
+};
 const pct = (part: number, whole: number) => (whole > 0 ? `${Math.round((part / whole) * 100)}%` : '–');
 
 export default function OverviewSection() {
@@ -81,9 +89,19 @@ export default function OverviewSection() {
             <Card title="Sign-ups per day" subtitle="Last 30 days">
               <Bars days={data.waitlist.daily} />
             </Card>
+            {(data.waitlist.campaigns?.length ?? 0) > 0 && (
+              <Card title="Campaigns" subtitle="From tagged links (utm_campaign)">
+                <Ranked rows={data.waitlist.campaigns!.map(c => ({ name: `${c.name}${c.platform ? ` · ${PLATFORM_LABEL[c.platform] ?? c.platform}` : ''}`, count: c.count }))} total={data.waitlist.total} />
+              </Card>
+            )}
+            <p className="text-xs text-gray-400">
+              Tag links in bios and posts to see them here, e.g. runivo.in/?utm_source=instagram&amp;utm_campaign=launch. Sign-ups from before 28 Nov show as Unknown.
+            </p>
             <div className="grid md:grid-cols-2 gap-3">
               <Card title="Cities"><Ranked rows={data.waitlist.cities} total={data.waitlist.total} /></Card>
-              <Card title="Where they came from"><Ranked rows={data.waitlist.sources} total={data.waitlist.total} /></Card>
+              <Card title="Where they came from" subtitle="Platform, all time">
+                <Ranked rows={(data.waitlist.platforms ?? []).map(p => ({ ...p, name: PLATFORM_LABEL[p.name] ?? p.name }))} total={data.waitlist.total} />
+              </Card>
             </div>
           </Group>
 

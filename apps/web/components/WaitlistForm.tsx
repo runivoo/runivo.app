@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
+import { firstTouch } from '@/lib/attribution';
 
 type State = { status: 'idle' | 'sending' | 'sent' | 'already' | 'error'; message?: string };
 
@@ -37,6 +38,7 @@ export function WaitlistForm({ source = 'web' }: { source?: string }) {
           city: String(f.get('city') ?? ''),
           company_url: String(f.get('company_url') ?? ''),
           source,
+          touch: firstTouch(),
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; alreadyJoined?: boolean; error?: string };

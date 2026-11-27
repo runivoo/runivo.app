@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import posthog from 'posthog-js';
 import { PostHogProvider as PHProvider } from 'posthog-js/react';
+import { rememberFirstTouch } from '@/lib/attribution';
 
 // Self-contained (does not import packages/shared) — apps/web has no dependency on
 // the shared package today, and this marketing site has no need for the mobile-only
@@ -10,6 +11,8 @@ import { PostHogProvider as PHProvider } from 'posthog-js/react';
 // Automatic pageview capture covers this app's analytics needs.
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    // Which link or site brought this visit, for waitlist attribution (tab only, no cookie).
+    rememberFirstTouch();
     const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
     if (!apiKey || posthog.__loaded) return;
     // Auth links (password reset, sign-in) carry access and refresh tokens after

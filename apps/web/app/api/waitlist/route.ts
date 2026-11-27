@@ -2,6 +2,7 @@ import { serviceClient, str, json } from '@/lib/adminServer';
 import { after } from 'next/server';
 import { makeLimiter, clientIp, EMAIL_RE } from '@/lib/rateLimit';
 import { sendWaitlistWelcome } from '@/lib/waitlistEmail';
+import { platformOf, referrerHost, slug, type Touch } from '@/lib/attribution';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,7 +53,12 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
-    const { data: isNew, error } = await serviceClient().rpc('join_waitlist', { p_email: email, p_city: city, p_source: source });
+    // Where they came from (migration 019): the platform is worked out here, not taken from the browser.
+    const t = (body.touch && typeof body.touch === 'object' ? body.touch : {}) as Touch;
+    const { data: isNew, error } = await serviceClient().rpc('join_waitlist', {
+      p_email: email, p_city: city, p_source: source,
+      p_platform: platformOf(t), p_campaign: slug(t.campaign, 60), p_medium: slug(t.medium, 30), p_referrer: referrerHost(t.referrer),
+    });
     if (error) {
       if (/rate_limited/.test(error.message)) {
         return json({ ok: false, error: 'We are getting a lot of sign-ups right now. Please try again in an hour.' }, 429);

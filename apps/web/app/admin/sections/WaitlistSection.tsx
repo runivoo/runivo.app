@@ -5,7 +5,7 @@ import { Download, ListChecks } from 'lucide-react';
 import { adminFetch, downloadCsv } from '@/lib/adminApi';
 import { thClass, ErrorNote, Spinner, Button, SectionHeader, TableCard, EmptyState } from '../ui';
 
-interface WaitlistRow { id: string; email: string; city: string | null; source: string; created_at: string }
+interface WaitlistRow { id: string; email: string; city: string | null; source: string; platform: string | null; campaign: string | null; created_at: string }
 
 export default function WaitlistSection() {
   const [rows, setRows] = useState<WaitlistRow[]>([]);
@@ -22,8 +22,8 @@ export default function WaitlistSection() {
 
   const exportCsv = () =>
     downloadCsv('runivo-waitlist.csv', [
-      ['Email', 'City', 'Source', 'Joined'],
-      ...rows.map(r => [r.email, r.city, r.source, r.created_at]),
+      ['Email', 'City', 'Platform', 'Campaign', 'Source', 'Joined'],
+      ...rows.map(r => [r.email, r.city, r.platform, r.campaign, r.source, r.created_at]),
     ]);
 
   return (
@@ -45,7 +45,7 @@ export default function WaitlistSection() {
             <thead><tr className="bg-gray-50 border-b border-gray-100">
               <th className={thClass}>Email</th>
               <th className={`${thClass} hidden sm:table-cell`}>City</th>
-              <th className={`${thClass} hidden sm:table-cell`}>Source</th>
+              <th className={`${thClass} hidden sm:table-cell`}>Came from</th>
               <th className={thClass}>Joined</th>
             </tr></thead>
             <tbody className="bg-white divide-y divide-gray-50">
@@ -53,7 +53,7 @@ export default function WaitlistSection() {
                 <tr key={r.id}>
                   <td className="px-4 py-3 font-medium text-gray-900 break-all">{r.email}</td>
                   <td className="px-4 py-3 text-xs text-gray-500 hidden sm:table-cell">{r.city ?? '–'}</td>
-                  <td className="px-4 py-3 text-xs text-gray-500 hidden sm:table-cell">{r.source}</td>
+                  <td className="px-4 py-3 text-xs text-gray-500 hidden sm:table-cell">{r.platform ?? r.source}{r.campaign ? <span className="block text-gray-400">{r.campaign}</span> : null}</td>
                   <td className="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">{new Date(r.created_at).toLocaleDateString()}</td>
                 </tr>
               ))}
