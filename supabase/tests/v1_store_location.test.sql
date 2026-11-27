@@ -106,7 +106,7 @@ SELECT pg_temp.check(pg_temp.apply_error('meera@stride.cafe', 'cafe', 'A fourth 
                      'a fourth application from one email in a day is refused');
 SELECT pg_temp.check(pg_temp.apply_error('not-an-email', 'cafe', 'A fine offer') = 'invalid', 'a bad email is refused');
 SELECT pg_temp.check(pg_temp.apply_error('a@b.co', 'casino', 'A fine offer') = 'invalid', 'an unknown category is refused');
--- The offer became optional in migration 026 (the team agrees it with the brand), so only an over-long one is refused.
+-- The offer became optional in 014_launch_fixes (partner_application_minimal) (the team agrees it with the brand), so only an over-long one is refused.
 SELECT pg_temp.check(pg_temp.apply_error('a@b.co', 'cafe', repeat('x', 1001)) = 'invalid', 'an over-long offer is refused');
 
 SELECT set_config('test.role', 'authenticated', false);

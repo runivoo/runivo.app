@@ -1,4 +1,4 @@
--- Profile insert guard (migration 029): a runner can't create their own profile as admin.
+-- Profile insert guard (014_launch_fixes, profile_insert_guard): a runner can't create their own profile as admin.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$

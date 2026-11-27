@@ -1,5 +1,5 @@
 -- A run whose GPS fixes carry fractional millisecond times (iOS) uploads, and its
--- route is built in time order (migration 015).
+-- route is built in time order (014_launch_fixes, runs_route_fractional_timestamps).
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$

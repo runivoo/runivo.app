@@ -18,6 +18,16 @@ SET search_path = public, extensions;
 CREATE EXTENSION IF NOT EXISTS postgis;   -- geometry types, spatial functions and indexes
 CREATE EXTENSION IF NOT EXISTS pgcrypto;  -- gen_random_uuid(), digest()
 
+-- API roles get table access by default; each feature file then takes away what a
+-- role shouldn't have (REVOKE) and row-level security decides which rows it sees.
+-- Older Supabase projects set this up themselves; new ones don't, so it lives here.
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;
+
 
 -- ── Tables ────────────────────────────────────────────────────────────
 

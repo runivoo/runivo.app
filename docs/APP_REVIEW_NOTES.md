@@ -4,7 +4,7 @@ Fill the two `[ ]` fields last. Keep this file in step with the build you submit
 
 ## Before you submit
 
-- [ ] Production database is up to date: `npx supabase db push` (includes `017_launch_fixes.sql`: account-deletion fix, word filter list, club handover).
+- [ ] Production database is up to date: `npx supabase db push` (includes `014_launch_fixes.sql`: account-deletion fix, word filter list, club handover).
 - [ ] Edge functions deployed: `npm run functions:deploy -- ai-coach delete-account foot-scan process-run-territory send-push-notification`.
 - [ ] Secrets set (`npx supabase secrets list`): `ANTHROPIC_API_KEY`; the four `APPLE_*` keys (Sign in with Apple revoke on deletion); `SUBSCRIPTIONS_ENABLED` absent or `false`.
 - [ ] Create the demo account in Supabase Auth (email + password, **email confirmed**), then run `supabase/seed/demo_data.sql` and `demo_data_v1.sql` with that email in `demo_cfg`. It seeds runs, 6 zones, a PACE balance, a club with chat, events and sample store rewards.

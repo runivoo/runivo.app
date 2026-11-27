@@ -92,7 +92,7 @@ VALUES ('b1a00000-0000-4000-8000-0000000000a3', 'Runivo', 'Sticker pack', 'x', 1
 SELECT pg_temp.as_user('b1100000-0000-4000-8000-000000000001');
 SELECT pg_temp.check(EXISTS (SELECT 1 FROM public.store_catalog() WHERE id = 'b1a00000-0000-4000-8000-0000000000a3'), 'Runivo''s own rewards still show');
 
--- 8. Sponsored challenges follow the brand too (migration 028).
+-- 8. Sponsored challenges follow the brand too (014_launch_fixes, sponsored_partner_gate).
 SET LOCAL test.role = 'service_role';
 UPDATE public.partners SET status = 'active' WHERE id = (SELECT id FROM app);
 INSERT INTO public.sponsored_challenges (id, partner_id, brand, title, metric, target, starts_at, ends_at, reward_id)

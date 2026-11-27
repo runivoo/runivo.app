@@ -1,4 +1,4 @@
--- Pause breaks (migration 027): the stretch into a "brk" point is never judged.
+-- Pause breaks (014_launch_fixes, pause_breaks): the stretch into a "brk" point is never judged.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$

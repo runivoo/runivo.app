@@ -1,4 +1,4 @@
--- Migration 022: block lists, privacy-place oracle and table privileges.
+-- 014_launch_fixes (backend_hardening): block lists, privacy-place oracle and table privileges.
 \set ON_ERROR_STOP on
 BEGIN;
 CREATE FUNCTION pg_temp.check(ok boolean, what text) RETURNS void LANGUAGE plpgsql AS $$
@@ -10,7 +10,7 @@ SELECT pg_temp.check(NOT has_function_privilege('authenticated', 'public.hidden_
 SELECT pg_temp.check(has_function_privilege('service_role', 'public.hidden_user_ids(uuid)', 'EXECUTE'), 'service_role can call hidden_user_ids');
 SELECT pg_temp.check(NOT has_function_privilege('anon', 'public.leaderboard_circle(uuid, text)', 'EXECUTE'), 'anon cannot call leaderboard_circle');
 SELECT pg_temp.check(NOT has_function_privilege('anon', 'public.is_blocked_between(uuid, uuid)', 'EXECUTE'), 'anon cannot probe blocks');
--- Migration 023: runners can no longer pass any two ids; policies use the caller-bound wrapper.
+-- 014_launch_fixes (live_db_fixes): runners can no longer pass any two ids; policies use the caller-bound wrapper.
 SELECT pg_temp.check(NOT has_function_privilege('authenticated', 'public.is_blocked_between(uuid, uuid)', 'EXECUTE'), 'signed-in runners cannot probe other pairs');
 SELECT pg_temp.check(has_function_privilege('authenticated', 'public.blocked_with_me(uuid)', 'EXECUTE'), 'policies use blocked_with_me');
 

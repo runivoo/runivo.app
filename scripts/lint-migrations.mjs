@@ -24,7 +24,7 @@ let expected = 1;
 
 for (const f of files) {
   const m = /^(\d{3})_[a-z0-9_]+\.sql$/.exec(f);
-  if (!m) { problems.push(`${f}: name must be <3-digit number>_<snake_case>.sql, like 029_clubs_invites.sql`); continue; }
+  if (!m) { problems.push(`${f}: name must be <3-digit number>_<snake_case>.sql, like 015_clubs_invites.sql`); continue; }
   const version = Number(m[1]);
   if (seen.has(version)) problems.push(`${f}: same number as ${seen.get(version)}`);
   seen.set(version, f);
