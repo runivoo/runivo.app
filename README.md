@@ -9,10 +9,10 @@ Run to claim territory. Expo / React Native app (`apps/mobile`), a marketing and
 | `apps/mobile` | The app. Feature folders under `src/features`, shared UI and helpers under `src/shared`, design tokens under `src/theme`. |
 | `packages/shared` | Game engine, local store (SQLite), sync, and types used by the app. Imported as `@shared/...`. |
 | `apps/web` | Next.js site: marketing, legal, support, password reset, partner admin. Deployed from `vercel.json`. |
-| `supabase/migrations` | The database, one file per feature (base, accounts, moderation, runs, territory, PACE, store, social, notifications, clubs, events, training, races). RLS and `SECURITY DEFINER` functions are the security boundary. New changes go in a new file named for its feature, e.g. `20261201000001_clubs_invites.sql`. The 178 pre-switch files were deleted (see git history before commit 9e5cf19); three that tests still use are in `supabase/tests/legacy`. Tests: `supabase/tests/run.sh`. |
+| `supabase/migrations` | The database, one file per feature (base, accounts, moderation, runs, territory, PACE, store, social, notifications, clubs, events, training, races). RLS and `SECURITY DEFINER` functions are the security boundary. New changes go in a new file named for its feature, e.g. `20261201000001_clubs_invites.sql`. The 178 pre-switch files were deleted (see git history before commit 9e5cf19). Tests: `supabase/tests/run.sh`. |
 | `supabase/functions` | Edge functions (run scoring, rewards, push, webhooks). `_shared/runEngine.ts` is a generated, git-ignored copy of the engine. |
 | `supabase/tests` | SQL tests. See `supabase/tests/README.md`. |
-| `docs/` | Current docs. `docs/archive/` holds older audits that are partly out of date. |
+| `docs/` | Current docs: checklists, review notes, moderation, notifications, onboarding, partners. |
 
 ## Set up
 
@@ -41,4 +41,4 @@ npm test               # vitest: shared logic, mobile helpers, pure edge-functio
 
 ## Before a release
 
-Work through [docs/SECURITY_CHECKLIST.md](docs/SECURITY_CHECKLIST.md) and, before an App Store submission, [docs/APP_STORE_CHECKLIST.md](docs/APP_STORE_CHECKLIST.md) (with [docs/APP_REVIEW_NOTES.md](docs/APP_REVIEW_NOTES.md) and [docs/MODERATION.md](docs/MODERATION.md)). Current findings and what is still open: [docs/AUDIT_2026-11.md](docs/AUDIT_2026-11.md).
+Work through [docs/SECURITY_CHECKLIST.md](docs/SECURITY_CHECKLIST.md) and, before an App Store submission, [docs/APP_STORE_CHECKLIST.md](docs/APP_STORE_CHECKLIST.md) (with [docs/APP_REVIEW_NOTES.md](docs/APP_REVIEW_NOTES.md) and [docs/MODERATION.md](docs/MODERATION.md)).

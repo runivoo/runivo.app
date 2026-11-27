@@ -64,7 +64,7 @@ export default tseslint.config(
   // ── Feature boundaries (warn only: the count is the to-do list) ─────────────
   // A feature may import from itself, from src/shared, src/theme and packages/shared,
   // but not reach into another feature's folders. Each such import is a coupling the
-  // restructure in docs/AUDIT_2026-11.md has to untangle (it caused the run⇄settings,
+  // restructure (Nov 2026 audit) has to untangle (it caused the run⇄settings,
   // social⇄clubs and profile⇄social cycles). Move the shared piece to src/shared (UI,
   // helpers) or give it a home in the feature that owns it and import that.
   ...FEATURES.map(feature => ({

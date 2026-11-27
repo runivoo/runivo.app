@@ -18,9 +18,8 @@ supabase/tests/run.sh races    # only tests whose name contains "races"
 parts of Supabase the schema needs: the auth, storage and cron schemas, roles,
 `auth.uid()` and Supabase's default grants) plus every file in
 `supabase/migrations`, then runs each test inside a transaction that rolls
-back. A few tests say on their first lines that they stand alone: they build
-the handful of tables they need on an empty database and load one legacy
-migration, and `run.sh` gives each of those its own empty database.
+back. (`run.sh` still supports a test that says on its first lines that it
+stands alone: it gets its own empty database. None do today.)
 
 The store test needs the `dblink` extension (Postgres contrib) for its
 concurrency check.

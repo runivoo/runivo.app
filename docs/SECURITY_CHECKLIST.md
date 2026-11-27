@@ -2,7 +2,7 @@
 
 Run this before every store build. Each item names the command or file that proves it. Tick a box only after running the check, not after remembering it.
 
-Last full audit: 2026-11 (findings and status in [AUDIT_2026-11.md](AUDIT_2026-11.md)).
+Last full audit: 27 Nov 2026; all findings from it are fixed.
 
 ## 1. Secrets and config
 
