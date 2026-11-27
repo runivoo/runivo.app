@@ -234,6 +234,25 @@ button, input, select, textarea { font-family: inherit; }
 .field-label { display: block; font-size: 14px; font-weight: 500; color: var(--t2); margin-bottom: 8px; }
 .form-error { color: var(--danger); font-size: 14px; }
 
+/* Waitlist form */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.waitlist { position: relative; width: 100%; max-width: 560px; }
+.waitlist-row { display: flex; gap: 10px; align-items: stretch; }
+.waitlist-field { flex: 1 1 0; min-width: 0; }
+.waitlist-city { flex: 0 1 170px; }
+.waitlist .field { height: 52px; border-radius: 999px; padding: 0 22px; }
+.waitlist-note { font-size: 14px; color: var(--t3); margin-top: 12px; }
+.waitlist-note.form-error { color: var(--danger); }
+@media (max-width: 640px) {
+  .waitlist-row { flex-direction: column; }
+  .waitlist-city { flex-basis: auto; }
+  .waitlist .btn { width: 100%; }
+}
+.waitlist-done { display: flex; gap: 14px; align-items: flex-start; max-width: 560px; padding: 18px 20px; border-radius: var(--radius); background: var(--accent-muted); border: 1px solid var(--border); }
+.waitlist-tick { flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff; }
+.waitlist-done-title { font-weight: 600; font-size: 17px; letter-spacing: -0.01em; color: var(--t1); }
+.waitlist-done-body { font-size: 15px; color: var(--t2); margin-top: 2px; }
+
 /* Phone menu: the text links are hidden under 720px, so a button opens them. */
 .menu-btn {
   display: none; width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--border);

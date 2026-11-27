@@ -38,7 +38,7 @@ import {
   Calendar, Megaphone, Plus, Trash2, ToggleLeft, ToggleRight,
   ArrowLeft, Pencil, X, AlertCircle, ShieldAlert, ShoppingBag,
   Handshake, BarChart3, BellRing, Flag,
-  Trophy, LogOut,
+  Trophy, LogOut, ListChecks,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import StoreSection from './sections/StoreSection';
@@ -47,6 +47,7 @@ import ReportsSection from './sections/ReportsSection';
 import CampaignsSection from './sections/CampaignsSection';
 import RacesSection from './sections/RacesSection';
 import ModerationSection from './sections/ModerationSection';
+import WaitlistSection from './sections/WaitlistSection';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -84,7 +85,7 @@ interface PromoRow {
   created_at: string;
 }
 
-type AdminTab = 'moderation' | 'events' | 'races' | 'promotions' | 'store' | 'partners' | 'reports' | 'campaigns';
+type AdminTab = 'moderation' | 'events' | 'races' | 'promotions' | 'store' | 'partners' | 'reports' | 'campaigns' | 'waitlist';
 
 const NAV: { id: AdminTab; label: string; Icon: typeof Calendar }[] = [
   { id: 'moderation', label: 'Moderation', Icon: Flag        },
@@ -92,6 +93,7 @@ const NAV: { id: AdminTab; label: string; Icon: typeof Calendar }[] = [
   { id: 'store',      label: 'PACE Store', Icon: ShoppingBag },
   { id: 'reports',    label: 'Reports',    Icon: BarChart3   },
   { id: 'campaigns',  label: 'Campaigns',  Icon: BellRing    },
+  { id: 'waitlist',   label: 'Waitlist',   Icon: ListChecks  },
   { id: 'events',     label: 'Events',     Icon: Calendar    },
   { id: 'races',      label: 'Races',      Icon: Trophy      },
   { id: 'promotions', label: 'Promotions', Icon: Megaphone   },
@@ -973,6 +975,7 @@ export default function AdminPage() {
               {tab === 'partners'   && <PartnersSection />}
               {tab === 'reports'    && <ReportsSection />}
               {tab === 'campaigns'  && <CampaignsSection />}
+              {tab === 'waitlist'   && <WaitlistSection />}
             </motion.div>
           </AnimatePresence>
         </main>

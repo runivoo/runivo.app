@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Logo } from './Logo';
 import { MobileMenu } from './MobileMenu';
-import { APP_STORE_URL } from '@/lib/site';
+import { GetAppLink } from './GetAppLink';
 
 export function Nav() {
   return (
@@ -12,7 +12,7 @@ export function Nav() {
           <Link href="/#how" className="nav-link">How it works</Link>
           <Link href="/partners" className="nav-link">Partners</Link>
           <Link href="/support" className="nav-link">Support</Link>
-          <a href={APP_STORE_URL} className="btn btn-dark btn-sm" style={{ marginLeft: 8 }}>Download</a>
+          <GetAppLink className="btn btn-dark btn-sm" style={{ marginLeft: 8 }} waitlist="Join waitlist" />
           <MobileMenu />
         </div>
       </nav>

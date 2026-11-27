@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { APP_STORE_URL } from '@/lib/site';
+import { GetAppLink } from '@/components/GetAppLink';
+import { APP_LIVE } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Follow on Runivo',
@@ -45,7 +46,7 @@ export default async function RunnerLinkPage({ params, searchParams }: {
             </a>
           )}
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--t2)', lineHeight: 1.7, marginTop: 20 }}>
-            No app yet? <a href={APP_STORE_URL} style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: 3 }}>Get Runivo on the App Store</a>, then scan the code again.
+            {APP_LIVE ? 'No app yet? ' : 'Runivo is not on the App Store yet. '}<GetAppLink style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: 3 }} live="Get Runivo on the App Store" waitlist="Join the waitlist" />{APP_LIVE ? ', then scan the code again.' : ' and we’ll email you the day it opens.'}
           </p>
         </article>
       </main>

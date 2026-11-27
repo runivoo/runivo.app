@@ -1,5 +1,6 @@
 import { serviceClient, str, num, list, json } from '@/lib/adminServer';
 import { PARTNER_CATEGORIES } from '@/app/api/admin/partners/fields';
+import { makeLimiter, clientIp, EMAIL_RE } from '@/lib/rateLimit';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,29 +11,9 @@ export const dynamic = 'force-dynamic';
  * reviews it in the admin. Errors are never returned verbatim.
  */
 
-// Simple per-IP limit: 5 applications per 10 minutes per server instance.
+// Per-IP limit: 5 applications per 10 minutes per server instance.
 // The database cap (3 per email per day) is the real guard.
-const WINDOW_MS = 10 * 60 * 1000;
-const MAX_PER_WINDOW = 5;
-const hits = new Map<string, number[]>();
-
-function rateLimited(ip: string, now = Date.now()): boolean {
-  const recent = (hits.get(ip) ?? []).filter(t => now - t < WINDOW_MS);
-  if (recent.length >= MAX_PER_WINDOW) { hits.set(ip, recent); return true; }
-  recent.push(now);
-  hits.set(ip, recent);
-  if (hits.size > 5000) {
-    for (const [k, v] of hits) if (v.every(t => now - t >= WINDOW_MS)) hits.delete(k);
-  }
-  return false;
-}
-
-function clientIp(req: Request): string {
-  const fwd = req.headers.get('x-forwarded-for');
-  return (fwd ? fwd.split(',')[0] : req.headers.get('x-real-ip') ?? 'unknown').trim();
-}
-
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+const rateLimited = makeLimiter(10 * 60 * 1000, 5);
 
 export async function POST(req: Request): Promise<Response> {
   let body: Record<string, unknown>;

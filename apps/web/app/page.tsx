@@ -4,7 +4,9 @@ import { ArrowRight, Coins, Hexagon, Sparkles, Users } from 'lucide-react';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { HexagonMark } from '@/components/Logo';
-import { APP_STORE_URL } from '@/lib/site';
+import { WaitlistForm } from '@/components/WaitlistForm';
+import { GetAppLink } from '@/components/GetAppLink';
+import { APP_LIVE } from '@/lib/site';
 
 const FEATURES = [
   {
@@ -25,12 +27,14 @@ const FEATURES = [
   },
 ] as const;
 
-const STEPS = [
-  ['Download the app', 'Free on iPhone. Sign up with Apple, Google or your email.'],
+const STEPS: readonly (readonly [string, string])[] = [
+  APP_LIVE
+    ? ['Download the app', 'Free on iPhone. Sign up with Apple, Google or your email.']
+    : ['Join the waitlist', 'Leave your email and we’ll tell you the day Runivo opens in your city.'],
   ['Lace up and run', 'GPS tracks your route, pace and splits, with the screen locked.'],
   ['Claim your zones', 'Streets and loops you run become your territory on the map.'],
   ['Earn and spend PACE', 'Turn kilometres into rewards from partner brands near you.'],
-] as const;
+];
 
 const BUILT_FOR_THE_RUN = [
   'Tracking keeps going with the screen locked, with a Live Activity on your Lock Screen.',
@@ -56,11 +60,22 @@ export default function Home() {
                 AI coaching. Live crews. Your city. Every run you record can claim real ground on the map,
                 and earns PACE you can spend on partner rewards.
               </p>
-              <div className="actions rise rise-3">
-                <a href={APP_STORE_URL} className="btn btn-dark">Download for iPhone</a>
-                <Link href="/#how" className="btn btn-surface">See how it works</Link>
-              </div>
-              <p className="muted" style={{ fontSize: 14, marginTop: 16 }}>Free to download. iPhone only for now.</p>
+              {APP_LIVE ? (
+                <>
+                  <div className="actions rise rise-3">
+                    <GetAppLink className="btn btn-dark" live="Download for iPhone" />
+                    <Link href="/#how" className="btn btn-surface">See how it works</Link>
+                  </div>
+                  <p className="muted" style={{ fontSize: 14, marginTop: 16 }}>Free to download. iPhone only for now.</p>
+                </>
+              ) : (
+                <div className="rise rise-3" style={{ marginTop: 32 }}>
+                  <WaitlistForm source="web" />
+                  <p style={{ marginTop: 18 }}>
+                    <Link href="/#how" className="muted" style={{ fontSize: 15, fontWeight: 500, textDecoration: 'underline', textUnderlineOffset: 3 }}>See how it works</Link>
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="hero-art rise rise-2">
@@ -132,19 +147,30 @@ export default function Home() {
         </section>
 
         {/* Final call */}
-        <section className="section" style={{ textAlign: 'center' }}>
+        <section className="section" id="waitlist" style={{ textAlign: 'center' }}>
           <div className="container">
             <h2 className="h-display" style={{ fontSize: 'clamp(38px, 6vw, 72px)' }}>
               Ready to <span className="accent">run?</span>
             </h2>
-            <p className="lead" style={{ margin: '18px auto 0', maxWidth: 460 }}>
-              Claim the streets you run. Download Runivo and take your first step.
-            </p>
-            <div className="actions" style={{ justifyContent: 'center' }}>
-              <a href={APP_STORE_URL} className="btn btn-dark">
-                Download for iPhone <ArrowRight size={18} aria-hidden />
-              </a>
-            </div>
+            {APP_LIVE ? (
+              <>
+                <p className="lead" style={{ margin: '18px auto 0', maxWidth: 460 }}>
+                  Claim the streets you run. Download Runivo and take your first step.
+                </p>
+                <div className="actions" style={{ justifyContent: 'center' }}>
+                  <GetAppLink className="btn btn-dark" live={<>Download for iPhone <ArrowRight size={18} aria-hidden /></>} />
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="lead" style={{ margin: '18px auto 0', maxWidth: 460 }}>
+                  Runivo is opening city by city. Join the waitlist and we’ll tell you the day it reaches yours.
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+                  <WaitlistForm source="web" />
+                </div>
+              </>
+            )}
           </div>
         </section>
       </main>

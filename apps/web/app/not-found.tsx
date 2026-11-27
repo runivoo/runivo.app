@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { APP_STORE_URL } from '@/lib/site';
+import { GetAppLink } from '@/components/GetAppLink';
 
 export default function NotFound() {
   return (
@@ -16,7 +16,7 @@ export default function NotFound() {
           </p>
           <div className="actions" style={{ justifyContent: 'center' }}>
             <Link href="/" className="btn btn-dark">Back to home</Link>
-            <a href={APP_STORE_URL} className="btn btn-surface">Get the app</a>
+            <GetAppLink className="btn btn-surface" live="Get the app" />
           </div>
         </div>
       </main>

@@ -37,7 +37,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p style={{ ...prose, color: 'var(--t3)', marginBottom: 48 }}>
-            Last updated: November 2026
+            Last updated: 26 November 2026
           </p>
 
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 48 }}>
@@ -52,6 +52,11 @@ export default function PrivacyPage() {
             <h3 style={h3Style}>Account information</h3>
             <p style={prose}>
               Your email address and/or phone number, a username, and your name if you sign in with Apple or Google. If you use a password it is stored only as a secure hash. Optional profile details such as a bio, display name, location text and profile photo are stored if you add them.
+            </p>
+
+            <h3 style={h3Style}>Waitlist</h3>
+            <p style={prose}>
+              If you join the waitlist on our website we store your email address, the city if you give one, and when you signed up. We use it only to email you when Runivo opens, and we do not share it. To be removed, email us at the address in section 10 and we will delete it; the same goes for any other data you want gone.
             </p>
 
             <h3 style={h3Style}>Precise location (runs)</h3>

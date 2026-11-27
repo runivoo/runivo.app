@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { APP_STORE_URL } from '@/lib/site';
+import { WaitlistForm } from '@/components/WaitlistForm';
+import { GetAppLink } from '@/components/GetAppLink';
+import { APP_LIVE } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Join Runivo',
@@ -34,7 +36,9 @@ export default async function InvitePage({ searchParams }: { searchParams: Promi
           </h1>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--t2)', lineHeight: 1.7 }}>
             Runivo is a running game: every run you record can claim a zone on the map, and other runners can take it back.
-            Get the app from the App Store, then follow {inviter ?? 'your friend'} once you are in.
+            {APP_LIVE
+              ? <>Get the app from the App Store, then follow {inviter ?? 'your friend'} once you are in.</>
+              : <>Runivo is not on the App Store yet. Join the waitlist and we’ll email you the day it opens, then you can follow {inviter ?? 'your friend'}.</>}
           </p>
           {code && (
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--t1)', lineHeight: 1.7, marginTop: 20 }}>
@@ -42,9 +46,15 @@ export default async function InvitePage({ searchParams }: { searchParams: Promi
               <strong style={{ letterSpacing: '0.12em' }}>{code}</strong>. You both get 50 PACE after your first 1 km run.
             </p>
           )}
-          <div className="actions" style={{ justifyContent: 'center' }}>
-            <a href={APP_STORE_URL} className="btn btn-dark">Get Runivo on iPhone</a>
-          </div>
+          {APP_LIVE ? (
+            <div className="actions" style={{ justifyContent: 'center' }}>
+              <GetAppLink className="btn btn-dark" live="Get Runivo on iPhone" />
+            </div>
+          ) : (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 28 }}>
+              <WaitlistForm source="invite" />
+            </div>
+          )}
         </article>
       </main>
       <Footer />

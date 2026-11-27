@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Logo } from './Logo';
-import { APP_STORE_URL, SUPPORT_EMAIL } from '@/lib/site';
+import { GetAppLink } from './GetAppLink';
+import { SUPPORT_EMAIL } from '@/lib/site';
 
 export function Footer() {
   return (
@@ -16,7 +17,7 @@ export function Footer() {
           <div style={{ display: 'flex', gap: 64, flexWrap: 'wrap' }}>
             <div>
               <h4>Product</h4>
-              <a className="fl" href={APP_STORE_URL}>Download</a>
+              <GetAppLink className="fl" />
               <Link className="fl" href="/#how">How it works</Link>
             </div>
             <div>
