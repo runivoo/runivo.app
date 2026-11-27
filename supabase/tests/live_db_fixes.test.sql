@@ -1,4 +1,4 @@
--- 20261124000002_live_db_fixes: the holes the live-database audit proved.
+-- 023_live_db_fixes: the holes the live-database audit proved.
 -- Needs every migration applied; runs in a transaction and rolls back.
 \set ON_ERROR_STOP on
 SET client_min_messages = notice;

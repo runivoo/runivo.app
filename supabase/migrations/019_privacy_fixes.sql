@@ -14,7 +14,7 @@
 --    anon key could read every comment, on followers-only and private posts too (B11).
 --    get_comments (SECURITY DEFINER, skips RLS) gets the same post-visibility check.
 -- 3. run_territories: the pre-polygon table, read by nothing, readable by anon and
---    ignoring map hiding and private places. 20261123000002 dropped its write
+--    ignoring map hiding and private places. Migration 018 dropped its write
 --    policies; the table itself goes (B12).
 
 -- ── 1. Minors ────────────────────────────────────────────────────────────────

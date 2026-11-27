@@ -120,7 +120,7 @@ export async function pullProfile(): Promise<void> {
     id: existing?.id ?? user.id,
     username: data.username,
     // level / xp / coins / energy are legacy game stats the server no longer lets
-    // clients write (20261123000004) and never computes, so its copy stays at the
+    // clients write (migration 020) and never computes, so its copy stays at the
     // defaults: keep this phone's values instead of resetting them after every run.
     level: existing?.level ?? data.level,
     xp: existing?.xp ?? data.xp,

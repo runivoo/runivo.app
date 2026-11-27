@@ -9,7 +9,7 @@
 --            can remove a follower. Direct inserts can only follow public profiles.
 --  5. P1-05  Runner search on the server.
 --  6. P1-08  Posts take the server's time and tier; level, xp, coins, energy and
---            achievements can't be set by the client (keeps 20261123000002's lock on
+--            achievements can't be set by the client (keeps migration 018's lock on
 --            total_territories_claimed). P1-09 avatar_url must be the runner's own upload.
 --  7. P1-13  Club invite links (any club, invite-only included) and a notification
 --            to the owner when someone asks to join.
@@ -19,7 +19,7 @@
 --            owner-writable; likes only through toggle_like; seeded global lobbies
 --            removed; live position not written inside a privacy place.
 --
--- Comment read access (B11) and the text filter (20261123000001) are handled elsewhere.
+-- Comment read access (B11) and the text filter (migration 017) are handled elsewhere.
 
 SET search_path = public, extensions;
 
@@ -315,9 +315,9 @@ BEGIN
   NEW.coins                   := OLD.coins;
   NEW.energy                  := OLD.energy;
   NEW.unlocked_achievements   := OLD.unlocked_achievements;
-  NEW.total_territories_claimed := OLD.total_territories_claimed;   -- server-owned since 20261123000002
+  NEW.total_territories_claimed := OLD.total_territories_claimed;   -- server-owned since migration 018
   -- Becoming under 18 (age screen): activities default to followers. The rest of the
-  -- minor rules (private, no live sharing, sticky flag) are guard_minor_profile (20261123000003).
+  -- minor rules (private, no live sharing, sticky flag) are guard_minor_profile (migration 019).
   IF NEW.age_range = 'under_18' AND OLD.age_range IS DISTINCT FROM 'under_18'
      AND NEW.default_activity_visibility = 'everyone' THEN
     NEW.default_activity_visibility := 'followers';
@@ -476,7 +476,7 @@ CREATE TRIGGER trg_live_position_privacy BEFORE INSERT OR UPDATE OF lat, lng ON 
   FOR EACH ROW EXECUTE FUNCTION public.skip_live_position_in_privacy_place();
 
 -- ── 9. Word-filter triggers run as their owner ───────────────────────────────
--- 20261123000001's clear_blocked_text / replace_blocked_username are SECURITY
+-- Migration 017's clear_blocked_text / replace_blocked_username are SECURITY
 -- INVOKER, but contains_blocked_term is not executable by clients, so every
 -- client insert into feed_posts, runs and profiles (sync upload, pushProfile's
 -- upsert) failed with "permission denied for function contains_blocked_term".

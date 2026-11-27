@@ -143,7 +143,7 @@ export async function fetchSuggestedRunners(userId: string): Promise<SuggestedRu
 
 /**
  * Follow or unfollow. A runner whose profile isn't public gets a request they
- * accept or decline (set_follow, 20261123000004); the result says which.
+ * accept or decline (set_follow, migration 020); the result says which.
  */
 export async function setFollow(targetId: string, follow: boolean): Promise<FollowState> {
   const { data, error } = await supabase.rpc('set_follow', { p_target: targetId, p_follow: follow });

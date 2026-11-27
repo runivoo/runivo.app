@@ -7,7 +7,7 @@
 --    (and not by `authenticated`). An anonymous caller could ask who a runner
 --    blocked, was blocked by, or muted. Server-side callers only.
 -- 2. The one RLS policy that used hidden_user_ids directly
---    (event_participants, 20261123000004) would fail with "permission denied
+--    (event_participants, migration 020) would fail with "permission denied
 --    for function" for signed-in runners, because they cannot execute it.
 --    It now goes through is_hidden_from_me(), which is bound to the caller.
 -- 3. public_route_for(user, points, hidden) was executable by anyone and drops
@@ -18,7 +18,7 @@
 --    No client calls it.
 -- 5. is_blocked_between() had no reason to be callable anonymously.
 -- 6. personal_records were readable by anyone, including anonymous callers and
---    runners with a private profile. Same rule as user_awards (20261123000004).
+--    runners with a private profile. Same rule as user_awards (migration 020).
 -- 7. Table privileges: RLS is the only barrier, so remove what clients never
 --    need (TRUNCATE is not subject to RLS; anon never writes).
 SET check_function_bodies = false;

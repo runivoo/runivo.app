@@ -91,4 +91,22 @@ INSERT INTO public.pace_store_rewards (id, brand, title, description, pace_cost,
 VALUES ('b1a00000-0000-4000-8000-0000000000a3', 'Runivo', 'Sticker pack', 'x', 10, 'Stickers', 'static', 'STICK', 'available');
 SELECT pg_temp.as_user('b1100000-0000-4000-8000-000000000001');
 SELECT pg_temp.check(EXISTS (SELECT 1 FROM public.store_catalog() WHERE id = 'b1a00000-0000-4000-8000-0000000000a3'), 'Runivo''s own rewards still show');
+
+-- 8. Sponsored challenges follow the brand too (migration 028).
+SET LOCAL test.role = 'service_role';
+UPDATE public.partners SET status = 'active' WHERE id = (SELECT id FROM app);
+INSERT INTO public.sponsored_challenges (id, partner_id, brand, title, metric, target, starts_at, ends_at, reward_id)
+VALUES ('b1c00000-0000-4000-8000-0000000000c1', (SELECT id FROM app), 'Stridewell', 'Run 10 km', 'distance_km', 10,
+        now() - interval '1 day', now() + interval '7 days', 'b1a00000-0000-4000-8000-0000000000a2');
+SELECT pg_temp.as_user('b1100000-0000-4000-8000-000000000001');
+SELECT pg_temp.check(EXISTS (SELECT 1 FROM public.list_sponsored_challenges() WHERE id = 'b1c00000-0000-4000-8000-0000000000c1'),
+  'an active brand''s challenge is listed');
+SET LOCAL test.role = 'service_role';
+UPDATE public.partners SET status = 'paused' WHERE id = (SELECT id FROM app);
+SELECT pg_temp.as_user('b1100000-0000-4000-8000-000000000001');
+SELECT pg_temp.check(NOT EXISTS (SELECT 1 FROM public.list_sponsored_challenges() WHERE id = 'b1c00000-0000-4000-8000-0000000000c1'),
+  'a paused brand''s challenge is not listed');
+SELECT public.join_sponsored_challenge('b1c00000-0000-4000-8000-0000000000c1');
+SELECT pg_temp.check(NOT EXISTS (SELECT 1 FROM public.sponsored_challenge_entries WHERE challenge_id = 'b1c00000-0000-4000-8000-0000000000c1'),
+  'nor joinable');
 ROLLBACK;

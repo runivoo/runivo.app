@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Migration lint. Fails (exit 1) on:
-//   - a file name that is not <14 digits>_<name>.sql
+//   - a file name that is not <3-digit number>_<name>.sql (001_base.sql, 002_accounts.sql, ...)
+//   - numbers that skip or repeat: the files must run 001, 002, 003, ... with no gap
 //   - two migrations sharing a version prefix (Supabase would apply only one)
 //   - in migrations from FIRST_STRICT on: a SECURITY DEFINER function without
 //     `SET search_path`, or without a REVOKE for it somewhere in the same file
@@ -12,20 +13,23 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const dir = process.argv[2] ?? 'supabase/migrations';
-// The 13 feature files (20261118000001-13) are the consolidated history, so
-// they're checked for naming only, like the archived files they replace.
-const FIRST_STRICT = '20261118000014';
+// The 13 feature files (001-013) are the consolidated history, so they are
+// checked for naming only. From 014 on, functions are checked as well.
+const FIRST_STRICT = 14;
 
 const files = readdirSync(dir).filter(f => f.endsWith('.sql')).sort();
 const problems = [];
 const seen = new Map();
+let expected = 1;
 
 for (const f of files) {
-  const m = /^(\d{14})_[a-z0-9_]+\.sql$/.exec(f);
-  if (!m) { problems.push(`${f}: name must be <14-digit version>_<snake_case>.sql`); continue; }
-  const version = m[1];
-  if (seen.has(version)) problems.push(`${f}: same version as ${seen.get(version)}`);
+  const m = /^(\d{3})_[a-z0-9_]+\.sql$/.exec(f);
+  if (!m) { problems.push(`${f}: name must be <3-digit number>_<snake_case>.sql, like 029_clubs_invites.sql`); continue; }
+  const version = Number(m[1]);
+  if (seen.has(version)) problems.push(`${f}: same number as ${seen.get(version)}`);
   seen.set(version, f);
+  if (version !== expected) problems.push(`${f}: expected number ${String(expected).padStart(3, '0')} (no gaps, no repeats)`);
+  expected = version + 1;
   if (version < FIRST_STRICT) continue;
 
   const sql = readFileSync(join(dir, f), 'utf8').replace(/--[^\n]*/g, '');

@@ -17,7 +17,7 @@ restored.
   (`CREATE TABLE IF NOT EXISTS`), and the matching reads/writes. Existing local
   databases keep working and the data is not lost.
 - The sync push for `nutrition_logs` / `nutrition_profiles` in `sync.ts`, and the
-  Supabase tables (`20261118000012_training.sql`).
+  Supabase tables (`012_training.sql`).
 - The coach's `nutrition_coach` capability chip, gated on the flag.
 
 ## Restoring it

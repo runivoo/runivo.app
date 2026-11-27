@@ -1,4 +1,4 @@
--- 20261123000003_privacy_fixes: minors stay private, the minor flag is one-way,
+-- 019_privacy_fixes: minors stay private, the minor flag is one-way,
 -- comments follow post visibility, run_territories is gone.
 -- Needs every migration applied; runs in a transaction and rolls back.
 \set ON_ERROR_STOP on

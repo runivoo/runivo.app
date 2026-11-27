@@ -312,7 +312,7 @@ BEGIN
     (pg_temp.did(11, 3), pg_temp.did(10, 1), pg_temp.did(0, 2), 'Who''s defending Kensington tonight? It''s at 34%.', now() - interval '50 minutes'),
     (pg_temp.did(11, 4), pg_temp.did(10, 1), pg_temp.did(0, 5), 'I can do 7pm.', now() - interval '20 minutes');
 
-  -- (No global lobby chatter: the global lobbies were removed in 20261123000004.)
+  -- (No global lobby chatter: the global lobbies were removed in migration 020.)
 
   -- ── events: three hosted near the tester, two curated races ──
   INSERT INTO public.events (id, title, description, event_type, source, starts_at, ends_at, lat, lng, location_name,

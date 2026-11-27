@@ -1,4 +1,4 @@
--- 20261123000005_review_fixes plus the follow rules it relies on: friends see each
+-- 021_review_fixes plus the follow rules it relies on: friends see each
 -- other's live position, "Only me" can't be followed, the word list keeps names.
 -- Needs every migration applied; runs in a transaction and rolls back.
 \set ON_ERROR_STOP on
