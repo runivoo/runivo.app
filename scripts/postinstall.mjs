@@ -17,13 +17,13 @@ const run = (args) => spawnSync(process.execPath, args, { cwd: root, stdio: 'inh
 let patchPackage = null;
 try { patchPackage = require.resolve('patch-package/index.js'); } catch { /* not installed */ }
 
-if (patchPackage) {
+if (process.env.VERCEL) {
+  // Web deploys install only apps/web (vercel.json); the patches are for the mobile
+  // app's native packages, which aren't installed there.
+  console.log('postinstall: Vercel web build, skipping mobile patches.');
+} else if (patchPackage) {
   const code = run([patchPackage]);
   if (code !== 0) process.exit(code);
-} else if (process.env.VERCEL) {
-  // Web deploys only: the patches are for the mobile app's native packages.
-  console.warn('postinstall: patch-package is not installed; skipping patches (Vercel web build).');
-  console.warn(`postinstall: NODE_ENV=${process.env.NODE_ENV ?? ''} node ${process.version}`);
 } else {
   console.error('postinstall: patch-package is missing; run `npm ci` with devDependencies included.');
   process.exit(1);
