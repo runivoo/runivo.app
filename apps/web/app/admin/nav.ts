@@ -1,5 +1,5 @@
 import {
-  BarChart3, BellRing, Calendar, Flag, Goal, Handshake, History, LayoutDashboard, ListChecks, ShoppingBag, Trophy, Users,
+  BarChart3, BellRing, Calendar, Flag, Goal, Handshake, History, LayoutDashboard, Mail, ListChecks, ShoppingBag, Trophy, Users,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -8,7 +8,7 @@ export type AdminTab =
   | 'overview' | 'people' | 'activity'
   | 'moderation' | 'races'
   | 'partners' | 'store' | 'challenges' | 'reports' | 'campaigns'
-  | 'events' | 'waitlist';
+  | 'events' | 'waitlist' | 'broadcasts';
 
 export interface NavItem { id: AdminTab; label: string; Icon: LucideIcon }
 export interface NavGroup { label: string; items: NavItem[] }
@@ -44,6 +44,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { id: 'events',     label: 'Events',     Icon: Calendar },
       { id: 'waitlist',   label: 'Waitlist',   Icon: ListChecks },
+      { id: 'broadcasts', label: 'Broadcasts', Icon: Mail },
     ],
   },
 ];

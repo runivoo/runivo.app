@@ -24,6 +24,7 @@ import { DEFAULT_TAB, asTab, type AdminTab } from './nav';
 import OverviewSection from './sections/OverviewSection';
 import ActivitySection from './sections/ActivitySection';
 import PeopleSection from './sections/PeopleSection';
+import BroadcastsSection from './sections/BroadcastsSection';
 import ModerationSection from './sections/ModerationSection';
 import RacesSection from './sections/RacesSection';
 import PartnersSection from './sections/PartnersSection';
@@ -48,6 +49,7 @@ const SECTIONS: Record<AdminTab, () => React.ReactNode> = {
   campaigns:  () => <CampaignsSection />,
   events:     () => <EventsSection />,
   waitlist:   () => <WaitlistSection />,
+  broadcasts: () => <BroadcastsSection />,
 };
 
 type AccessState = 'loading' | 'granted' | 'denied' | 'signed_out';

@@ -35,7 +35,7 @@ export function renderWaitlistEmail(city: string | null): { subject: string; htm
   const text = [
     `You're in.`,
     ``,
-    `Thanks for joining the ${SITE_NAME} waitlist${where}. We'll email you once more, the day ${SITE_NAME} opens. Nothing in between.`,
+    `Thanks for joining the ${SITE_NAME} waitlist${where}. We'll email you when ${SITE_NAME} opens, and now and then with big news. You can unsubscribe anytime.`,
     ``,
     `"${FOUNDER_QUOTE}"`,
     `Mehtab, Founder, ${SITE_NAME}`,
@@ -49,7 +49,7 @@ export function renderWaitlistEmail(city: string | null): { subject: string; htm
   ].join('\n');
 
   const e = escapeHtml;
-  const preheader = `We'll email you once more, the day ${SITE_NAME} opens. Nothing in between.`;
+  const preheader = `We'll email you when ${SITE_NAME} opens.`;
   const rule = '<tr><td class="px" style="padding:0 56px;"><div style="border-top:1px solid #E8E8E4;font-size:0;line-height:0;">&nbsp;</div></td></tr>';
 
   // Light design (Downloads/runivo/runivo-welcome-email-*.png): white card on a soft grey,
@@ -84,7 +84,7 @@ export function renderWaitlistEmail(city: string | null): { subject: string; htm
 
 <tr><td class="px" style="padding:48px 56px 36px;">
   <h1 class="h1" style="margin:0 0 20px;font-size:56px;line-height:1.05;font-weight:300;letter-spacing:-1.5px;color:#17181A;">You’re in.</h1>
-  <p style="margin:0;font-size:17px;line-height:1.6;font-weight:400;color:#55585A;">Thanks for joining the ${e(SITE_NAME)} waitlist${e(where)}. We’ll email you once more, the day ${e(SITE_NAME)} opens. Nothing in between.</p>
+  <p style="margin:0;font-size:17px;line-height:1.6;font-weight:400;color:#55585A;">Thanks for joining the ${e(SITE_NAME)} waitlist${e(where)}. We’ll email you when ${e(SITE_NAME)} opens, and now and then with big news.</p>
 </td></tr>
 
 ${rule}
