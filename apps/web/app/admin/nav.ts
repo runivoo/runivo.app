@@ -1,11 +1,11 @@
 import {
-  BarChart3, BellRing, Calendar, Flag, Handshake, History, LayoutDashboard, ListChecks, ShoppingBag, Trophy,
+  BarChart3, BellRing, Calendar, Flag, Handshake, History, LayoutDashboard, ListChecks, ShoppingBag, Trophy, Users,
   type LucideIcon,
 } from 'lucide-react';
 
 /** The admin's sections. The order here is the order in the sidebar. */
 export type AdminTab =
-  | 'overview' | 'activity'
+  | 'overview' | 'people' | 'activity'
   | 'moderation' | 'races'
   | 'partners' | 'store' | 'reports' | 'campaigns'
   | 'events' | 'waitlist';
@@ -18,6 +18,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'Studio',
     items: [
       { id: 'overview', label: 'Overview', Icon: LayoutDashboard },
+      { id: 'people',   label: 'People',   Icon: Users },
       { id: 'activity', label: 'Activity', Icon: History },
     ],
   },

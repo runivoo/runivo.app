@@ -38,7 +38,11 @@ export async function requireAdmin(req: Request): Promise<string> {
 }
 
 export function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+  // no-store: admin data (emails, reports) is never kept by the browser, a proxy or a CDN.
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store, private' },
+  });
 }
 
 // The signed-in admin for a request that passed adminRoute's check.
