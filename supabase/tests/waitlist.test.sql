@@ -42,6 +42,6 @@ EXCEPTION WHEN others THEN IF SQLERRM LIKE 'FAILED%' THEN RAISE; END IF; RAISE N
 SELECT pg_temp.check(NOT has_table_privilege('anon', 'public.waitlist', 'SELECT')
   AND NOT has_table_privilege('authenticated', 'public.waitlist', 'SELECT')
   AND NOT has_table_privilege('authenticated', 'public.waitlist', 'INSERT'), 'anon and signed-in users have no table access');
-SELECT pg_temp.check(NOT has_function_privilege('anon', 'public.join_waitlist(text,text,text)', 'EXECUTE')
-  AND NOT has_function_privilege('authenticated', 'public.join_waitlist(text,text,text)', 'EXECUTE'), 'clients cannot execute join_waitlist');
+SELECT pg_temp.check(NOT has_function_privilege('anon', 'public.join_waitlist(text,text,text,text,text,text,text)', 'EXECUTE')
+  AND NOT has_function_privilege('authenticated', 'public.join_waitlist(text,text,text,text,text,text,text)', 'EXECUTE'), 'clients cannot execute join_waitlist');
 ROLLBACK;
