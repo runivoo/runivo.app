@@ -1,0 +1,24 @@
+import { WaitlistForm } from './WaitlistForm';
+import { GetAppLink } from './GetAppLink';
+import { APP_LIVE } from '@/lib/site';
+
+/** The closing call to action on content pages: the waitlist form before launch, the download button after. */
+export function EndCta({ heading = 'Ready to run smarter?', lead = 'Runivo is opening city by city. Join the waitlist and we’ll tell you the day it reaches yours.' }: { heading?: string; lead?: string }) {
+  return (
+    <section className="section cta-end" id="waitlist">
+      <div className="container">
+        <h2 className="h-section">{heading}</h2>
+        {APP_LIVE ? (
+          <div className="actions" style={{ justifyContent: 'center' }}>
+            <GetAppLink className="btn btn-dark" live="Download for iPhone" />
+          </div>
+        ) : (
+          <>
+            <p className="lead" style={{ margin: '16px auto 0', maxWidth: 460 }}>{lead}</p>
+            <WaitlistForm source="web" />
+          </>
+        )}
+      </div>
+    </section>
+  );
+}

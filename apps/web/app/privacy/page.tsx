@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
+import { staticPage } from '@/lib/pages';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy — Runivo',
-  description: 'How Runivo collects, uses, and protects your personal data.',
-};
+export const metadata: Metadata = pageMetadata(staticPage('/privacy'));
 
 const prose: React.CSSProperties = {
   fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--t2)', lineHeight: 1.75,

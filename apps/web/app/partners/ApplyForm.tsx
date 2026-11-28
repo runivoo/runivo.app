@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useState, type FormEvent } from 'react';
-import { Check } from 'lucide-react';
+import { Check } from '@phosphor-icons/react/ssr';
 
 type State = { status: 'idle' | 'sending' | 'sent' | 'error'; message?: string };
 
@@ -36,7 +36,7 @@ export function ApplyForm() {
   if (state.status === 'sent') {
     return (
       <div className="waitlist-done" role="status" style={{ maxWidth: 'none' }}>
-        <span className="waitlist-tick"><Check size={18} strokeWidth={3} aria-hidden /></span>
+        <span className="waitlist-tick"><Check size={18} weight="bold" aria-hidden /></span>
         <div>
           <p className="waitlist-done-title">Thanks, we’ve got it.</p>
           <p className="waitlist-done-body">We’ll get in touch within 5 working days.</p>
@@ -46,7 +46,7 @@ export function ApplyForm() {
   }
 
   return (
-    <form onSubmit={submit} noValidate className="card apply-form">
+    <form onSubmit={submit} noValidate className="apply-form">
       <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
         <label htmlFor={`${uid}-co`}>Leave this empty</label>
         <input id={`${uid}-co`} name="company_url" type="text" tabIndex={-1} autoComplete="off" />

@@ -27,22 +27,26 @@
 .faq-item p { color: var(--t2); font-size: 16px; line-height: 1.7; padding: 0 2px 22px; max-width: 620px; }
 @media (prefers-reduced-motion: reduce) { .faq-item summary::after { transition: none; } }
 
-/* Sports: plain outlined pills. */
-.sports { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
-.sports li {
-  padding: 11px 20px; border-radius: 999px; background: var(--card); border: 1px solid var(--border);
-  font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--t1);
-}
-.sports li.sports-alt { background: transparent; border-style: dashed; color: var(--t2); }
+/* Home: features as four plain blocks on hairlines. */
+.home-features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 64px; }
+.home-feature { display: block; padding: 32px 0 36px; border-top: 1px solid var(--border); }
+.home-feature h3 { display: flex; align-items: center; gap: 14px; font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; letter-spacing: -0.028em; line-height: 1.15; }
+.home-feature p { color: var(--t2); font-size: 18px; line-height: 1.5; margin-top: 12px; max-width: 460px; letter-spacing: -0.01em; }
+.home-feature .feature-more { margin-top: 18px; }
+@media (hover: hover) { .home-feature:hover h3 { color: var(--accent); } }
+@media (max-width: 760px) { .home-features { grid-template-columns: minmax(0, 1fr); } }
 
-/* Sports and workouts: one card, a labelled row per group (label left, pills right). */
-.kit { padding: 0; }
-.kit-row { display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; padding: 26px 32px; border-bottom: 1px solid var(--border); }
-.kit-row:last-child { border-bottom: 0; }
-.kit-label h3 { font-size: 18px; letter-spacing: -0.02em; margin-bottom: 4px; }
-.kit-label p { font-size: 14px; color: var(--t3); }
-.kit .sports li { background: var(--bg); padding: 9px 16px; font-size: 15px; }
-.kit .sports li.sports-alt { background: transparent; }
-@media (max-width: 760px) {
-  .kit-row { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 22px 20px; }
-}
+/* Home: what you can do, as type. Two columns, each group a label and one line of names. */
+.kit2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 64px; }
+.kit2-group { padding: 28px 0 32px; border-top: 1px solid var(--border); }
+.kit2-group h3 { font-size: 15px; font-weight: 600; letter-spacing: 0; color: var(--t3); margin-bottom: 14px; }
+.kit2-items { list-style: none; display: flex; flex-wrap: wrap; font-size: clamp(22px, 2.3vw, 28px); font-weight: 600; letter-spacing: -0.028em; line-height: 1.3; color: var(--t1); }
+.kit2-items li:not(:last-child)::after { content: '·'; margin: 0 .5em; color: var(--t3); font-weight: 400; }
+.kit2-note { color: var(--t2); font-size: 16px; margin-top: 12px; }
+@media (max-width: 760px) { .kit2 { grid-template-columns: minmax(0, 1fr); } }
+
+/* "Learn more" links under the home feature cards. */
+.feature-more { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; font-size: 15px; font-weight: 600; color: var(--accent); }
+p > .feature-more { margin-top: 0; }
+.feature-more svg { transition: transform .2s ease; }
+@media (hover: hover) { .feature-more:hover svg, .feature:hover .feature-more svg { transform: translateX(3px); } }

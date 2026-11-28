@@ -1,14 +1,22 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Activity, ArrowRight, Coins, Hexagon, Sparkles } from 'lucide-react';
+import { ArrowRight, Coins, Hexagon, PersonSimpleRun, Sparkle } from '@phosphor-icons/react/ssr';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { HexagonMark } from '@/components/Logo';
 import { Faq } from '@/components/Faq';
 import { WaitlistForm } from '@/components/WaitlistForm';
 import { GetAppLink } from '@/components/GetAppLink';
+import { LinkCard } from '@/components/LinkCard';
 import { APP_LIVE } from '@/lib/site';
+import { pageMetadata } from '@/lib/seo';
+import { staticPage } from '@/lib/pages';
+import { POSTS } from '@/lib/posts';
 import './home.css';
+import './pages.css';
+
+export const metadata: Metadata = pageMetadata(staticPage('/'));
 
 // Every line here describes something the app does today (docs/ONBOARDING.md, the store
 // listing, the privacy policy and the sport list in apps/mobile/src/features/run/constants/activities.ts).
@@ -16,19 +24,19 @@ import './home.css';
 
 const FEATURES = [
   {
-    tile: 'tile-mint', icon: Activity, title: 'Track every run',
+    icon: PersonSimpleRun, color: '#4E7F1F', title: 'Track every run', href: '/features/run-tracking',
     body: 'GPS route, distance, pace, splits and elevation, with the screen locked and live stats on your lock screen. Optional auto-pause and voice updates.',
   },
   {
-    tile: 'tile-lavender', icon: Sparkles, title: 'PaceX, your AI coach',
+    icon: Sparkle, color: '#5B4FC4', title: 'PaceX, your AI coach', href: '/features/ai-coach',
     body: 'A debrief after every run, a weekly review, and answers on pace, recovery and race prep. Plans for 5K, 10K, half marathon and marathon.',
   },
   {
-    tile: 'tile-amber', icon: Coins, title: 'PACE and the PACE Store',
+    icon: Coins, color: '#B8690A', title: 'PACE and the PACE Store', href: '/features/pace-rewards',
     body: 'Earn PACE for kilometres, daily missions and new ground. Spend it in the PACE Store on partner rewards in selected cities.',
   },
   {
-    tile: 'tile-ink', icon: Hexagon, title: 'Zones and clubs',
+    icon: Hexagon, color: '#B8690A', title: 'Zones and clubs', href: '/features/zones',
     body: 'Run a street to claim a zone, or close a loop to own what is inside. Join a club, chat with clubmates and climb the weekly leaderboards.',
   },
 ] as const;
@@ -97,9 +105,6 @@ export default function Home() {
               ) : (
                 <div className="rise rise-3" style={{ marginTop: 32 }}>
                   <WaitlistForm source="web" />
-                  <p style={{ marginTop: 18 }}>
-                    <Link href="/#features" className="muted" style={{ fontSize: 15, fontWeight: 500, textDecoration: 'underline', textUnderlineOffset: 3 }}>See what is inside</Link>
-                  </p>
                 </div>
               )}
             </div>
@@ -125,15 +130,18 @@ export default function Home() {
             <h2 className="h-section" style={{ maxWidth: 560, marginBottom: 40 }}>
               Tracking, coaching and rewards, together.
             </h2>
-            <div className="grid-2">
-              {FEATURES.map(({ tile, icon: Icon, title, body }) => (
-                <article key={title} className="card feature">
-                  <div className={`tile ${tile}`}><Icon size={24} strokeWidth={2} aria-hidden /></div>
-                  <h3>{title}</h3>
+            <div className="home-features">
+              {FEATURES.map(({ icon: Icon, color, title, body, href }) => (
+                <Link key={title} href={href} className="home-feature">
+                  <h3><Icon size={34} weight="light" color={color} aria-hidden />{title}</h3>
                   <p>{body}</p>
-                </article>
+                  <span className="feature-more">Learn more <ArrowRight size={15} weight="bold" aria-hidden /></span>
+                </Link>
               ))}
             </div>
+            <p style={{ marginTop: 24 }}>
+              <Link href="/features" className="feature-more">See every feature <ArrowRight size={15} weight="bold" aria-hidden /></Link>
+            </p>
           </div>
         </section>
 
@@ -144,17 +152,14 @@ export default function Home() {
             <h2 className="h-section" style={{ maxWidth: 620, marginBottom: 32 }}>
               Built for every kind of run.
             </h2>
-            <div className="card kit">
+            <div className="kit2">
               {KIT.map(g => (
-                <div key={g.label} className="kit-row">
-                  <div className="kit-label">
-                    <h3>{g.label}</h3>
-                    <p>{g.note}</p>
-                  </div>
-                  <ul className="sports" aria-label={g.label}>
-                    {g.items.map(s => <li key={s}>{s}</li>)}
-                    {'extra' in g && <li className="sports-alt">{g.extra}</li>}
+                <div key={g.label} className="kit2-group">
+                  <h3>{g.label} · {g.note}</h3>
+                  <ul className="kit2-items" aria-label={g.label}>
+                    {g.items.map(x => <li key={x}>{x}</li>)}
                   </ul>
+                  {'extra' in g && <p className="kit2-note">Plus: {g.extra.toLowerCase()}</p>}
                 </div>
               ))}
             </div>
@@ -195,6 +200,23 @@ export default function Home() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Guides and tools */}
+        <section className="section-sm">
+          <div className="container">
+            <p className="eyebrow">Guides and tools</p>
+            <h2 className="h-section" style={{ maxWidth: 620, marginBottom: 32 }}>Run better, with less guesswork.</h2>
+            <div className="link-cards">
+              {POSTS.slice(0, 3).map(p => (
+                <LinkCard key={p.slug} href={`/blog/${p.slug}`} title={p.title} text={p.description} meta={`${p.readMinutes} min read`} more="Read the guide" />
+              ))}
+            </div>
+            <p style={{ marginTop: 24, display: 'flex', flexWrap: 'wrap', gap: '8px 24px' }}>
+              <Link href="/blog" className="feature-more">All guides <ArrowRight size={15} weight="bold" aria-hidden /></Link>
+              <Link href="/tools" className="feature-more">Free pace and race tools <ArrowRight size={15} weight="bold" aria-hidden /></Link>
+            </p>
           </div>
         </section>
 

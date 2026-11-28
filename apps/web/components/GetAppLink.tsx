@@ -10,15 +10,18 @@ import { APP_LIVE, APP_STORE_URL, WAITLIST_HREF } from '@/lib/site';
 export function GetAppLink({
   live = 'Download',
   waitlist = 'Join the waitlist',
+  waitlistHref = WAITLIST_HREF,
   className,
   style,
 }: {
   live?: ReactNode;
   waitlist?: ReactNode;
+  /** Where the waitlist button goes. Pages with their own waitlist form point it at that form. */
+  waitlistHref?: string;
   className?: string;
   style?: React.CSSProperties;
 }) {
   return APP_LIVE
     ? <a href={APP_STORE_URL} className={className} style={style}>{live}</a>
-    : <Link href={WAITLIST_HREF} className={className} style={style}>{waitlist}</Link>;
+    : <Link href={waitlistHref} className={className} style={style}>{waitlist}</Link>;
 }

@@ -1,13 +1,13 @@
 import type { MetadataRoute } from 'next';
+import { PAGES } from '@/lib/pages';
+import { absoluteUrl } from '@/lib/seo';
 
-const BASE = 'https://www.runivo.in';
-
+// Built from the page registry (lib/pages.ts), so a new page is listed as soon as it is registered.
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    { url: `${BASE}/`, changeFrequency: 'monthly', priority: 1 },
-    { url: `${BASE}/partners`, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/support`, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE}/terms`, changeFrequency: 'yearly', priority: 0.3 },
-  ];
+  return PAGES.map(p => ({
+    url: absoluteUrl(p.path),
+    lastModified: p.updated,
+    changeFrequency: p.changeFrequency,
+    priority: p.priority,
+  }));
 }

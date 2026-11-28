@@ -11,7 +11,7 @@ type State = { status: 'idle' | 'sending' | 'sent' | 'already' | 'error'; messag
  * launch first. Posts to /api/waitlist. The honeypot field is hidden from
  * people and tempting to bots.
  */
-export function WaitlistForm({ source = 'web' }: { source?: string }) {
+export function WaitlistForm({ source = 'web', defaultCity }: { source?: string; defaultCity?: string }) {
   const uid = useId();
   const [state, setState] = useState<State>({ status: 'idle' });
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -101,7 +101,7 @@ export function WaitlistForm({ source = 'web' }: { source?: string }) {
           <label className="sr-only" htmlFor={`${uid}-city`}>City (optional)</label>
           <input
             id={`${uid}-city`} name="city" type="text" className="field" placeholder="City (optional)"
-            maxLength={80} autoComplete="address-level2"
+            maxLength={80} autoComplete="address-level2" defaultValue={defaultCity}
           />
         </div>
         <button type="submit" className="btn btn-dark" disabled={sending}>

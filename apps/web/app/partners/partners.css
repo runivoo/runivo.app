@@ -1,24 +1,19 @@
-/* Partners page only. Tokens come from globals.css. */
+/* Partners page only. Tokens come from globals.css; the section rows come from pages.css. */
 
-.level-table { width: 100%; min-width: 560px; border-collapse: collapse; }
-.level-table th { text-align: left; padding: 16px 20px; font-size: 13px; color: var(--t3); font-weight: 500; border-bottom: 1px solid var(--border); }
-.level-table td { padding: 18px 20px; font-size: 14.5px; color: var(--t2); border-bottom: 1px solid var(--border); }
-.level-table tr:last-child td { border-bottom: 0; }
-.level-table .level-name { font-size: 15px; color: var(--t1); font-weight: 600; }
-.level-table .level-pace { font-size: 15px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+/* The first screen is the hero alone: it fills the viewport under the nav and centres its content,
+   so the next section starts only after scrolling. svh keeps it right under mobile browser toolbars. */
+.hero-full { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: 96px 0 56px; }
+.hero-full > .container { width: 100%; }
 
-.partner-list { list-style: disc; padding-left: 20px; display: grid; gap: 10px; color: var(--t2); font-size: 15.5px; line-height: 1.6; }
+/* Numbered steps. */
+.rows.steps { counter-reset: step; }
+.rows.steps li { counter-increment: step; position: relative; padding-left: 44px; }
+.rows.steps li::before { content: counter(step); position: absolute; left: 0; top: 18px; font-size: 19px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+.rows.steps li:first-child::before { top: 0; }
 
-.partner-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
-@media (max-width: 920px) { .partner-steps { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .partner-steps { grid-template-columns: 1fr; } }
-
-.apply-form { position: relative; display: grid; gap: 18px; grid-template-columns: repeat(2, 1fr); padding: 28px; }
+/* The form: plain fields on the page, no box. */
+.apply-form { position: relative; display: grid; gap: 20px; grid-template-columns: repeat(2, 1fr); }
+.apply-form .field { height: 52px; padding: 0 18px; border-radius: 14px; }
 .apply-form .apply-actions, .apply-form .apply-error { grid-column: 1 / -1; }
 .apply-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
 @media (max-width: 640px) { .apply-form { grid-template-columns: 1fr; } .apply-actions .btn { width: 100%; } }
-
-/* The first screen is the hero alone: it fills the viewport (below the fixed nav) and centres its content,
-   so the next section starts only after scrolling. svh keeps it right under mobile browser toolbars. */
-.hero-full { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: 108px 0 56px; }
-.hero-full > .container { width: 100%; }

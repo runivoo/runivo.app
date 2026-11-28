@@ -1,0 +1,152 @@
+/* Content pages: features, tools, guides, glossary, cities. Same tokens as globals.css.
+   Sparse on purpose: type, hairlines and space. No boxes, no colour blocks, no shadows. */
+
+/* ── Breadcrumbs and page head ────────────────────────────────────────────── */
+.crumbs { padding-top: 96px; }
+.crumbs ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 14px; color: var(--t3); }
+.crumbs li { display: inline-flex; align-items: center; gap: 6px; }
+.crumbs a { color: var(--t2); }
+.crumbs a:hover { color: var(--t1); }
+.crumbs [aria-current='page'] { color: var(--t1); }
+
+.page-head { padding: 40px 0 80px; }
+.page-head.plain { padding-bottom: 48px; }
+.h-page { font-size: clamp(44px, 7vw, 84px); letter-spacing: -0.04em; line-height: 1.02; font-weight: 700; }
+.page-head .eyebrow { font-size: 15px; margin-bottom: 18px; }
+
+/* Specs: three big numbers on a hairline, like a product spec row. */
+.specs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px; margin-top: 72px; border-top: 1px solid var(--border); }
+.spec { padding-top: 22px; }
+.spec-value { font-size: clamp(30px, 4vw, 48px); font-weight: 700; letter-spacing: -0.04em; line-height: 1.05; color: var(--t1); font-variant-numeric: tabular-nums; }
+.spec-label { font-size: 15px; color: var(--t2); margin-top: 8px; line-height: 1.4; }
+@media (max-width: 640px) { .specs { grid-template-columns: minmax(0, 1fr); margin-top: 48px; } .spec { padding: 18px 0; border-bottom: 1px solid var(--border); } .spec:first-child { padding-top: 22px; } }
+
+/* ── Sections on a feature page ───────────────────────────────────────────── */
+.sec { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 56px; align-items: start; padding: 56px 0; border-top: 1px solid var(--border); }
+.sec-title { font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -0.032em; line-height: 1.08; font-weight: 700; }
+.sec-intro { color: var(--t2); font-size: 19px; line-height: 1.5; letter-spacing: -0.012em; max-width: 560px; }
+.sec-body > * + * { margin-top: 24px; }
+@media (max-width: 920px) { .sec { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 40px 0; } }
+
+.rows { list-style: none; }
+.rows li { padding: 18px 0; border-top: 1px solid var(--border); }
+.rows li:first-child { border-top: 0; padding-top: 0; }
+.rows h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; }
+.rows p { color: var(--t2); font-size: 17px; line-height: 1.5; margin-top: 4px; letter-spacing: -0.01em; }
+.rows.plain p { color: var(--t1); margin-top: 0; font-size: 19px; }
+
+.also { color: var(--t2); font-size: 15.5px; margin-top: 36px; }
+.also a { color: var(--accent); }
+.also a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Feature list on the hub ──────────────────────────────────────────────── */
+.feature-list { list-style: none; border-top: 1px solid var(--border); }
+.feature-list li { border-bottom: 1px solid var(--border); }
+.feature-list a { display: flex; align-items: center; gap: 22px; padding: 28px 4px; color: var(--t1); }
+.feature-list svg { flex: none; }
+.feature-list .fl-text { flex: 1; min-width: 0; }
+.feature-list .fl-title { display: block; font-size: clamp(22px, 2.6vw, 28px); font-weight: 600; letter-spacing: -0.028em; line-height: 1.15; }
+.feature-list .fl-title em { font-style: normal; font-size: 13px; font-weight: 500; color: var(--t3); margin-left: 12px; letter-spacing: 0; }
+.feature-list .fl-line { display: block; color: var(--t2); font-size: 17px; margin-top: 6px; line-height: 1.45; max-width: 640px; }
+.feature-list a > svg:last-child { color: var(--t3); transition: transform .2s ease, color .2s ease; }
+@media (hover: hover) { .feature-list a:hover > svg:last-child { transform: translateX(4px); color: var(--t1); } }
+@media (max-width: 640px) { .feature-list a { gap: 16px; padding: 22px 0; } }
+
+/* ── Plain link blocks (guides, tools, cities) ────────────────────────────── */
+.link-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 40px; }
+@media (max-width: 920px) { .link-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .link-cards { grid-template-columns: minmax(0, 1fr); } }
+a.link-card { display: block; padding: 24px 0 28px; border-top: 1px solid var(--border); }
+a.link-card h3 { font-size: 21px; letter-spacing: -0.025em; line-height: 1.2; font-weight: 600; }
+a.link-card p { color: var(--t2); font-size: 16px; line-height: 1.5; margin-top: 8px; }
+.link-card .meta { display: block; font-size: 13px; color: var(--t3); margin-bottom: 8px; }
+.link-card .more { display: inline-flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 500; color: var(--accent); margin-top: 14px; }
+@media (hover: hover) { a.link-card:hover h3 { color: var(--accent); } a.link-card:hover .more svg { transform: translateX(3px); } }
+.link-card .more svg { transition: transform .2s ease; }
+.block-title { font-size: clamp(26px, 3.2vw, 36px); letter-spacing: -0.032em; margin-bottom: 26px; font-weight: 700; }
+
+.cta-end { text-align: center; }
+.cta-end .h-section { max-width: 640px; margin: 0 auto; }
+.cta-end .waitlist { margin: 28px auto 0; text-align: left; }
+
+/* ── Tools ────────────────────────────────────────────────────────────────── */
+.tool { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+@media (max-width: 920px) { .tool { grid-template-columns: minmax(0, 1fr); } }
+.tool-panel { padding: 0; background: none; border: 0; }
+.tool-form { display: grid; gap: 22px; }
+.tool-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.tool-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.tool-row .field { padding: 14px; border-radius: 14px; text-align: center; font-variant-numeric: tabular-nums; font-size: 18px; }
+.tool-unit { font-size: 12px; color: var(--t3); text-align: center; margin-top: 6px; }
+.seg { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--surface); gap: 2px; flex-wrap: wrap; }
+.seg button { height: 38px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--t2); font-size: 14.5px; font-weight: 500; cursor: pointer; }
+.seg button[aria-pressed='true'] { background: var(--card); color: var(--t1); font-weight: 600; box-shadow: 0 1px 2px rgba(23,24,26,.12); }
+.result { border-radius: var(--radius-xl); background: var(--ink); color: #fff; padding: 36px; }
+.result .eyebrow { color: rgba(255,255,255,.6); margin-bottom: 10px; }
+.result-big { font-size: clamp(44px, 6vw, 64px); font-weight: 700; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+.result-note { margin-top: 14px; color: rgba(255,255,255,.66); font-size: 15px; line-height: 1.55; }
+.result-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-variant-numeric: tabular-nums; }
+.result-table th, .result-table td { text-align: left; padding: 13px 0; border-top: 1px solid rgba(255,255,255,.14); font-size: 16.5px; font-weight: 400; }
+.result-table th { color: rgba(255,255,255,.66); }
+.result-table td:last-child { text-align: right; font-weight: 600; }
+.method { margin-top: 56px; max-width: 680px; }
+.method h2 { font-size: 24px; letter-spacing: -0.028em; margin-bottom: 12px; font-weight: 700; }
+.method p { color: var(--t2); font-size: 17px; line-height: 1.6; margin-bottom: 12px; }
+
+/* ── Guides ───────────────────────────────────────────────────────────────── */
+.chips-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+.chips-row a { padding: 8px 16px; border-radius: 999px; background: var(--surface); font-size: 14.5px; font-weight: 500; color: var(--t2); }
+.chips-row a:hover { color: var(--t1); }
+
+.article { max-width: 700px; margin: 0 auto; }
+.article-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 22px; font-size: 14.5px; color: var(--t3); }
+.article .prose { margin-top: 40px; }
+.article .prose h2 { font-size: 30px; margin: 52px 0 14px; letter-spacing: -0.028em; font-weight: 700; }
+.article .prose h3 { font-size: 21px; margin: 30px 0 10px; }
+.article .prose p, .article .prose li { font-size: 19px; line-height: 1.65; color: #3a3d39; letter-spacing: -0.012em; }
+.article .prose ul, .article .prose ol { padding-left: 24px; margin-bottom: 16px; }
+.article .prose li { margin-bottom: 6px; }
+.article .prose strong { color: var(--t1); font-weight: 600; }
+.article .prose blockquote { margin: 28px 0; padding: 4px 0 4px 22px; border-left: 2px solid var(--border); }
+.article .prose blockquote p { margin: 0; color: var(--t2); }
+.callout { margin: 56px 0 0; padding: 22px 0 0; border-top: 1px solid var(--border); color: var(--t2); font-size: 17px; line-height: 1.6; }
+.callout strong { color: var(--t1); }
+.callout a { color: var(--accent); }
+/* Tailwind's reset removes list markers (the admin uses it); put them back in guides. */
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+
+/* ── Glossary ─────────────────────────────────────────────────────────────── */
+.terms { display: grid; border-top: 1px solid var(--border); }
+.term { padding: 26px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 0.55fr 1.45fr; gap: 28px; }
+.term h2 { font-size: 22px; letter-spacing: -0.028em; font-weight: 600; }
+.term p { color: var(--t2); font-size: 17px; line-height: 1.6; }
+.term .term-links { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 15px; }
+.term .term-links a { color: var(--accent); }
+.alpha { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 28px; }
+.alpha a { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; font-weight: 500; font-size: 14px; color: var(--t2); }
+.alpha a:hover { background: var(--surface); color: var(--t1); }
+@media (max-width: 720px) { .term { grid-template-columns: minmax(0, 1fr); gap: 8px; } }
+
+/* ── Cities ───────────────────────────────────────────────────────────────── */
+.spot { padding: 18px 0; border-top: 1px solid var(--border); }
+.spot:first-child { border-top: 0; padding-top: 0; }
+.spot h3 { font-size: 19px; letter-spacing: -0.02em; font-weight: 600; margin-bottom: 4px; }
+.spot p { color: var(--t2); font-size: 17px; line-height: 1.5; }
+.head-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: start; }
+.head-grid .lead { margin-top: 20px; max-width: 520px; }
+@media (max-width: 920px) { .head-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
+
+/* ── Colour: one brand colour per feature page, used only for small things ─ */
+.tone-green  { --pa: #4E7F1F; }
+.tone-violet { --pa: #5B4FC4; }
+.tone-amber  { --pa: #B8690A; }
+.toned { --accent: var(--pa); position: relative; isolation: isolate; }
+.toned::before {   /* a soft tint of the page colour in the top corner, fading out */
+  content: ''; position: absolute; left: 0; right: 0; top: -150px; height: 720px; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(55% 55% at 88% 6%, color-mix(in srgb, var(--pa) 16%, transparent), transparent 70%),
+    radial-gradient(40% 40% at 0% 0%, color-mix(in srgb, var(--pa) 7%, transparent), transparent 70%);
+}
+.toned .spec-value { color: var(--pa); }
+.toned .eyebrow { font-weight: 600; }

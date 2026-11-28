@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
+import { staticPage } from '@/lib/pages';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 
-export const metadata: Metadata = {
-  title: 'Terms of Service — Runivo',
-  description: 'Terms and conditions for using Runivo.',
-};
+export const metadata: Metadata = pageMetadata(staticPage('/terms'));
 
 const prose: React.CSSProperties = {
   fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--t2)', lineHeight: 1.75,

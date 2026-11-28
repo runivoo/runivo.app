@@ -22,7 +22,7 @@ const TARGETS = [
   '.section .eyebrow', '.section-sm .eyebrow',
   '.h-section', '.section .h-display', '.section > .container > .lead',
   '.card:not(.kit)', '.step', '.extra', '.kit-row', '.band', '.faq-item',
-  '.waitlist', '.support-card',
+  '.waitlist', '.support-card', '.spec', '.link-card', '.sec',
 ].join(',');
 
 const REVEAL_MS = 700;

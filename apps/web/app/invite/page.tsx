@@ -8,6 +8,7 @@ import { APP_LIVE } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'Join Runivo',
   description: 'You have been invited to Runivo, the running game where your runs claim territory.',
+  robots: { index: false, follow: false },
 };
 
 /**
