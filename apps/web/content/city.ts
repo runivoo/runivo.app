@@ -38,7 +38,7 @@ export const CITY_COPY = {
   },
   friends: { eyebrow: 'Friends', title: 'You’re never running alone.', lead: 'See friends run live. Send kudos. Peer pressure, but wholesome.', hint: 'Go on, give Aanya some kudos' },
   rivals: { eyebrow: 'Rivals', title: 'Someone took your street? Take it back.', lead: 'Rivals can claim the ground you run. Run it again, close the loop, and it’s yours.' },
-  final: { title: 'More than running.', accent: 'Run smarter.', lead: 'Runivo is almost at the start line. Get on the list before your friends do.' },
+  final: { eyebrow: 'Opening city by city', facts: ['Free', 'iPhone first', 'One city at a time'], title: 'More than running.', accent: 'Run smarter.', lead: 'Runivo is almost at the start line. Get on the list before your friends do.' },
   tags: {
     zone: `New zone claimed · +${CITY_ECONOMY.newZone} PACE`,
     pace: '5:44 /km',

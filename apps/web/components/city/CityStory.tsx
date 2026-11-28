@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { WaitlistForm } from '@/components/forms/WaitlistForm';
+import { HexagonMark } from '@/components/layout/Logo';
 import { CHAPTERS, storyProgress } from '@/lib/city/timeline';
 import { CITY_COPY as C } from '@/content/city';
 import type { CityScene } from './cityScene';
@@ -146,9 +147,14 @@ export function CityStory({ fallback }: { fallback: ReactNode }) {
 
           <section className="panel final" data-in={chapter('final').in} data-out={chapter('final').out}>
             <div className="box">
+              <HexagonMark size={30} color="#F2A43A" />
+              <p className="eyebrow">{C.final.eyebrow}</p>
               <h2>{C.final.title} <span className="acc">{C.final.accent}</span></h2>
               <p className="lead">{C.final.lead}</p>
-              <WaitlistForm source="web" />
+              <WaitlistForm source="web" defaultCity="" />
+              <ul className="final-facts" aria-label="Good to know">
+                {C.final.facts.map(f => <li key={f}>{f}</li>)}
+              </ul>
             </div>
           </section>
 
