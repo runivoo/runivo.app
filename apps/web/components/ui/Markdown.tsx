@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { parseMarkdown, type Block, type Inline } from '@/lib/markdown';
+import { parseMarkdown, type Block, type Inline } from '@/lib/content/markdown';
 
 function Inlines({ nodes }: { nodes: Inline[] }) {
   return (
@@ -30,7 +30,7 @@ function BlockView({ b }: { b: Block }) {
   }
 }
 
-/** Renders a guide's markdown body (see lib/markdown.ts for what is supported). */
+/** Renders a guide's markdown body (see lib/content/markdown.ts for what is supported). */
 export function Markdown({ source }: { source: string }) {
   return <div className="prose">{parseMarkdown(source).map((b, i) => <BlockView key={i} b={b} />)}</div>;
 }

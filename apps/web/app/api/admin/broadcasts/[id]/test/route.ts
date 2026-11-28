@@ -1,5 +1,5 @@
-import { adminRoute, adminIdOf, serviceClient, json } from '@/lib/adminServer';
-import { sendTest, ResendError, type Broadcast } from '@/lib/broadcast';
+import { adminRoute, adminIdOf, serviceClient, json } from '@/lib/server/adminServer';
+import { sendTest, ResendError, type Broadcast } from '@/lib/email/broadcast';
 
 export const dynamic = 'force-dynamic';
 

@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation';
  * 2. A "scrolled" flag on <html> for the nav shadow and the scroll progress line.
  *
  * Nothing happens for people who ask for reduced motion or on the admin pages. Without JavaScript every block is simply visible.
- * The styles are in app/motion.css.
+ * The styles are in styles/motion.css.
  */
 
 // Blocks that reveal. A block inside another revealed block is skipped (the outer one carries it).

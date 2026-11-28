@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { CaretRight } from '@phosphor-icons/react/ssr';
 import { PageShell } from '@/components/layout/PageShell';
 import { EndCta } from '@/components/ui/EndCta';
-import { ACCENT_HEX, FEATURE_NAV } from '@/lib/nav';
-import { FEATURES } from '@/lib/features';
-import { pageMetadata } from '@/lib/seo';
-import { staticPage } from '@/lib/pages';
+import { ACCENT_HEX, FEATURE_NAV } from '@/lib/config/nav';
+import { FEATURES } from '@/content/features';
+import { pageMetadata } from '@/lib/seo/seo';
+import { staticPage } from '@/lib/seo/pages';
 
 export const metadata: Metadata = pageMetadata(staticPage('/features'));
 

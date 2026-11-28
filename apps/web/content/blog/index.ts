@@ -1,4 +1,4 @@
-import { withReadTime, type Post, type PostSource } from '@/lib/blog';
+import { withReadTime, type Post, type PostSource } from '@/lib/content/blog';
 
 import startRunning from './start-running-0-to-5k';
 import indianHeat from './running-in-indian-heat-humidity-monsoon';

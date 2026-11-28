@@ -1,6 +1,6 @@
-import { serviceClient } from '@/lib/adminServer';
-import { digestData } from '@/lib/adminStats';
-import { aiNote, renderDigest, sendDigest } from '@/lib/adminDigest';
+import { safeEqual, serviceClient } from '@/lib/server/adminServer';
+import { digestData } from '@/lib/admin/adminStats';
+import { aiNote, renderDigest, sendDigest } from '@/lib/admin/adminDigest';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -12,7 +12,7 @@ export const maxDuration = 60;
  */
 export async function GET(req: Request): Promise<Response> {
   const secret = process.env.CRON_SECRET;
-  if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) {
+  if (!secret || !safeEqual(req.headers.get('authorization') ?? '', `Bearer ${secret}`)) {
     return new Response('Unauthorized', { status: 401 });
   }
   const db = serviceClient();

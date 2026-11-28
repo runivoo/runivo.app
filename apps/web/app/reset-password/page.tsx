@@ -12,7 +12,7 @@
 import { useState, useEffect } from 'react';
 import { Nav } from '@/components/layout/Nav';
 import { Footer } from '@/components/layout/Footer';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/auth/supabase';
 
 type Status = 'checking' | 'ready' | 'invalid' | 'success';
 

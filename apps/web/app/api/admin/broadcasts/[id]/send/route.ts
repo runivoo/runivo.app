@@ -1,5 +1,5 @@
-import { adminRoute, serviceClient, json, logAction } from '@/lib/adminServer';
-import { addToSegment, audienceCount, audiencePage, createAndSendBroadcast, createSegment, ResendError, type Broadcast } from '@/lib/broadcast';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/server/adminServer';
+import { addToSegment, audienceCount, audiencePage, createAndSendBroadcast, createSegment, ResendError, type Broadcast } from '@/lib/email/broadcast';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;

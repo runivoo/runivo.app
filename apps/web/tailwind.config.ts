@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 
 /**
  * Tailwind is used only by the admin (app/admin). Everything else on the site uses the
- * tokens in app/globals.css. So the admin does not look like a different product, the
+ * tokens in styles/globals.css. So the admin does not look like a different product, the
  * palette, radii and weights below are the website's (and the mobile app's) tokens:
  * warm paper and ink instead of Tailwind's cool grays, Outfit semibold instead of bold,
  * 22px cards. Text shades are AA-readable (4.5:1 on white and on the paper background).

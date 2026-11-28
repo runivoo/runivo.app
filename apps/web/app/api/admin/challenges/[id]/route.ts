@@ -1,5 +1,5 @@
-import { adminRoute, serviceClient, json, logAction, oneOf } from '@/lib/adminServer';
-import { getImpact } from '@/lib/impact';
+import { adminRoute, serviceClient, json, logAction, oneOf } from '@/lib/server/adminServer';
+import { getImpact } from '@/lib/admin/impact';
 import { challengePayload, challengeProblem, CHALLENGE_STATUSES } from '../fields';
 
 export const dynamic = 'force-dynamic';

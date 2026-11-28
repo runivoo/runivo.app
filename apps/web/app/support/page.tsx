@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { PageShell } from '@/components/layout/PageShell';
 import { JsonLd } from '@/components/ui/JsonLd';
 import { Faq } from '@/components/ui/Faq';
-import { faqLd, pageMetadata } from '@/lib/seo';
-import { staticPage } from '@/lib/pages';
-import { SUPPORT_EMAIL } from '@/lib/site';
+import { faqLd, pageMetadata } from '@/lib/seo/seo';
+import { staticPage } from '@/lib/seo/pages';
+import { SUPPORT_EMAIL } from '@/lib/config/site';
 
 export const metadata: Metadata = pageMetadata(staticPage('/support'));
 

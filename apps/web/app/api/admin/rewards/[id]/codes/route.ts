@@ -1,5 +1,5 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
-import { parseCodes } from '@/lib/csvCodes';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/server/adminServer';
+import { parseCodes } from '@/lib/admin/csvCodes';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,5 +38,6 @@ export const POST = adminRoute(async (req: Request, ctx: Ctx) => {
     if (error) return json({ error: error.message, added }, 400);
     added += data?.length ?? 0;
   }
+  await logAction(req, { action: 'upload codes', kind: 'reward', id, details: { received: codes.length, added } });
   return json({ received: codes.length, added, duplicates: codes.length - added });
 });

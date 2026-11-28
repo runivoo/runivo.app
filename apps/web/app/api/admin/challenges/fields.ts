@@ -1,4 +1,4 @@
-import { str, num, list, isoDate, oneOf, httpsUrl } from '@/lib/adminServer';
+import { str, num, list, isoDate, oneOf, httpsUrl } from '@/lib/server/adminServer';
 
 export const CHALLENGE_METRICS = ['distance_km', 'zones', 'active_days'] as const;
 export const CHALLENGE_STATUSES = ['draft', 'live', 'ended'] as const;

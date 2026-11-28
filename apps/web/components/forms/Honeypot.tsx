@@ -1,4 +1,4 @@
-/** A field people never see and bots like to fill. The form routes (lib/publicForm.ts) drop any submission that has it filled. */
+/** A field people never see and bots like to fill. The form routes (lib/server/publicForm.ts) drop any submission that has it filled. */
 export function Honeypot({ id }: { id: string }) {
   return (
     <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>

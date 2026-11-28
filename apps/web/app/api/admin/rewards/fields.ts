@@ -1,4 +1,4 @@
-import { str, num, list, isoDate, oneOf, httpsUrl } from '@/lib/adminServer';
+import { str, num, list, isoDate, oneOf, httpsUrl } from '@/lib/server/adminServer';
 
 export const REWARD_STATUSES = ['available', 'coming_soon', 'sold_out', 'hidden'] as const;
 export const REWARD_TIERS = ['entry', 'mid', 'premium'] as const;

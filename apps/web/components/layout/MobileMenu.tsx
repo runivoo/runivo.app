@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CaretDown, List, X } from '@phosphor-icons/react/ssr';
-import { FEATURE_NAV, TOP_LINKS } from '@/lib/nav';
+import { FEATURE_NAV, TOP_LINKS } from '@/lib/config/nav';
 import { GetAppLink } from '@/components/ui/GetAppLink';
 
 /**

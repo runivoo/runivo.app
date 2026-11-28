@@ -1,13 +1,13 @@
-import './globals.css';
-import './motion.css';
+import '../styles/globals.css';
+import '../styles/motion.css';
 import { Inter, Outfit } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
-import { PostHogProvider } from './PostHogProvider';
+import { PostHogProvider } from '../components/layout/PostHogProvider';
 import { Motion } from '@/components/layout/Motion';
 import { JsonLd } from '@/components/ui/JsonLd';
-import { staticPage } from '@/lib/pages';
-import { ogImagePath, organizationLd, websiteLd } from '@/lib/seo';
-import { SITE_NAME, SITE_URL } from '@/lib/site';
+import { staticPage } from '@/lib/seo/pages';
+import { ogImagePath, organizationLd, websiteLd } from '@/lib/seo/seo';
+import { SITE_NAME, SITE_URL } from '@/lib/config/site';
 
 // Text uses the system font: SF Pro on iPhone, iPad and Mac (what Apple's own sites use), and
 // Inter, which is drawn to match it, everywhere else. Outfit is kept only for the "runivo" wordmark.

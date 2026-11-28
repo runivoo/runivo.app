@@ -1,6 +1,6 @@
-import { adminRoute, json, str } from '@/lib/adminServer';
-import { slug } from '@/lib/attribution';
-import { audienceCount } from '@/lib/broadcast';
+import { adminRoute, json, str } from '@/lib/server/adminServer';
+import { slug } from '@/lib/forms/attribution';
+import { audienceCount } from '@/lib/email/broadcast';
 
 export const dynamic = 'force-dynamic';
 

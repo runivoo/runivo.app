@@ -3,10 +3,10 @@ import { CaretRight } from '@phosphor-icons/react/ssr';
 import { Nav } from '@/components/layout/Nav';
 import { Footer } from '@/components/layout/Footer';
 import { JsonLd } from '@/components/ui/JsonLd';
-import { breadcrumbLd, mobileAppLd, type Crumb } from '@/lib/seo';
-import { APP_LIVE, APP_STORE_URL } from '@/lib/site';
-import '@/app/home.css';
-import '@/app/pages.css';
+import { breadcrumbLd, mobileAppLd, type Crumb } from '@/lib/seo/seo';
+import { APP_LIVE, APP_STORE_URL } from '@/lib/config/site';
+import '@/styles/home.css';
+import '@/styles/pages.css';
 
 /**
  * The frame for the content pages (features, tools, guides, glossary, cities): the header, a

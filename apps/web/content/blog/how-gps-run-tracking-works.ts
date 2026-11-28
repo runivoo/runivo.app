@@ -1,4 +1,4 @@
-import type { PostSource } from '@/lib/blog';
+import type { PostSource } from '@/lib/content/blog';
 
 const post: PostSource = {
   slug: 'how-gps-run-tracking-works',

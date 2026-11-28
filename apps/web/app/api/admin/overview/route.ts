@@ -1,6 +1,6 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
-import { renderWaitlistEmail } from '@/lib/waitlistEmail';
-import { lowCodeRewards, cheatingStats } from '@/lib/adminStats';
+import { adminRoute, serviceClient, json } from '@/lib/server/adminServer';
+import { renderWaitlistEmail } from '@/lib/email/waitlistEmail';
+import { lowCodeRewards, cheatingStats } from '@/lib/admin/adminStats';
 
 export const dynamic = 'force-dynamic';
 

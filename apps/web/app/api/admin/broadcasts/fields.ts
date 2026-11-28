@@ -1,6 +1,6 @@
-import { str, httpsUrl } from '@/lib/adminServer';
-import { slug } from '@/lib/attribution';
-import type { Audience } from '@/lib/broadcast';
+import { str, httpsUrl } from '@/lib/server/adminServer';
+import { slug } from '@/lib/forms/attribution';
+import type { Audience } from '@/lib/email/broadcast';
 
 export function broadcastPayload(b: Record<string, unknown>) {
   const a = (b.audience && typeof b.audience === 'object' ? b.audience : {}) as Record<string, unknown>;

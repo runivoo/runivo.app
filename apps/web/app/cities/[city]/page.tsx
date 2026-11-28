@@ -4,10 +4,10 @@ import { PageShell } from '@/components/layout/PageShell';
 import { LinkCard } from '@/components/ui/LinkCard';
 import { WaitlistForm } from '@/components/forms/WaitlistForm';
 import { GetAppLink } from '@/components/ui/GetAppLink';
-import { CITIES, getCity } from '@/lib/cities';
-import { getPost } from '@/lib/posts';
-import { APP_LIVE } from '@/lib/site';
-import { pageMetadata } from '@/lib/seo';
+import { CITIES, getCity } from '@/content/cities';
+import { getPost } from '@/lib/content/posts';
+import { APP_LIVE } from '@/lib/config/site';
+import { pageMetadata } from '@/lib/seo/seo';
 
 export const dynamicParams = false;
 

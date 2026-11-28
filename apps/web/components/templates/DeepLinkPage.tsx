@@ -1,6 +1,6 @@
 import { PageShell } from '@/components/layout/PageShell';
 import { GetAppLink } from '@/components/ui/GetAppLink';
-import { APP_LIVE, APP_TAGLINE } from '@/lib/site';
+import { APP_LIVE, APP_TAGLINE } from '@/lib/config/site';
 
 /**
  * The landing page for a link shared from the app (an invite, a club, a runner). A heading, one line

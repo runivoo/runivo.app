@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json } from '@/lib/server/adminServer';
 
 export const dynamic = 'force-dynamic';
 

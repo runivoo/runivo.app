@@ -1,4 +1,4 @@
-import { str, num, list, isoDate, oneOf } from '@/lib/adminServer';
+import { str, num, list, isoDate, oneOf } from '@/lib/server/adminServer';
 
 export const CAMPAIGN_STATUSES = ['draft', 'scheduled', 'done', 'cancelled'] as const;
 export const TIERS = ['free', 'premium', 'admin'] as const;

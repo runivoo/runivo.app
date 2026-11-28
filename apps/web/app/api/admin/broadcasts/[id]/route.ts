@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json, logAction } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/server/adminServer';
 import { broadcastPayload, broadcastProblem } from '../fields';
 
 export const dynamic = 'force-dynamic';

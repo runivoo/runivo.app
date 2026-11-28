@@ -1,6 +1,6 @@
-import { adminRoute, adminIdOf, serviceClient, json, logAction } from '@/lib/adminServer';
-import { digestData } from '@/lib/adminStats';
-import { aiNote, renderDigest, sendDigest } from '@/lib/adminDigest';
+import { adminRoute, adminIdOf, serviceClient, json, logAction } from '@/lib/server/adminServer';
+import { digestData } from '@/lib/admin/adminStats';
+import { aiNote, renderDigest, sendDigest } from '@/lib/admin/adminDigest';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;

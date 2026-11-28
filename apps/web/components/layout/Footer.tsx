@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Logo } from '@/components/layout/Logo';
 import { GetAppLink } from '@/components/ui/GetAppLink';
-import { INSTAGRAM_URL, SUPPORT_EMAIL } from '@/lib/site';
-import { FEATURE_NAV, FOOTER_LEARN } from '@/lib/nav';
+import { INSTAGRAM_URL, SUPPORT_EMAIL } from '@/lib/config/site';
+import { FEATURE_NAV, FOOTER_LEARN } from '@/lib/config/nav';
 
 export function Footer() {
   return (

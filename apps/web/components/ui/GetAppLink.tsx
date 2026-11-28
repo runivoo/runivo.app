@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { APP_LIVE, APP_STORE_URL, WAITLIST_HREF } from '@/lib/site';
+import { APP_LIVE, APP_STORE_URL, WAITLIST_HREF } from '@/lib/config/site';
 
 /**
  * The one "get the app" link. Before launch it leads to the waitlist; after
- * launch (APP_LIVE in lib/site.ts) it leads to the App Store. `live` and
+ * launch (APP_LIVE in lib/config/site.ts) it leads to the App Store. `live` and
  * `waitlist` are the two labels, so each place can word its own button.
  */
 export function GetAppLink({

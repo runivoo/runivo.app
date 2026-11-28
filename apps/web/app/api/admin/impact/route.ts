@@ -1,5 +1,5 @@
-import { adminRoute, json } from '@/lib/adminServer';
-import { getImpact, IMPACT_KINDS, type ImpactKind } from '@/lib/impact';
+import { adminRoute, json } from '@/lib/server/adminServer';
+import { getImpact, IMPACT_KINDS, type ImpactKind } from '@/lib/admin/impact';
 
 export const dynamic = 'force-dynamic';
 

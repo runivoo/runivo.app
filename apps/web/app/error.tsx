@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import * as Sentry from '@sentry/nextjs';
 import { PageShell } from '@/components/layout/PageShell';
-import { SUPPORT_EMAIL } from '@/lib/site';
+import { SUPPORT_EMAIL } from '@/lib/config/site';
 
 /** A page failed while rendering. The layout (and so the nav and footer) is still intact. */
 export default function RouteError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {

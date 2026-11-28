@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { PageShell } from '@/components/layout/PageShell';
 import { LinkCard } from '@/components/ui/LinkCard';
 import { EndCta } from '@/components/ui/EndCta';
-import { CATEGORIES, categorySlug } from '@/lib/blog';
-import { POSTS, postsIn } from '@/lib/posts';
-import { pageMetadata } from '@/lib/seo';
-import { staticPage } from '@/lib/pages';
+import { CATEGORIES, categorySlug } from '@/lib/content/blog';
+import { POSTS, postsIn } from '@/lib/content/posts';
+import { pageMetadata } from '@/lib/seo/seo';
+import { staticPage } from '@/lib/seo/pages';
 
 export const metadata: Metadata = pageMetadata(staticPage('/blog'));
 

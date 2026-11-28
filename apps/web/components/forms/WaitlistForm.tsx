@@ -2,8 +2,8 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { Check } from '@phosphor-icons/react/ssr';
-import { firstTouch } from '@/lib/attribution';
-import { postForm } from '@/lib/postForm';
+import { firstTouch } from '@/lib/forms/attribution';
+import { postForm } from '@/lib/forms/postForm';
 import { Honeypot } from './Honeypot';
 import { FormSuccess } from './FormSuccess';
 

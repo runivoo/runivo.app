@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 import { TimeFields, secondsOf } from './TimeFields';
-import { RACES, distanceFrom, formatDuration, formatPace, paceFrom, speedKmh, timeFrom } from '@/lib/runMath';
+import { RACES, distanceFrom, formatDuration, formatPace, paceFrom, speedKmh, timeFrom } from '@/lib/tools/runMath';
 
 type Solve = 'pace' | 'time' | 'distance';
 const MODES: [Solve, string][] = [['pace', 'Pace'], ['time', 'Finish time'], ['distance', 'Distance']];

@@ -1,5 +1,5 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
-import { asRange, posthogConfig, websiteStats } from '@/lib/websiteStats';
+import { adminRoute, serviceClient, json } from '@/lib/server/adminServer';
+import { asRange, posthogConfig, websiteStats } from '@/lib/admin/websiteStats';
 
 export const dynamic = 'force-dynamic';
 

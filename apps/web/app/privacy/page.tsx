@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { pageMetadata } from '@/lib/seo';
-import { staticPage } from '@/lib/pages';
+import { pageMetadata } from '@/lib/seo/seo';
+import { staticPage } from '@/lib/seo/pages';
 import { LegalPage } from '@/components/templates/LegalPage';
-import { SUPPORT_EMAIL } from '@/lib/site';
+import { SUPPORT_EMAIL } from '@/lib/config/site';
 
 export const metadata: Metadata = pageMetadata(staticPage('/privacy'));
 

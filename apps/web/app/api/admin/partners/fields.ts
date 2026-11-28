@@ -1,4 +1,4 @@
-import { str, num, list, oneOf, httpsUrl } from '@/lib/adminServer';
+import { str, num, list, oneOf, httpsUrl } from '@/lib/server/adminServer';
 
 export const PARTNER_CATEGORIES = ['shoes', 'apparel', 'gear', 'nutrition', 'cafe', 'physio', 'races', 'gym', 'insurance', 'tech', 'other'] as const;
 export const PARTNER_STATUSES = ['applied', 'active', 'paused', 'ended', 'rejected'] as const;

@@ -1,4 +1,4 @@
-import { jsonLdString } from '@/lib/seo';
+import { jsonLdString } from '@/lib/seo/seo';
 
 /** One structured-data block (JSON-LD) for search engines. Renders nothing visible. */
 export function JsonLd({ data }: { data: Record<string, unknown> }) {

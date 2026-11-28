@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { DeepLinkPage } from '@/components/templates/DeepLinkPage';
 import { WaitlistForm } from '@/components/forms/WaitlistForm';
 import { GetAppLink } from '@/components/ui/GetAppLink';
-import { APP_LIVE } from '@/lib/site';
+import { APP_LIVE } from '@/lib/config/site';
 
 export const metadata: Metadata = {
   title: 'Join Runivo',

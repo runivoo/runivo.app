@@ -6,15 +6,16 @@ import { Nav } from '@/components/layout/Nav';
 import { Footer } from '@/components/layout/Footer';
 import { HexagonMark } from '@/components/layout/Logo';
 import { Faq } from '@/components/ui/Faq';
+import { EndCta } from '@/components/ui/EndCta';
 import { WaitlistForm } from '@/components/forms/WaitlistForm';
 import { GetAppLink } from '@/components/ui/GetAppLink';
 import { LinkCard } from '@/components/ui/LinkCard';
-import { APP_LIVE } from '@/lib/site';
-import { pageMetadata } from '@/lib/seo';
-import { staticPage } from '@/lib/pages';
-import { POSTS } from '@/lib/posts';
-import './home.css';
-import './pages.css';
+import { APP_LIVE } from '@/lib/config/site';
+import { pageMetadata } from '@/lib/seo/seo';
+import { staticPage } from '@/lib/seo/pages';
+import { POSTS } from '@/lib/content/posts';
+import '../styles/home.css';
+import '../styles/pages.css';
 
 export const metadata: Metadata = pageMetadata(staticPage('/'));
 
@@ -236,28 +237,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Final call */}
-        <section className="section" id="waitlist" style={{ textAlign: 'center' }}>
-          <div className="container">
-            <h2 className="h-display" style={{ fontSize: 'clamp(38px, 6vw, 72px)' }}>
-              Ready to run <span className="accent">smarter?</span>
-            </h2>
-            {APP_LIVE ? (
-              <div className="actions" style={{ justifyContent: 'center' }}>
-                <GetAppLink className="btn btn-dark" live={<>Download for iPhone <ArrowRight size={18} aria-hidden /></>} />
-              </div>
-            ) : (
-              <>
-                <p className="lead" style={{ margin: '18px auto 0', maxWidth: 460 }}>
-                  Runivo is opening city by city. Join the waitlist and we’ll tell you the day it reaches yours.
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-                  <WaitlistForm source="web" />
-                </div>
-              </>
-            )}
-          </div>
-        </section>
+        <EndCta large heading={<>Ready to run <span className="accent">smarter?</span></>} />
 
         {/* FAQ */}
         <section className="section" id="faq" style={{ paddingTop: 24 }}>

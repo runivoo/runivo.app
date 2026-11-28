@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/server/adminServer';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,8 +23,9 @@ export const POST = adminRoute(async (req) => {
     .from('races')
     .update({ status: approve ? 'approved' : 'rejected', checked_at: new Date().toISOString() })
     .eq('id', id).eq('source', 'runner').eq('status', 'pending')
-    .select('id').maybeSingle();
+    .select('id, name').maybeSingle();
   if (error) return json({ error: error.message }, 400);
   if (!data) return json({ error: 'Already reviewed' }, 409);
+  await logAction(req, { action: approve ? 'approve' : 'reject', kind: 'race', id, label: data.name });
   return json({ ok: true });
 });

@@ -31,5 +31,5 @@ The marketing pages (`apps/web`: features, tools, guides, glossary, cities) desc
 
 ## Before launch
 
-- Set `APP_LIVE` and `APP_STORE_URL` in `apps/web/lib/site.ts`. The structured data for the app (`mobileAppLd`) is emitted only then.
+- Set `APP_LIVE` and `APP_STORE_URL` in `apps/web/lib/config/site.ts`. The structured data for the app (`mobileAppLd`) is emitted only then.
 - Revisit every "free at launch", "pilot" and "not available yet" line against the live app, and bump the `updated` date on any page you change.

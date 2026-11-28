@@ -1,4 +1,4 @@
-import { adminRoute, serviceClient, json, oneOf, logAction } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, oneOf, logAction } from '@/lib/server/adminServer';
 import { partnerPayload, PARTNER_STATUSES } from '../fields';
 
 export const dynamic = 'force-dynamic';

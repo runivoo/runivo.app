@@ -7,10 +7,10 @@ import { Faq } from '@/components/ui/Faq';
 import { LinkCard } from '@/components/ui/LinkCard';
 import { EndCta } from '@/components/ui/EndCta';
 import { GetAppLink } from '@/components/ui/GetAppLink';
-import { FEATURE_NAV, TOOLS_NAV, type FeatureSlug } from '@/lib/nav';
-import { FEATURES } from '@/lib/features';
-import { getPost } from '@/lib/posts';
-import { faqLd, pageMetadata } from '@/lib/seo';
+import { FEATURE_NAV, TOOLS_NAV, type FeatureSlug } from '@/lib/config/nav';
+import { FEATURES } from '@/content/features';
+import { getPost } from '@/lib/content/posts';
+import { faqLd, pageMetadata } from '@/lib/seo/seo';
 
 export const dynamicParams = false;
 

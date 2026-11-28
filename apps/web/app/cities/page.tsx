@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import { PageShell } from '@/components/layout/PageShell';
 import { LinkCard } from '@/components/ui/LinkCard';
 import { EndCta } from '@/components/ui/EndCta';
-import { CITIES } from '@/lib/cities';
-import { pageMetadata } from '@/lib/seo';
-import { staticPage } from '@/lib/pages';
+import { CITIES } from '@/content/cities';
+import { pageMetadata } from '@/lib/seo/seo';
+import { staticPage } from '@/lib/seo/pages';
 
 export const metadata: Metadata = pageMetadata(staticPage('/cities'));
 

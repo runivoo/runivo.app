@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
-import { PAGES, pageByPath } from '@/lib/pages';
-import { SITE_URL } from '@/lib/site';
+import { PAGES, pageByPath } from '@/lib/seo/pages';
+import { SITE_URL } from '@/lib/config/site';
 
 // One share image per registered page, drawn at build time. Only registered pages get an image,
 // so the address cannot be used to make a branded picture with arbitrary text.

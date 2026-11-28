@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { adminRoute, serviceClient, json, logAction } from '@/lib/adminServer';
+import { adminRoute, serviceClient, json, logAction } from '@/lib/server/adminServer';
 
 export const dynamic = 'force-dynamic';
 

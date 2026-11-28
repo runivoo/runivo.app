@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { SITE_URL } from '@/lib/site';
+import { SITE_URL } from '@/lib/config/site';
 
 // Public marketing pages are indexable. The admin, API and one-off link pages
 // (invites, club and runner links, the live safety page) are not.

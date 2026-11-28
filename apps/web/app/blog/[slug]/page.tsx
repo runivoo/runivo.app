@@ -6,9 +6,9 @@ import { JsonLd } from '@/components/ui/JsonLd';
 import { Markdown } from '@/components/ui/Markdown';
 import { LinkCard } from '@/components/ui/LinkCard';
 import { EndCta } from '@/components/ui/EndCta';
-import { POSTS, getPost, nextPosts } from '@/lib/posts';
-import { FEATURE_NAV, TOOLS_NAV } from '@/lib/nav';
-import { articleLd, pageMetadata } from '@/lib/seo';
+import { POSTS, getPost, nextPosts } from '@/lib/content/posts';
+import { FEATURE_NAV, TOOLS_NAV } from '@/lib/config/nav';
+import { articleLd, pageMetadata } from '@/lib/seo/seo';
 
 export const dynamicParams = false;
 

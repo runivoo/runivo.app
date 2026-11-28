@@ -1,7 +1,7 @@
-import { serviceClient, str, json } from '@/lib/adminServer';
-import { makeLimiter, EMAIL_RE } from '@/lib/rateLimit';
-import { guardPublicForm } from '@/lib/publicForm';
-import { SUPPORT_EMAIL } from '@/lib/site';
+import { serviceClient, str, json } from '@/lib/server/adminServer';
+import { makeLimiter, EMAIL_RE } from '@/lib/server/rateLimit';
+import { guardPublicForm } from '@/lib/server/publicForm';
+import { SUPPORT_EMAIL } from '@/lib/config/site';
 
 export const dynamic = 'force-dynamic';
 

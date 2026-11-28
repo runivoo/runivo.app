@@ -3,7 +3,7 @@
 import { useId, useState, type FormEvent } from 'react';
 import { Honeypot } from '@/components/forms/Honeypot';
 import { FormSuccess } from '@/components/forms/FormSuccess';
-import { postForm } from '@/lib/postForm';
+import { postForm } from '@/lib/forms/postForm';
 
 type State = { status: 'idle' | 'sending' | 'sent' | 'error'; message?: string };
 

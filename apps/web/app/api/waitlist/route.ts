@@ -1,9 +1,9 @@
-import { serviceClient, str, json } from '@/lib/adminServer';
+import { serviceClient, str, json } from '@/lib/server/adminServer';
 import { after } from 'next/server';
-import { makeLimiter, EMAIL_RE } from '@/lib/rateLimit';
-import { guardPublicForm } from '@/lib/publicForm';
-import { sendWaitlistWelcome } from '@/lib/waitlistEmail';
-import { platformOf, referrerHost, slug, type Touch } from '@/lib/attribution';
+import { makeLimiter, EMAIL_RE } from '@/lib/server/rateLimit';
+import { guardPublicForm } from '@/lib/server/publicForm';
+import { sendWaitlistWelcome } from '@/lib/email/waitlistEmail';
+import { platformOf, referrerHost, slug, type Touch } from '@/lib/forms/attribution';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic';
  * cap in join_waitlist keep it from being used to scan for addresses. Errors are
  * never returned verbatim.
  *
- * A new address also gets a welcome email (lib/waitlistEmail.ts), sent after the
+ * A new address also gets a welcome email (lib/email/waitlistEmail.ts), sent after the
  * response so the form is not slowed down. A repeat address gets nothing, so the
  * form cannot be used to mail someone over and over.
  */

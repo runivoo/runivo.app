@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { PageShell } from '@/components/layout/PageShell';
 import { JsonLd } from '@/components/ui/JsonLd';
 import { EndCta } from '@/components/ui/EndCta';
-import { TERMS } from '@/lib/glossary';
-import { definedTermSetLd, pageMetadata } from '@/lib/seo';
-import { staticPage } from '@/lib/pages';
+import { TERMS } from '@/content/glossary';
+import { definedTermSetLd, pageMetadata } from '@/lib/seo/seo';
+import { staticPage } from '@/lib/seo/pages';
 
 export const metadata: Metadata = pageMetadata(staticPage('/glossary'));
 

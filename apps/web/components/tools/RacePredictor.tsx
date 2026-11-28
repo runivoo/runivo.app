@@ -1,28 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { TimeFields, secondsOf } from './TimeFields';
-import { RACES, formatDuration, formatPace, paceFrom, predictTime, type RaceId } from '@/lib/runMath';
+import { RaceResultPanel, useRaceResult } from './RaceResultInput';
+import { RACES, formatDuration, formatPace, paceFrom, predictTime } from '@/lib/tools/runMath';
 
 export function RacePredictor() {
-  const [from, setFrom] = useState<RaceId>('10k');
-  const [time, setTime] = useState({ h: '', m: '50', s: '00' });
-  const seconds = secondsOf(time);
-  const base = RACES.find(r => r.id === from)!;
+  const result = useRaceResult('10k', { h: '', m: '50', s: '00' });
+  const { from, seconds, base } = result;
 
   return (
     <div className="tool">
-      <div className="card tool-panel">
-        <div className="tool-form">
-          <div>
-            <p className="field-label">Your recent result over</p>
-            <div className="seg" role="group" aria-label="Distance of your result">
-              {RACES.map(r => <button key={r.id} type="button" aria-pressed={from === r.id} onClick={() => setFrom(r.id)}>{r.label}</button>)}
-            </div>
-          </div>
-          <TimeFields label="Your time" value={time} onChange={setTime} />
-        </div>
-      </div>
+      <RaceResultPanel result={result} />
 
       <div className="result" role="status" aria-live="polite">
         <p className="eyebrow">Estimated times</p>

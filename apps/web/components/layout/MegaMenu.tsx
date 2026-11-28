@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight, CaretDown } from '@phosphor-icons/react/ssr';
-import { ACCENT_HEX, FEATURE_GROUPS } from '@/lib/nav';
+import { ACCENT_HEX, FEATURE_GROUPS } from '@/lib/config/nav';
 
 /**
  * "Features" in the header. The word itself is a real link to /features; the chevron beside it

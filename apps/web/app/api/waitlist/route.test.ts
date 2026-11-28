@@ -4,9 +4,9 @@ const rpc = vi.fn();
 const sendWelcome = vi.fn().mockResolvedValue('sent');
 
 vi.mock('next/server', () => ({ after: (fn: () => unknown) => { fn(); } }));
-vi.mock('@/lib/waitlistEmail', () => ({ sendWaitlistWelcome: (...a: unknown[]) => sendWelcome(...a) }));
-vi.mock('@/lib/adminServer', async orig => ({
-  ...(await orig<typeof import('@/lib/adminServer')>()),
+vi.mock('@/lib/email/waitlistEmail', () => ({ sendWaitlistWelcome: (...a: unknown[]) => sendWelcome(...a) }));
+vi.mock('@/lib/server/adminServer', async orig => ({
+  ...(await orig<typeof import('@/lib/server/adminServer')>()),
   serviceClient: () => ({ rpc }),
 }));
 

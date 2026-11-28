@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { pageMetadata } from '@/lib/seo';
-import { staticPage } from '@/lib/pages';
+import { pageMetadata } from '@/lib/seo/seo';
+import { staticPage } from '@/lib/seo/pages';
 import { PageShell } from '@/components/layout/PageShell';
 import { ApplyForm } from './ApplyForm';
 import './partners.css';

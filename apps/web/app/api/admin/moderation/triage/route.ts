@@ -1,5 +1,5 @@
-import { adminRoute, json } from '@/lib/adminServer';
-import { askClaude, parseJson, clip, AiError } from '@/lib/ai';
+import { adminRoute, json } from '@/lib/server/adminServer';
+import { askClaude, parseJson, clip, AiError } from '@/lib/admin/ai';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;

@@ -1,6 +1,6 @@
-import { POSTS } from '@/lib/posts';
-import { absoluteUrl } from '@/lib/seo';
-import { SITE_NAME } from '@/lib/site';
+import { POSTS } from '@/lib/content/posts';
+import { absoluteUrl } from '@/lib/seo/seo';
+import { SITE_NAME } from '@/lib/config/site';
 
 export const dynamic = 'force-static';
 

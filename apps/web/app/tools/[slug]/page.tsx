@@ -8,10 +8,10 @@ import { EndCta } from '@/components/ui/EndCta';
 import { PaceCalculator } from '@/components/tools/PaceCalculator';
 import { RacePredictor } from '@/components/tools/RacePredictor';
 import { TrainingPacesTool } from '@/components/tools/TrainingPacesTool';
-import { TOOL_PAGES } from '@/lib/tools';
-import { TOOLS_NAV } from '@/lib/nav';
-import { getPost } from '@/lib/posts';
-import { faqLd, pageMetadata } from '@/lib/seo';
+import { TOOL_PAGES } from '@/content/tools';
+import { TOOLS_NAV } from '@/lib/config/nav';
+import { getPost } from '@/lib/content/posts';
+import { faqLd, pageMetadata } from '@/lib/seo/seo';
 
 export const dynamicParams = false;
 
