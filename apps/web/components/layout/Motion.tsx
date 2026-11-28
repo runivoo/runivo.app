@@ -21,7 +21,7 @@ import { usePathname } from 'next/navigation';
 const TARGETS = [
   '.section .eyebrow', '.section-sm .eyebrow',
   '.h-section', '.section .h-display', '.section > .container > .lead',
-  '.step', '.extra', '.kit2-group', '.home-feature', '.band', '.faq-item',
+  '.step', '.extra', '.facts-row', '.home-feature', '.band', '.faq-item',
   '.waitlist', '.spec', '.link-card', '.sec', '.tool-panel',
 ].join(',');
 
