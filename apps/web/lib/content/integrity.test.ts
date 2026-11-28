@@ -6,6 +6,7 @@ import { CITIES } from '../../content/cities';
 import { TERMS } from '../../content/glossary';
 import { POSTS, getPost } from './posts';
 import { PAGES } from '../seo/pages';
+import { CITY_COPY } from '../../content/city';
 import { CATEGORIES, categorySlug } from './blog';
 import { internalLinks, plainText } from './markdown';
 import { ENGINE } from '../../../../packages/shared/src/engine/runEngine';
@@ -64,6 +65,9 @@ describe('content integrity', () => {
   });
 });
 
+/** Every string inside a nested object. */
+const strings = (v: unknown): string[] => typeof v === 'string' ? [v] : Array.isArray(v) ? v.flatMap(strings) : v && typeof v === 'object' ? Object.values(v).flatMap(strings) : [];
+
 /** All visible words on the marketing content, with where each came from. */
 function allText(): [string, string][] {
   const out: [string, string][] = [];
@@ -76,6 +80,7 @@ function allText(): [string, string][] {
   for (const t of TOOL_PAGES) out.push([`tool ${t.slug}`, [t.title, t.description, t.lead, ...t.method.paragraphs, ...t.faqs.flat()].join('\n')]);
   for (const c of CITIES) out.push([`city ${c.slug}`, [c.description, c.intro, c.season, ...c.spots.map(s => s.note), ...c.tips, c.race ?? ''].join('\n')]);
   for (const t of TERMS) out.push([`term ${t.id}`, t.definition]);
+  out.push(['landing story', strings(CITY_COPY).join('\n')]);
   return out;
 }
 
@@ -93,6 +98,7 @@ describe('claims we must not make (see docs/WEBSITE_CLAIMS.md)', () => {
     [/20\+ sports|\d\d\+ sports/i, 'seven sports plus treadmill'],
     [/hexagons?\b.*\bclaim|claim.*\bhexagons?\b/i, 'zones are route strips, not hexagons'],
     [/\btokens?\b/i, 'PACE is reward points, not a token'],
+    [/founding runner|bonus points|early access|\bbpm\b|\bpts\b/i, 'the app offers no such perk'],
   ];
 
   for (const [pattern, why] of BANNED) {

@@ -16,6 +16,15 @@ The marketing pages (`apps/web`: features, tools, guides, glossary, cities) desc
 | Store cities, 14 days and 3 runs to redeem | `store_cities` seed and `reward_block_reason()` in `supabase/migrations` |
 | PaceX consent, what is sent | `apps/mobile/src/features/coach/components/AiConsentCard.tsx`, `supabase/functions/ai-coach` |
 
+## The landing page's scroll story
+
+`content/city.ts` holds its words and numbers; `lib/city/timeline.test.ts` checks them against the engine.
+
+- **PACE**: 2 per whole kilometre (five coins on the route are five kilometres), 5 for a new zone, 10 for taking a zone back (`ENGINE`). The balance (120) and the two rewards (75 and 250 PACE) are an **example**, labelled as such, at the partner guide's entry and mid price levels. No brand names.
+- **People**: Aanya, Rahul, Mei, Kabir and their distances are illustrative; the page says so ("Illustrated example").
+- **Not shown, on purpose**: heart rate (the app has no live display), badges or bonus points for joining, "early access".
+- The waitlist form in the last chapter is the real one.
+
 ## Do not say (until it is true)
 
 - That the app is **available**, "download now", or has any user count, review or testimonial.

@@ -3,11 +3,11 @@ import { GetAppLink } from '@/components/ui/GetAppLink';
 import { APP_LIVE } from '@/lib/config/site';
 
 /** The closing call to action on content pages: the waitlist form before launch, the download button after. */
-export function EndCta({ heading = 'Ready to run smarter?', lead = 'Runivo is opening city by city. Join the waitlist and we’ll tell you the day it reaches yours.', large }: { heading?: React.ReactNode; lead?: string; large?: boolean }) {
+export function EndCta({ heading = 'Ready to run smarter?', lead = 'Runivo is opening city by city. Join the waitlist and we’ll tell you the day it reaches yours.' }: { heading?: string; lead?: string }) {
   return (
     <section className="section cta-end" id="waitlist">
       <div className="container">
-        <h2 className={large ? 'h-display' : 'h-section'} style={large ? { fontSize: 'clamp(38px, 6vw, 72px)' } : undefined}>{heading}</h2>
+        <h2 className="h-section">{heading}</h2>
         {APP_LIVE ? (
           <div className="actions" style={{ justifyContent: 'center' }}>
             <GetAppLink className="btn btn-dark" live="Download for iPhone" />

@@ -9,14 +9,17 @@ app/            ROUTES ONLY: pages, API handlers, sitemap, robots, share images
   api/            waitlist, partners/apply (public) · admin/* (Studio, admin-only) · cron/admin-digest
 components/     ALL UI, shared by every page
   layout/         Nav, MegaMenu, MobileMenu, Footer, Logo, PageShell, Motion, PostHogProvider
+  city/           the landing page's scroll story: CityStory (chapters, scroll progress, fallbacks) and cityScene (the Three.js scene, ported from the design file)
+  home/           HomeStatic: the poster hero and feature blocks shown instead of the story (reduced motion, no WebGL, Save-Data)
   ui/             Faq, LinkCard, EndCta, GetAppLink, Markdown, JsonLd
   forms/          WaitlistForm, Honeypot, FormSuccess
   templates/      LegalPage (privacy, terms), DeepLinkPage (invite, club and runner links)
   tools/          the three run calculators
   admin/          Studio: shell, sign-in screens, UI kit (ui.tsx), one file per section
-content/        THE WORDS: features, tools, cities, glossary, blog/ (12 guides)
+content/        THE WORDS: features, tools, cities, glossary, city (the scroll story), blog/ (12 guides)
 lib/            CODE, grouped by job
   config/         site.ts (constants and launch switch), nav.ts (every navigation link)
+  city/           timeline.ts: the story's scroll maths (pure, tested)
   seo/            seo.ts (metadata, JSON-LD), pages.ts (registry behind the sitemap and share images)
   content/        blog, posts, markdown, and the integrity and claims tests
   tools/          runMath.ts (the calculators' maths)
@@ -41,6 +44,7 @@ Rules: pages in `app/` contain no styling or copy of their own beyond layout; wo
 | Studio sections | `/api/admin/*` | partners, rewards and codes, campaigns, challenges, events, races, moderation, people, broadcasts, waitlist; every write is recorded in `public.admin_actions` (Activity) |
 | Daily digest | `GET /api/cron/admin-digest` (Vercel Cron, `CRON_SECRET`) | emails admins; reads only |
 | Analytics and errors | PostHog, Sentry | optional; off without their keys |
+| Landing scroll story | its last chapter is the same waitlist form (`POST /api/waitlist`) | the example rewards and balance are illustration; nothing is stored |
 | Calculators, guides, glossary, city pages | none needed | static: the maths runs in the browser, the words are in `content/` |
 
 Support is a `mailto:` link, not a form, so there is nothing to store.
