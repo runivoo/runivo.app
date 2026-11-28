@@ -6,8 +6,6 @@
 .city canvas.hot { cursor: pointer; }
 /* Scrolling to #waitlist lands where the last chapter (the form) is on screen. */
 .city-anchor { position: absolute; left: 0; bottom: 100svh; width: 0; height: 0; }
-.city .skip-story { position: absolute; left: 16px; top: 68px; z-index: 7; padding: 10px 16px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 600; transform: translateY(-200%); transition: transform .15s ease; }
-.city .skip-story:focus-visible { transform: none; }
 .city .caption { position: absolute; right: 18px; bottom: 14px; z-index: 6; max-width: 34ch; font-size: 12px; line-height: 1.4; color: var(--t3); text-align: right; pointer-events: none; }
 .city .store-note { margin-top: 12px; font-size: 13px; color: var(--t3); max-width: 36ch; }
 .city .btn-orange { background: var(--orange); color: #fff; }

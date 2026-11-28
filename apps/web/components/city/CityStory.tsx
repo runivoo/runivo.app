@@ -76,7 +76,6 @@ export function CityStory({ fallback }: { fallback: ReactNode }) {
       <section ref={section} className="city" aria-label="How Runivo works">
         <div ref={stage} className="city-pin">
           <h1 className="sr-only">{C.h1}</h1>
-          <a className="skip-story" href="#after-story">{C.skip}</a>
           <canvas data-id="stage" aria-hidden="true" />
           <span id="waitlist" className="city-anchor" aria-hidden="true" />
 
@@ -197,7 +196,6 @@ export function CityStory({ fallback }: { fallback: ReactNode }) {
           <p className="caption">{C.illustration}</p>
         </div>
       </section>
-      <span id="after-story" />
     </>
   );
 }

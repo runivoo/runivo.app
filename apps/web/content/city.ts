@@ -17,7 +17,6 @@ export const CITY_ECONOMY = {
 
 export const CITY_COPY = {
   h1: 'Runivo: run smarter with an AI running coach',
-  skip: 'Skip the animation',
   illustration: 'Illustrated example. Names and numbers are made up.',
   thought: [
     ['Every run begins as a thought.', 'Long before the first step.'],
