@@ -10,8 +10,8 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Nav } from '@/components/Nav';
-import { Footer } from '@/components/Footer';
+import { Nav } from '@/components/layout/Nav';
+import { Footer } from '@/components/layout/Footer';
 import { supabase } from '@/lib/supabase';
 
 type Status = 'checking' | 'ready' | 'invalid' | 'success';

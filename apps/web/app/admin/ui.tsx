@@ -1,5 +1,5 @@
 'use client';
-import { AlertCircle, ToggleLeft, ToggleRight, X } from 'lucide-react';
+import { ToggleLeft, ToggleRight, WarningCircle, X } from '@phosphor-icons/react/ssr';
 import { Children, cloneElement, isValidElement, useId, type ComponentPropsWithRef, type ReactElement, type ReactNode } from 'react';
 
 /*
@@ -141,7 +141,7 @@ export function ErrorNote({ message }: { message: string }) {
   if (!message) return null;
   return (
     <div role="alert" className="mt-3 flex items-center gap-2 px-4 py-3 rounded-xl bg-red-50 border border-red-100">
-      <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" aria-hidden />
+      <WarningCircle className="w-4 h-4 text-red-500 flex-shrink-0" aria-hidden />
       <p className="text-sm text-red-600">{message}</p>
     </div>
   );

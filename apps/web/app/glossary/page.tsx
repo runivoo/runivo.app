@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { PageShell } from '@/components/PageShell';
-import { JsonLd } from '@/components/JsonLd';
-import { EndCta } from '@/components/EndCta';
+import { PageShell } from '@/components/layout/PageShell';
+import { JsonLd } from '@/components/ui/JsonLd';
+import { EndCta } from '@/components/ui/EndCta';
 import { TERMS } from '@/lib/glossary';
 import { definedTermSetLd, pageMetadata } from '@/lib/seo';
 import { staticPage } from '@/lib/pages';

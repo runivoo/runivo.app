@@ -1,7 +1,9 @@
 'use client';
 
 import { useId, useState, type FormEvent } from 'react';
-import { Check } from '@phosphor-icons/react/ssr';
+import { Honeypot } from '@/components/forms/Honeypot';
+import { FormSuccess } from '@/components/forms/FormSuccess';
+import { postForm } from '@/lib/postForm';
 
 type State = { status: 'idle' | 'sending' | 'sent' | 'error'; message?: string };
 
@@ -21,36 +23,15 @@ export function ApplyForm() {
       ['name', 'contact_name', 'contact_email', 'website', 'company_url'].map(k => [k, String(f.get(k) ?? '')]),
     );
     setState({ status: 'sending' });
-    try {
-      const res = await fetch('/api/partners/apply', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
-      });
-      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-      if (res.ok && data.ok) setState({ status: 'sent' });
-      else setState({ status: 'error', message: data.error ?? 'Something went wrong. Please try again.' });
-    } catch {
-      setState({ status: 'error', message: 'Couldn’t reach us. Check your connection and try again.' });
-    }
+    const reply = await postForm('/api/partners/apply', payload);
+    setState(reply.ok ? { status: 'sent' } : { status: 'error', message: reply.error });
   }
 
-  if (state.status === 'sent') {
-    return (
-      <div className="waitlist-done" role="status" style={{ maxWidth: 'none' }}>
-        <span className="waitlist-tick"><Check size={18} weight="bold" aria-hidden /></span>
-        <div>
-          <p className="waitlist-done-title">Thanks, we’ve got it.</p>
-          <p className="waitlist-done-body">We’ll get in touch within 5 working days.</p>
-        </div>
-      </div>
-    );
-  }
+  if (state.status === 'sent') return <FormSuccess wide title="Thanks, we’ve got it.">We’ll get in touch within 5 working days.</FormSuccess>;
 
   return (
     <form onSubmit={submit} noValidate className="apply-form">
-      <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
-        <label htmlFor={`${uid}-co`}>Leave this empty</label>
-        <input id={`${uid}-co`} name="company_url" type="text" tabIndex={-1} autoComplete="off" />
-      </div>
+      <Honeypot id={`${uid}-co`} />
 
       <div>
         <label className="field-label" htmlFor={`${uid}-name`}>Company name *</label>

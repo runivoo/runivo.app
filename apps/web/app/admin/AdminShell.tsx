@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ExternalLink, LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ArrowSquareOut, List, SidebarSimple, SignOut, X } from '@phosphor-icons/react/ssr';
+import { Logo } from '@/components/layout/Logo';
 import { Button, IconButton } from './ui';
 import { NAV_GROUPS, type AdminTab } from './nav';
 
@@ -110,13 +110,13 @@ export function AdminShell({
           ref={menuBtn} label="Open menu" className="md:hidden"
           aria-expanded={drawerOpen} aria-controls="admin-drawer" onClick={() => setDrawerOpen(true)}
         >
-          <Menu className="w-5 h-5" aria-hidden />
+          <List className="w-5 h-5" aria-hidden />
         </IconButton>
         <IconButton
           label={pinned ? 'Unpin sidebar (open on hover)' : 'Keep sidebar open'} className="hidden md:inline-flex"
           aria-pressed={pinned} aria-controls="admin-sidebar" onClick={togglePinned}
         >
-          {pinned ? <PanelLeftClose className="w-5 h-5" aria-hidden /> : <PanelLeftOpen className="w-5 h-5" aria-hidden />}
+          <SidebarSimple className="w-5 h-5" weight={pinned ? 'fill' : 'regular'} aria-hidden />
         </IconButton>
 
         <div className="flex items-center gap-3 min-w-0 ml-1">
@@ -126,10 +126,10 @@ export function AdminShell({
 
         <div className="ml-auto flex items-center gap-2">
           <Button variant="secondary" size="sm" className="px-3 sm:px-4" aria-label="View site" onClick={() => router.push('/')}>
-            <ExternalLink className="w-4 h-4" aria-hidden /><span className="hidden sm:inline">View site</span>
+            <ArrowSquareOut className="w-4 h-4" aria-hidden /><span className="hidden sm:inline">View site</span>
           </Button>
           <Button variant="secondary" size="sm" className="px-3 sm:px-4" aria-label="Sign out" onClick={onSignOut}>
-            <LogOut className="w-4 h-4" aria-hidden /><span className="hidden sm:inline">Sign out</span>
+            <SignOut className="w-4 h-4" aria-hidden /><span className="hidden sm:inline">Sign out</span>
           </Button>
         </div>
       </header>
@@ -207,7 +207,7 @@ function NavList({ tab, onPick, collapsed }: { tab: AdminTab; onPick: (id: Admin
                       collapsed ? 'justify-center' : 'gap-3 px-4'
                     } ${active ? 'bg-green-50 text-[#4E7F1F] font-semibold' : 'font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}
                   >
-                    <Icon className="w-[18px] h-[18px] flex-shrink-0" strokeWidth={1.8} aria-hidden />
+                    <Icon className="w-[18px] h-[18px] flex-shrink-0" aria-hidden />
                     <span className={collapsed ? 'sr-only' : 'truncate'}>{label}</span>
                   </button>
                 </li>

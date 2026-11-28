@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { Check } from 'lucide-react';
+import { Check } from '@phosphor-icons/react/ssr';
 import { firstTouch } from '@/lib/attribution';
+import { postForm } from '@/lib/postForm';
+import { Honeypot } from './Honeypot';
+import { FormSuccess } from './FormSuccess';
 
 type State = { status: 'idle' | 'sending' | 'sent' | 'already' | 'error'; message?: string };
 
@@ -29,37 +32,20 @@ export function WaitlistForm({ source = 'web', defaultCity }: { source?: string;
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     setState({ status: 'sending' });
-    try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: String(f.get('email') ?? ''),
-          city: String(f.get('city') ?? ''),
-          company_url: String(f.get('company_url') ?? ''),
-          source,
-          touch: firstTouch(),
-        }),
-      });
-      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; alreadyJoined?: boolean; error?: string };
-      if (res.ok && data.ok && data.alreadyJoined) setState({ status: 'already' });
-      else if (res.ok && data.ok) setState({ status: 'sent' });
-      else setState({ status: 'error', message: data.error ?? 'Something went wrong. Please try again.' });
-    } catch {
-      setState({ status: 'error', message: 'Couldn’t reach us. Check your connection and try again.' });
-    }
+    const reply = await postForm('/api/waitlist', {
+      email: String(f.get('email') ?? ''),
+      city: String(f.get('city') ?? ''),
+      company_url: String(f.get('company_url') ?? ''),
+      source,
+      touch: firstTouch(),
+    });
+    if (reply.ok && reply.alreadyJoined) setState({ status: 'already' });
+    else if (reply.ok) setState({ status: 'sent' });
+    else setState({ status: 'error', message: reply.error });
   }
 
   if (state.status === 'sent') {
-    return (
-      <div className="waitlist-done" role="status">
-        <span className="waitlist-tick"><Check size={18} strokeWidth={3} aria-hidden /></span>
-        <div>
-          <p className="waitlist-done-title">You’re on the list.</p>
-          <p className="waitlist-done-body">Check your inbox for a confirmation. We’ll email you when Runivo opens in your city, and now and then with big news.</p>
-        </div>
-      </div>
-    );
+    return <FormSuccess title="You’re on the list.">Check your inbox for a confirmation. We’ll email you when Runivo opens in your city, and now and then with big news.</FormSuccess>;
   }
 
   const sending = state.status === 'sending';
@@ -77,16 +63,13 @@ export function WaitlistForm({ source = 'web', defaultCity }: { source?: string;
           if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) e.currentTarget.close();
         }}
       >
-        <span className="waitlist-tick"><Check size={18} strokeWidth={3} aria-hidden /></span>
+        <span className="waitlist-tick"><Check size={18} weight="bold" aria-hidden /></span>
         <h2 id={titleId} className="waitlist-done-title">You’re already on the waitlist!</h2>
         <p className="waitlist-done-body">Thank you. We’ll email you the day Runivo opens in your city.</p>
         <button type="button" className="btn btn-dark" onClick={() => dialogRef.current?.close()}>Got it</button>
       </dialog>
 
-      <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
-        <label htmlFor={`${uid}-co`}>Leave this empty</label>
-        <input id={`${uid}-co`} name="company_url" type="text" tabIndex={-1} autoComplete="off" />
-      </div>
+      <Honeypot id={`${uid}-co`} />
 
       <div className="waitlist-row">
         <div className="waitlist-field">
@@ -111,7 +94,7 @@ export function WaitlistForm({ source = 'web', defaultCity }: { source?: string;
 
       {state.status === 'error' && <p id={`${uid}-err`} role="alert" className="form-error waitlist-note">{state.message}</p>}
       {state.status !== 'error' && (
-        <p className="waitlist-note">Free. One email when we launch, nothing else.</p>
+        <p className="waitlist-note">Free. We’ll email you when your city opens, and now and then with launch news. Unsubscribe anytime.</p>
       )}
     </form>
   );

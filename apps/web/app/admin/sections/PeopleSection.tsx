@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Download, Search, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CaretLeft, CaretRight, DownloadSimple, MagnifyingGlass, Users } from '@phosphor-icons/react/ssr';
 import { adminFetch, downloadCsv } from '@/lib/adminApi';
 import { inputClass, thClass, ErrorNote, Spinner, Badge, Button, IconButton, SectionHeader, TableCard, EmptyState } from '../ui';
 
@@ -68,11 +68,11 @@ export default function PeopleSection() {
       <SectionHeader
         title="People"
         description={loading && !people.length ? 'Loading…' : `${total.toLocaleString('en-IN')} ${search ? 'matching' : ''} account${total === 1 ? '' : 's'}.`}
-        action={<Button variant="secondary" onClick={exportCsv} disabled={exporting || total === 0} icon={<Download className="w-4 h-4" aria-hidden />}>{exporting ? 'Exporting…' : 'Export CSV'}</Button>}
+        action={<Button variant="secondary" onClick={exportCsv} disabled={exporting || total === 0} icon={<DownloadSimple className="w-4 h-4" aria-hidden />}>{exporting ? 'Exporting…' : 'Export CSV'}</Button>}
       />
 
       <div className="relative mb-4 max-w-md">
-        <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" aria-hidden />
+        <MagnifyingGlass className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" aria-hidden />
         <input
           type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search name, username, email or phone"
           aria-label="Search people" className={`${inputClass} pl-10`}
@@ -124,8 +124,8 @@ export default function PeopleSection() {
           {pages > 1 && (
             <div className="flex items-center justify-end gap-2 mt-4">
               <span className="text-sm text-gray-500 mr-1">Page {page + 1} of {pages}</span>
-              <IconButton label="Previous page" onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0 || loading}><ChevronLeft className="w-4 h-4" aria-hidden /></IconButton>
-              <IconButton label="Next page" onClick={() => setPage(p => Math.min(pages - 1, p + 1))} disabled={page >= pages - 1 || loading}><ChevronRight className="w-4 h-4" aria-hidden /></IconButton>
+              <IconButton label="Previous page" onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0 || loading}><CaretLeft className="w-4 h-4" aria-hidden /></IconButton>
+              <IconButton label="Next page" onClick={() => setPage(p => Math.min(pages - 1, p + 1))} disabled={page >= pages - 1 || loading}><CaretRight className="w-4 h-4" aria-hidden /></IconButton>
             </div>
           )}
         </>

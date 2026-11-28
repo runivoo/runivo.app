@@ -1,18 +1,15 @@
 import type { Metadata } from 'next';
-import { Nav } from '@/components/Nav';
-import { Footer } from '@/components/Footer';
-import { GetAppLink } from '@/components/GetAppLink';
-import { APP_LIVE } from '@/lib/site';
+import { DeepLinkPage, GetAppNote, OpenInAppButton } from '@/components/templates/DeepLinkPage';
 
 export const metadata: Metadata = {
   title: 'Join a club on Runivo',
-  description: 'Runivo is the running game where your runs claim territory.',
-  robots: { index: false },
+  description: 'You have been invited to a running club on Runivo.',
+  robots: { index: false, follow: false },
 };
 
 /**
  * Where a club invite lands (apps/mobile clubService clubInviteLinks builds
- * https://runivo.in/club/<club id>?invite=<code>). Offers to open the club in
+ * https://www.runivo.in/club/<club id>?invite=<code>). Offers to open the club in
  * the app (runivo://club/<id>?invite=<code>, which joins), or to get the app first.
  */
 export default async function ClubLinkPage({ params, searchParams }: {
@@ -27,30 +24,9 @@ export default async function ClubLinkPage({ params, searchParams }: {
   const code = rawCode && /^[A-Za-z0-9_-]{4,64}$/.test(rawCode) ? rawCode : null;
 
   return (
-    <>
-      <Nav />
-      <main id="main" style={{ padding: '140px 24px 100px' }}>
-        <article style={{ maxWidth: 560, margin: '0 auto', textAlign: 'center' }}>
-          <h1 style={{
-            fontFamily: 'var(--font-display)', fontSize: 'clamp(34px, 5vw, 52px)', color: 'var(--t1)',
-            marginBottom: 16, letterSpacing: '-0.02em',
-          }}>
-            You&apos;re invited to a running club
-          </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--t2)', lineHeight: 1.7 }}>
-            Runivo is a running game: every run you record can claim a zone on the map, and other runners can take it back.
-          </p>
-          {id && (
-            <a href={`runivo://club/${id}${code ? `?invite=${encodeURIComponent(code)}` : ''}`} className="btn btn-dark" style={{ marginTop: 28 }}>
-              Open the club in Runivo
-            </a>
-          )}
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--t2)', lineHeight: 1.7, marginTop: 20 }}>
-            {APP_LIVE ? 'No app yet? ' : 'Runivo is not on the App Store yet. '}<GetAppLink style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: 3 }} live="Get Runivo on the App Store" waitlist="Join the waitlist" />{APP_LIVE ? ', then open this link again.' : ' and we’ll email you the day it opens.'}
-          </p>
-        </article>
-      </main>
-      <Footer />
-    </>
+    <DeepLinkPage title="You’re invited to a running club">
+      {id && <OpenInAppButton href={`runivo://club/${id}${code ? `?invite=${encodeURIComponent(code)}` : ''}`} label="Open the club in Runivo" />}
+      <GetAppNote again="open this link again." />
+    </DeepLinkPage>
   );
 }

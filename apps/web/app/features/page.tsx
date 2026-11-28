@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CaretRight } from '@phosphor-icons/react/ssr';
-import { PageShell } from '@/components/PageShell';
-import { EndCta } from '@/components/EndCta';
+import { PageShell } from '@/components/layout/PageShell';
+import { EndCta } from '@/components/ui/EndCta';
 import { ACCENT_HEX, FEATURE_NAV } from '@/lib/nav';
 import { FEATURES } from '@/lib/features';
 import { pageMetadata } from '@/lib/seo';

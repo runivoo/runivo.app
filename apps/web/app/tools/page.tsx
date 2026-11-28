@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { PageShell } from '@/components/PageShell';
-import { LinkCard } from '@/components/LinkCard';
-import { EndCta } from '@/components/EndCta';
+import { PageShell } from '@/components/layout/PageShell';
+import { LinkCard } from '@/components/ui/LinkCard';
+import { EndCta } from '@/components/ui/EndCta';
 import { TOOLS_NAV } from '@/lib/nav';
 import { TOOL_PAGES } from '@/lib/tools';
 import { pageMetadata } from '@/lib/seo';

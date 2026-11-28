@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { AlertTriangle, Mail, RefreshCw } from 'lucide-react';
+import { ArrowsClockwise, Envelope, Warning } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { ErrorNote, Spinner, Button, SectionHeader } from '../ui';
 
@@ -69,10 +69,10 @@ export default function OverviewSection() {
         title="Overview"
         description={data ? `How Runivo is doing. Updated ${new Date(data.generated_at).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}.` : 'How Runivo is doing.'}
         action={<>
-          <Button variant="secondary" onClick={sendDigest} disabled={digest === 'sending'} icon={<Mail className="w-4 h-4" aria-hidden />}>
+          <Button variant="secondary" onClick={sendDigest} disabled={digest === 'sending'} icon={<Envelope className="w-4 h-4" aria-hidden />}>
             {digest === 'sending' ? 'Sending…' : 'Email me the daily digest'}
           </Button>
-          <Button variant="secondary" onClick={load} disabled={loading} icon={<RefreshCw className="w-4 h-4" aria-hidden />}>Refresh</Button>
+          <Button variant="secondary" onClick={load} disabled={loading} icon={<ArrowsClockwise className="w-4 h-4" aria-hidden />}>Refresh</Button>
         </>}
       />
       {digest !== 'idle' && digest !== 'sending' && <p role="status" className="text-sm text-gray-500 -mt-3 mb-5">{digest} The digest also arrives every morning at 8:00.</p>}
@@ -82,7 +82,7 @@ export default function OverviewSection() {
         <div className="space-y-6">
           {data.lowCodes && data.lowCodes.length > 0 && (
             <div role="status" className="rounded-2xl border border-amber-200 bg-amber-50 p-4 flex gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" aria-hidden />
+              <Warning className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" aria-hidden />
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-gray-900">Rewards running out of codes</p>
                 <ul className="mt-1 space-y-0.5">

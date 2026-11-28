@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CaretDown, List, X } from '@phosphor-icons/react/ssr';
 import { FEATURE_NAV, TOP_LINKS } from '@/lib/nav';
-import { GetAppLink } from './GetAppLink';
+import { GetAppLink } from '@/components/ui/GetAppLink';
 
 /**
  * The menu on phones and small tablets (the inline links are hidden under 860px).

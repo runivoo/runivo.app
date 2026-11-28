@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { CaretRight } from '@phosphor-icons/react/ssr';
-import { Nav } from './Nav';
-import { Footer } from './Footer';
-import { JsonLd } from './JsonLd';
+import { Nav } from '@/components/layout/Nav';
+import { Footer } from '@/components/layout/Footer';
+import { JsonLd } from '@/components/ui/JsonLd';
 import { breadcrumbLd, mobileAppLd, type Crumb } from '@/lib/seo';
 import { APP_LIVE, APP_STORE_URL } from '@/lib/site';
 import '@/app/home.css';

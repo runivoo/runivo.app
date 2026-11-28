@@ -21,3 +21,6 @@ export const SITE_URL = 'https://www.runivo.in';
  * link only when this is set, so nothing points at an account that is not ours.
  */
 export const INSTAGRAM_URL = 'https://www.instagram.com/runivo.app/';
+
+/** One sentence that says what Runivo is, for pages that need to introduce it (invite links and the like). */
+export const APP_TAGLINE = 'Runivo is a GPS running app with an AI coach and PACE rewards.';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { ImagePlus, X } from 'lucide-react';
+import { ImageSquare, X } from '@phosphor-icons/react/ssr';
 import { supabase } from '@/lib/supabase';
 import { Button, IconButton, labelClass } from './ui';
 
@@ -43,7 +43,7 @@ export function ImageField({ label, hint, kind, value, onChange, aspect = 'wide'
           {value
             // eslint-disable-next-line @next/next/no-img-element
             ? <img src={value} alt="" className="w-full h-full object-cover" />
-            : <ImagePlus className="w-5 h-5 text-gray-300 absolute inset-0 m-auto" aria-hidden />}
+            : <ImageSquare className="w-5 h-5 text-gray-300 absolute inset-0 m-auto" aria-hidden />}
         </div>
         <Button variant="secondary" size="sm" onClick={() => input.current?.click()} disabled={busy}>
           {busy ? 'Uploading…' : value ? 'Replace' : 'Upload image'}

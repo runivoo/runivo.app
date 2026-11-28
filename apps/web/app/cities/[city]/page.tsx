@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { PageShell } from '@/components/PageShell';
-import { LinkCard } from '@/components/LinkCard';
-import { WaitlistForm } from '@/components/WaitlistForm';
-import { GetAppLink } from '@/components/GetAppLink';
+import { PageShell } from '@/components/layout/PageShell';
+import { LinkCard } from '@/components/ui/LinkCard';
+import { WaitlistForm } from '@/components/forms/WaitlistForm';
+import { GetAppLink } from '@/components/ui/GetAppLink';
 import { CITIES, getCity } from '@/lib/cities';
 import { getPost } from '@/lib/posts';
 import { APP_LIVE } from '@/lib/site';

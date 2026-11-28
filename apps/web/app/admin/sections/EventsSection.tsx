@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Calendar, Plus, Trash2, Pencil } from 'lucide-react';
+import { Calendar, PencilSimple, Plus, Trash } from '@phosphor-icons/react/ssr';
 import { supabase } from '@/lib/supabase';
 import { RemoveDialog } from '../RemoveDialog';
 import { ImageField } from '../ImageField';
@@ -169,7 +169,7 @@ export default function EventsSection() {
       <SectionHeader
         title="Events"
         description={<>{events.length} total · {events.filter(e => e.is_active).length} active</>}
-        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>New event</Button>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" aria-hidden />}>New event</Button>}
       />
 
       {showForm && (
@@ -321,9 +321,9 @@ export default function EventsSection() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <IconButton label={`Edit ${e.title}`} onClick={() => openEdit(e)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                      <IconButton label={`Edit ${e.title}`} onClick={() => openEdit(e)}><PencilSimple className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
                       <IconButton variant="danger" label={`Remove ${e.title}`} onClick={() => setRemoving(e)}>
-                        <Trash2 className="w-4 h-4" aria-hidden />
+                        <Trash className="w-4 h-4" aria-hidden />
                       </IconButton>
                     </div>
                   </td>

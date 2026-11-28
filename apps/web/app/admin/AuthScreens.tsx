@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ShieldAlert } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ShieldWarning } from '@phosphor-icons/react/ssr';
+import { Logo } from '@/components/layout/Logo';
 import { supabase } from '@/lib/supabase';
 import { Button, inputClass, labelClass } from './ui';
 
@@ -100,7 +100,7 @@ export function AccessDeniedScreen({ onHome, onSignOut }: { onHome: () => void; 
     <main id="main" className={SHELL}>
       <div className={`${CARD} text-center`}>
         <div className="w-14 h-14 rounded-full bg-red-50 border border-red-100 flex items-center justify-center mx-auto mb-5">
-          <ShieldAlert className="w-7 h-7 text-red-500" aria-hidden />
+          <ShieldWarning className="w-7 h-7 text-red-500" aria-hidden />
         </div>
         <h1 className="text-2xl font-semibold tracking-tight text-gray-900 mb-2">Access denied</h1>
         <p className="text-sm text-gray-500">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Download, BarChart3 } from 'lucide-react';
+import { ChartBar, DownloadSimple } from '@phosphor-icons/react/ssr';
 import { adminFetch, downloadCsv } from '@/lib/adminApi';
 import { inputClass, thClass, Field, ErrorNote, Spinner, Button, SectionHeader } from '../ui';
 import type { PartnerRow } from './PartnersSection';
@@ -92,7 +92,7 @@ export default function ReportsSection() {
         <div className="w-full sm:w-44">
           <Field label="Month"><input className={inputClass} type="month" value={month} onChange={e => setMonth(e.target.value)} /></Field>
         </div>
-        <Button onClick={run} disabled={!partnerId || running} className="min-h-[48px]" icon={<BarChart3 className="w-4 h-4" aria-hidden />}>{running ? 'Loading…' : 'Show report'}</Button>
+        <Button onClick={run} disabled={!partnerId || running} className="min-h-[48px]" icon={<ChartBar className="w-4 h-4" aria-hidden />}>{running ? 'Loading…' : 'Show report'}</Button>
       </div>
 
       <ErrorNote message={error} />
@@ -158,7 +158,7 @@ export default function ReportsSection() {
           </div>
 
           <div className="flex justify-end">
-            <Button variant="secondary" onClick={exportCsv} icon={<Download className="w-4 h-4" aria-hidden />}>Export CSV</Button>
+            <Button variant="secondary" onClick={exportCsv} icon={<DownloadSimple className="w-4 h-4" aria-hidden />}>Export CSV</Button>
           </div>
         </div>
       )}

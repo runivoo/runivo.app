@@ -1,5 +1,6 @@
 import { serviceClient, str, json } from '@/lib/adminServer';
-import { makeLimiter, clientIp, EMAIL_RE } from '@/lib/rateLimit';
+import { makeLimiter, EMAIL_RE } from '@/lib/rateLimit';
+import { guardPublicForm } from '@/lib/publicForm';
 import { SUPPORT_EMAIL } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
@@ -17,24 +18,9 @@ export const dynamic = 'force-dynamic';
 const rateLimited = makeLimiter(10 * 60 * 1000, 5);
 
 export async function POST(req: Request): Promise<Response> {
-  let body: Record<string, unknown>;
-  try {
-    const raw = await req.json();
-    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new Error('bad body');
-    body = raw as Record<string, unknown>;
-  } catch {
-    return json({ ok: false, error: 'Please send the form again.' }, 400);
-  }
-
-  // Honeypot: real people never fill the hidden "company_url" field.
-  // Answer as if it worked so bots learn nothing.
-  if (typeof body.company_url === 'string' && body.company_url.trim() !== '') {
-    return json({ ok: true });
-  }
-
-  if (rateLimited(clientIp(req))) {
-    return json({ ok: false, error: 'Too many applications from here. Try again in a few minutes.' }, 429);
-  }
+  const guarded = await guardPublicForm(req, rateLimited, 'Too many applications from here. Try again in a few minutes.');
+  if (guarded instanceof Response) return guarded;
+  const body = guarded;
 
   const name = str(body.name, 120);
   const contactName = str(body.contact_name, 120);

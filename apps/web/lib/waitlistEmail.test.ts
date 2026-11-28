@@ -1,3 +1,4 @@
+import { SITE_URL } from './site';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderWaitlistEmail, sendWaitlistWelcome, FOUNDER_QUOTE } from './waitlistEmail';
 
@@ -35,10 +36,10 @@ describe('renderWaitlistEmail', () => {
     expect(m.html).toContain('Founder, Runivo');
   });
 
-  it('loads its one image (the hex) from runivo.in over https', () => {
+  it('loads its one image (the hex) from the site over https', () => {
     const srcs = [...renderWaitlistEmail(null).html.matchAll(/src="([^"]+)"/g)].map(x => x[1]);
     expect(srcs.length).toBe(1);
-    for (const s of srcs) expect(s.startsWith('https://runivo.in/email/')).toBe(true);
+    for (const s of srcs) expect(s.startsWith(`${SITE_URL}/email/`)).toBe(true);
   });
 
   it('leaves the city out when there is none', () => {

@@ -1,7 +1,5 @@
-import {
-  BarChart3, BellRing, Calendar, Flag, Globe, Goal, Handshake, History, LayoutDashboard, Mail, ListChecks, ShoppingBag, Trophy, Users,
-  type LucideIcon,
-} from 'lucide-react';
+import { BellRinging, Calendar, ChartBar, ClockCounterClockwise, Envelope, Flag, Globe, Handshake, ListChecks, ShoppingBag, SquaresFour, Target, Trophy, Users } from '@phosphor-icons/react/ssr';
+import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
 
 /** The admin's sections. The order here is the order in the sidebar. */
 export type AdminTab =
@@ -10,17 +8,17 @@ export type AdminTab =
   | 'partners' | 'store' | 'challenges' | 'reports' | 'campaigns'
   | 'events' | 'waitlist' | 'broadcasts';
 
-export interface NavItem { id: AdminTab; label: string; Icon: LucideIcon }
+export interface NavItem { id: AdminTab; label: string; Icon: PhosphorIcon }
 export interface NavGroup { label: string; items: NavItem[] }
 
 export const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Studio',
     items: [
-      { id: 'overview', label: 'Overview', Icon: LayoutDashboard },
+      { id: 'overview', label: 'Overview', Icon: SquaresFour },
       { id: 'website',  label: 'Website',  Icon: Globe },
       { id: 'people',   label: 'People',   Icon: Users },
-      { id: 'activity', label: 'Activity', Icon: History },
+      { id: 'activity', label: 'Activity', Icon: ClockCounterClockwise },
     ],
   },
   {
@@ -35,9 +33,9 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { id: 'partners',  label: 'Partners',   Icon: Handshake },
       { id: 'store',     label: 'PACE Store', Icon: ShoppingBag },
-      { id: 'challenges', label: 'Challenges', Icon: Goal },
-      { id: 'reports',   label: 'Reports',    Icon: BarChart3 },
-      { id: 'campaigns', label: 'Campaigns',  Icon: BellRing },
+      { id: 'challenges', label: 'Challenges', Icon: Target },
+      { id: 'reports',   label: 'Reports',    Icon: ChartBar },
+      { id: 'campaigns', label: 'Campaigns',  Icon: BellRinging },
     ],
   },
   {
@@ -45,7 +43,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { id: 'events',     label: 'Events',     Icon: Calendar },
       { id: 'waitlist',   label: 'Waitlist',   Icon: ListChecks },
-      { id: 'broadcasts', label: 'Broadcasts', Icon: Mail },
+      { id: 'broadcasts', label: 'Broadcasts', Icon: Envelope },
     ],
   },
 ];

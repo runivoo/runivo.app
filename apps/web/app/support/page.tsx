@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { PageShell } from '@/components/PageShell';
-import { JsonLd } from '@/components/JsonLd';
-import { Faq } from '@/components/Faq';
+import { PageShell } from '@/components/layout/PageShell';
+import { JsonLd } from '@/components/ui/JsonLd';
+import { Faq } from '@/components/ui/Faq';
 import { faqLd, pageMetadata } from '@/lib/seo';
 import { staticPage } from '@/lib/pages';
 import { SUPPORT_EMAIL } from '@/lib/site';

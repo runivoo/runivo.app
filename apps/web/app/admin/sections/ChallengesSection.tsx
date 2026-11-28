@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Flag, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Flag, PencilSimple, Plus, Trash } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { RemoveDialog } from '../RemoveDialog';
 import { ImageField } from '../ImageField';
@@ -113,7 +113,7 @@ export default function ChallengesSection() {
       <SectionHeader
         title="Sponsored challenges"
         description={loading ? 'Loading…' : `${rows.length} total · ${live} live. Live challenges show in the app's PACE Store.`}
-        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>New challenge</Button>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" aria-hidden />}>New challenge</Button>}
       />
 
       {showForm && (
@@ -200,8 +200,8 @@ export default function ChallengesSection() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
-                      <IconButton label={`Edit ${r.title}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
-                      <IconButton variant="danger" label={`Remove ${r.title}`} onClick={() => setRemoving(r)}><Trash2 className="w-4 h-4" aria-hidden /></IconButton>
+                      <IconButton label={`Edit ${r.title}`} onClick={() => openEdit(r)}><PencilSimple className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                      <IconButton variant="danger" label={`Remove ${r.title}`} onClick={() => setRemoving(r)}><Trash className="w-4 h-4" aria-hidden /></IconButton>
                     </div>
                   </td>
                 </tr>

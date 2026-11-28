@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { Logo } from './Logo';
-import { MegaMenu } from './MegaMenu';
-import { MobileMenu } from './MobileMenu';
-import { GetAppLink } from './GetAppLink';
+import { Logo } from '@/components/layout/Logo';
+import { MegaMenu } from '@/components/layout/MegaMenu';
+import { MobileMenu } from '@/components/layout/MobileMenu';
+import { GetAppLink } from '@/components/ui/GetAppLink';
 import { TOP_LINKS } from '@/lib/nav';
 
 export function Nav() {

@@ -35,9 +35,6 @@
     .btn:active { transform: translateY(0) scale(.98); box-shadow: none; }
 
     .card { transition: transform .3s cubic-bezier(.22,.8,.3,1), box-shadow .3s ease, border-color .3s ease; }
-    .card.feature:hover { transform: translateY(-5px); box-shadow: 0 22px 44px -28px rgba(23,24,26,.35); border-color: #d3d6ce; }
-    .tile { transition: transform .35s cubic-bezier(.22,.8,.3,1); }
-    .card.feature:hover .tile { transform: rotate(-7deg) scale(1.08); }
 
     .sports li { transition: transform .2s ease, border-color .2s ease, background-color .2s ease; }
     .sports li:hover { transform: translateY(-2px); border-color: var(--accent); }

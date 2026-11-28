@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { AlertTriangle, Info, X } from 'lucide-react';
+import { Info, Warning, X } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { Button, IconButton, Spinner, inputClass } from './ui';
 
@@ -114,7 +114,7 @@ export function RemoveDialog({ kind, id, name, onClose, onDone }: {
                   {impact.effects.map(e => (
                     <li key={e.text} className={`flex gap-2.5 text-sm ${e.loss ? 'text-red-700' : 'text-gray-700'}`}>
                       {e.loss
-                        ? <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-500" aria-hidden />
+                        ? <Warning className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-500" aria-hidden />
                         : <Info className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" aria-hidden />}
                       {e.text}
                     </li>

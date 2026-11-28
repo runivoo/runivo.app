@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Plus, Pencil, Ban, BellRing } from 'lucide-react';
+import { BellRinging, PencilSimple, Plus, Prohibit } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { AiDraft } from '../AiDraft';
 import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, toLocalInput, fromLocalInput, Button, IconButton, SectionHeader, TableCard } from '../ui';
@@ -106,7 +106,7 @@ export default function CampaignsSection() {
       <SectionHeader
         title="Campaigns"
         description={<>Festive and partner pushes, sent at each runner&apos;s local hour. Quiet hours and the 3-a-day limit still apply.</>}
-        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>New campaign</Button>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" aria-hidden />}>New campaign</Button>}
       />
 
       {showForm && (
@@ -158,7 +158,7 @@ export default function CampaignsSection() {
 
       {loading ? <Spinner /> : rows.length === 0 ? (
         <div className="text-center py-16">
-          <BellRing className="w-8 h-8 text-gray-200 mx-auto mb-3" />
+          <BellRinging className="w-8 h-8 text-gray-200 mx-auto mb-3" />
           <p className="text-sm text-gray-400">No campaigns yet.</p>
         </div>
       ) : (
@@ -191,10 +191,10 @@ export default function CampaignsSection() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
                       {r.sent_count === 0 && (r.status === 'scheduled' || r.status === 'draft') && (
-                        <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                        <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><PencilSimple className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
                       )}
                       {(r.status === 'scheduled' || r.status === 'draft') && (
-                        <IconButton variant="danger" label={`Cancel ${r.name}`} onClick={() => cancelCampaign(r)}><Ban className="w-4 h-4" aria-hidden /></IconButton>
+                        <IconButton variant="danger" label={`Cancel ${r.name}`} onClick={() => cancelCampaign(r)}><Prohibit className="w-4 h-4" aria-hidden /></IconButton>
                       )}
                     </div>
                   </td>

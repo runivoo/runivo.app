@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Plus, Trash2, Pencil, ShoppingBag, ChevronUp, ChevronDown, Upload, Crown, Lock } from 'lucide-react';
+import { CaretDown, CaretUp, Crown, Lock, PencilSimple, Plus, ShoppingBag, Trash, UploadSimple } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { RemoveDialog } from '../RemoveDialog';
 import { ImageField } from '../ImageField';
@@ -190,7 +190,7 @@ export default function StoreSection() {
       <SectionHeader
         title="PACE Store"
         description={<>{rewards.length} rewards · {rewards.filter(r => r.status === 'available').length} live</>}
-        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>Add reward</Button>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" aria-hidden />}>Add reward</Button>}
       />
 
       {showForm && (
@@ -283,7 +283,7 @@ export default function StoreSection() {
           <textarea className={`${inputClass} resize-y font-mono text-xs`} rows={6} value={csv} onChange={e => setCsv(e.target.value)} placeholder={'code\nBRK-7KQ2\nBRK-9XW4'} />
           {uploadMsg && <p className="text-xs text-gray-600 mt-2">{uploadMsg}</p>}
           <div className="flex justify-end mt-3">
-            <Button onClick={uploadCodes} disabled={uploading || !csv.trim()} icon={<Upload className="w-4 h-4" aria-hidden />}>{uploading ? 'Uploading…' : 'Upload codes'}</Button>
+            <Button onClick={uploadCodes} disabled={uploading || !csv.trim()} icon={<UploadSimple className="w-4 h-4" aria-hidden />}>{uploading ? 'Uploading…' : 'Upload codes'}</Button>
           </div>
         </FormCard>
       )}
@@ -337,12 +337,12 @@ export default function StoreSection() {
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1">
                         {r.code_mode === 'pool' && (
-                          <Button variant="secondary" size="sm" onClick={() => { setCodesFor(r); setShowForm(false); setUploadMsg(''); }} aria-label={`Upload codes for ${r.title}`} icon={<Upload className="w-3.5 h-3.5" aria-hidden />}>Codes</Button>
+                          <Button variant="secondary" size="sm" onClick={() => { setCodesFor(r); setShowForm(false); setUploadMsg(''); }} aria-label={`Upload codes for ${r.title}`} icon={<UploadSimple className="w-3.5 h-3.5" aria-hidden />}>Codes</Button>
                         )}
-                        <IconButton label="Move up" onClick={() => reorder(r, 'up')} disabled={idx === 0}><ChevronUp className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
-                        <IconButton label="Move down" onClick={() => reorder(r, 'down')} disabled={idx === rewards.length - 1}><ChevronDown className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
-                        <IconButton label={`Edit ${r.title}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
-                        <IconButton variant="danger" label={`Remove ${r.title}`} onClick={() => del(r)}><Trash2 className="w-4 h-4" aria-hidden /></IconButton>
+                        <IconButton label="Move up" onClick={() => reorder(r, 'up')} disabled={idx === 0}><CaretUp className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                        <IconButton label="Move down" onClick={() => reorder(r, 'down')} disabled={idx === rewards.length - 1}><CaretDown className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                        <IconButton label={`Edit ${r.title}`} onClick={() => openEdit(r)}><PencilSimple className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                        <IconButton variant="danger" label={`Remove ${r.title}`} onClick={() => del(r)}><Trash className="w-4 h-4" aria-hidden /></IconButton>
                       </div>
                     </td>
                   </tr>

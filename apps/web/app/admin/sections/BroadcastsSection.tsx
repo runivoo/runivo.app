@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Mail, Pencil, Plus, Send, Trash2 } from 'lucide-react';
+import { Envelope, PaperPlaneTilt, PencilSimple, Plus, Trash } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { AiDraft } from '../AiDraft';
 import { inputClass, thClass, Field, ErrorNote, FormCard, Spinner, Badge, Button, IconButton, SectionHeader, TableCard, EmptyState } from '../ui';
@@ -125,7 +125,7 @@ export default function BroadcastsSection() {
       <SectionHeader
         title="Broadcasts"
         description="Email the waitlist: everyone, one city or one platform. Unsubscribes are handled by Resend."
-        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>New broadcast</Button>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" aria-hidden />}>New broadcast</Button>}
       />
 
       {sending && (
@@ -173,8 +173,8 @@ export default function BroadcastsSection() {
           {note && <p role="status" className="text-sm text-gray-600 mt-3">{note}</p>}
           <div className="flex flex-wrap gap-2 mt-5">
             <Button variant="secondary" onClick={() => save()} disabled={saving || !canSave}>{saving ? 'Saving…' : 'Save draft'}</Button>
-            <Button variant="secondary" onClick={test} disabled={saving || !canSave} icon={<Mail className="w-4 h-4" aria-hidden />}>Send me a test</Button>
-            <Button onClick={sendFromForm} disabled={saving || !canSave || !count} icon={<Send className="w-4 h-4" aria-hidden />}>Send to {count ?? '…'} {count === 1 ? 'person' : 'people'}</Button>
+            <Button variant="secondary" onClick={test} disabled={saving || !canSave} icon={<Envelope className="w-4 h-4" aria-hidden />}>Send me a test</Button>
+            <Button onClick={sendFromForm} disabled={saving || !canSave || !count} icon={<PaperPlaneTilt className="w-4 h-4" aria-hidden />}>Send to {count ?? '…'} {count === 1 ? 'person' : 'people'}</Button>
           </div>
         </FormCard>
       )}
@@ -182,7 +182,7 @@ export default function BroadcastsSection() {
       {!showForm && <ErrorNote message={error} />}
 
       {loading ? <Spinner /> : rows.length === 0 ? (
-        <EmptyState icon={<Mail className="w-8 h-8" />} title="No broadcasts yet." hint="Write one for launch day, or a city announcement." />
+        <EmptyState icon={<Envelope className="w-8 h-8" />} title="No broadcasts yet." hint="Write one for launch day, or a city announcement." />
       ) : (
         <TableCard>
           <table className="w-full text-sm">
@@ -209,7 +209,7 @@ export default function BroadcastsSection() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
-                      {r.status === 'draft' && <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>}
+                      {r.status === 'draft' && <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><PencilSimple className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>}
                       {(r.status === 'syncing' || r.status === 'failed') && !sending && (
                         <Button size="sm" variant="secondary" onClick={() => send(r.id, r.recipients)}>Resume</Button>
                       )}
@@ -217,7 +217,7 @@ export default function BroadcastsSection() {
                         <IconButton variant="danger" label={`Delete ${r.name}`} onClick={async () => {
                           if (!window.confirm(`Delete the draft "${r.name}"?`)) return;
                           try { await adminFetch(`/broadcasts/${r.id}`, { method: 'DELETE' }); load(); } catch (e) { setError((e as Error).message); }
-                        }}><Trash2 className="w-4 h-4" aria-hidden /></IconButton>
+                        }}><Trash className="w-4 h-4" aria-hidden /></IconButton>
                       )}
                     </div>
                   </td>

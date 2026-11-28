@@ -1,5 +1,5 @@
-import { WaitlistForm } from './WaitlistForm';
-import { GetAppLink } from './GetAppLink';
+import { WaitlistForm } from '@/components/forms/WaitlistForm';
+import { GetAppLink } from '@/components/ui/GetAppLink';
 import { APP_LIVE } from '@/lib/site';
 
 /** The closing call to action on content pages: the waitlist form before launch, the download button after. */

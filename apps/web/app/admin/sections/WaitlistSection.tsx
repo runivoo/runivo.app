@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Download, ListChecks } from 'lucide-react';
+import { DownloadSimple, ListChecks } from '@phosphor-icons/react/ssr';
 import { adminFetch, downloadCsv } from '@/lib/adminApi';
 import { thClass, ErrorNote, Spinner, Button, SectionHeader, TableCard, EmptyState } from '../ui';
 
@@ -32,7 +32,7 @@ export default function WaitlistSection() {
         title="Waitlist"
         description={<>{loading ? 'Loading…' : `${total.toLocaleString()} sign-up${total === 1 ? '' : 's'} from runivo.in.`}
             {total > rows.length ? ` Showing the newest ${rows.length.toLocaleString()}.` : ''}</>}
-        action={<Button variant="secondary" onClick={exportCsv} disabled={rows.length === 0} icon={<Download className="w-4 h-4" aria-hidden />}>Export CSV</Button>}
+        action={<Button variant="secondary" onClick={exportCsv} disabled={rows.length === 0} icon={<DownloadSimple className="w-4 h-4" aria-hidden />}>Export CSV</Button>}
       />
 
       <ErrorNote message={error} />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Globe, RefreshCw } from 'lucide-react';
+import { ArrowsClockwise, Globe } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { ErrorNote, Spinner, Button, SectionHeader, EmptyState } from '../ui';
 import { Stat, Card, Bars, Ranked } from './OverviewSection';
@@ -59,7 +59,7 @@ export default function WebsiteSection() {
               </button>
             ))}
           </div>
-          <Button variant="secondary" onClick={load} disabled={loading} icon={<RefreshCw className="w-4 h-4" aria-hidden />}>Refresh</Button>
+          <Button variant="secondary" onClick={load} disabled={loading} icon={<ArrowsClockwise className="w-4 h-4" aria-hidden />}>Refresh</Button>
         </>}
       />
       <ErrorNote message={error} />

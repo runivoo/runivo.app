@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { adminFetch } from '@/lib/adminApi';
-import { Sparkles } from 'lucide-react';
+import { Sparkle } from '@phosphor-icons/react/ssr';
 import { ErrorNote, Spinner, Badge, Button, SectionHeader, EmptyState } from '../ui';
 
 interface Item {
@@ -95,7 +95,7 @@ export default function ModerationSection() {
       <SectionHeader
         title="Moderation"
         description={<>Open reports, oldest first. Act within 24 hours. Removing deletes the content; suspending also stops its author from posting.</>}
-        action={items.length > 0 && <Button variant="secondary" onClick={sortWithAi} disabled={sorting} icon={<Sparkles className="w-4 h-4" aria-hidden />}>{sorting ? 'Sorting…' : 'Sort with AI'}</Button>}
+        action={items.length > 0 && <Button variant="secondary" onClick={sortWithAi} disabled={sorting} icon={<Sparkle className="w-4 h-4" aria-hidden />}>{sorting ? 'Sorting…' : 'Sort with AI'}</Button>}
       />
       {Object.keys(triage).length > 0 && <p className="text-xs text-gray-400 -mt-3 mb-4">Sorted by AI: harmful first. AI only suggests; check each item before acting.</p>}
       <ErrorNote message={error} />

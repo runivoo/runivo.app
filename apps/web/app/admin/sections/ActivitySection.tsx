@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { History } from 'lucide-react';
+import { ClockCounterClockwise } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { thClass, ErrorNote, Spinner, Badge, SectionHeader, TableCard, EmptyState } from '../ui';
 
@@ -39,7 +39,7 @@ export default function ActivitySection() {
       <SectionHeader title="Activity" description="Every change made in Studio, newest first. Kept for two years." />
       <ErrorNote message={error} />
       {loading ? <Spinner /> : rows.length === 0 && !error ? (
-        <EmptyState icon={<History className="w-8 h-8" />} title="No changes yet." hint="Creates, edits, hides and deletes show up here." />
+        <EmptyState icon={<ClockCounterClockwise className="w-8 h-8" />} title="No changes yet." hint="Creates, edits, hides and deletes show up here." />
       ) : rows.length > 0 && (
         <TableCard>
           <table className="w-full text-sm">

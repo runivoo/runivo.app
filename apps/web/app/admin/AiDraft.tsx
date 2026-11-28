@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkle } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { Button, inputClass } from './ui';
 
@@ -21,7 +21,7 @@ export function AiDraft<T>({ kind, onDraft, placeholder }: { kind: 'push' | 'ema
       <div className="flex flex-col sm:flex-row gap-2">
         <input className={`${inputClass} flex-1`} value={goal} onChange={e => setGoal(e.target.value)} maxLength={400} placeholder={placeholder}
           onKeyDown={e => { if (e.key === 'Enter' && goal.trim() && !busy) { e.preventDefault(); run(); } }} aria-label="What is this for?" />
-        <Button variant="secondary" onClick={run} disabled={busy || !goal.trim()} icon={<Sparkles className="w-4 h-4" aria-hidden />}>{busy ? 'Writing…' : 'Draft with AI'}</Button>
+        <Button variant="secondary" onClick={run} disabled={busy || !goal.trim()} icon={<Sparkle className="w-4 h-4" aria-hidden />}>{busy ? 'Writing…' : 'Draft with AI'}</Button>
       </div>
       {error ? <p role="alert" className="text-xs text-red-600 mt-1.5">{error}</p>
         : <p className="text-xs text-gray-400 mt-1.5">Fills the fields below in Runivo’s voice. Read and edit before sending.</p>}

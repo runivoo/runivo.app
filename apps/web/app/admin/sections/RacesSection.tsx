@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X } from '@phosphor-icons/react/ssr';
 import { adminFetch } from '@/lib/adminApi';
 import { thClass, ErrorNote, Spinner, Badge, Button, SectionHeader, TableCard, EmptyState } from '../ui';
 

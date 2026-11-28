@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Plus, Pencil, Handshake, Ban, Sparkles } from 'lucide-react';
+import { Handshake, PencilSimple, Plus, Prohibit, Sparkle } from '@phosphor-icons/react/ssr';
 import { RemoveDialog } from '../RemoveDialog';
 import { ImageField } from '../ImageField';
 import { adminFetch } from '@/lib/adminApi';
@@ -126,7 +126,7 @@ export default function PartnersSection() {
       <SectionHeader
         title="Partners"
         description={<>{rows.filter(r => r.status === 'active').length} active · {rows.filter(r => r.status === 'applied').length} to review · {freeCount}/10 free listings used</>}
-        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" strokeWidth={2.5} aria-hidden />}>Add partner</Button>}
+        action={<Button onClick={openNew} icon={<Plus className="w-4 h-4" aria-hidden />}>Add partner</Button>}
       />
 
       {showForm && (
@@ -223,7 +223,7 @@ export default function PartnersSection() {
                     })()}
                   </div>
                   <div className="flex gap-2 shrink-0">
-                    <Button variant="secondary" size="sm" onClick={() => screen(r.id)} disabled={screens[r.id] === 'loading'} icon={<Sparkles className="w-4 h-4" aria-hidden />}>AI check</Button>
+                    <Button variant="secondary" size="sm" onClick={() => screen(r.id)} disabled={screens[r.id] === 'loading'} icon={<Sparkle className="w-4 h-4" aria-hidden />}>AI check</Button>
                     <Button variant="secondary" size="sm" onClick={() => openEdit(r)}>Edit</Button>
                     <Button variant="secondary" size="sm" onClick={() => decide(r, 'rejected')} disabled={deciding === r.id}>Reject</Button>
                     <Button size="sm" onClick={() => decide(r, 'active')} disabled={deciding === r.id}>Approve</Button>
@@ -261,9 +261,9 @@ export default function PartnersSection() {
                   <td className="px-4 py-3"><Badge tone={STATUS_TONE[r.status]}>{r.status}</Badge></td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
-                      <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><Pencil className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
+                      <IconButton label={`Edit ${r.name}`} onClick={() => openEdit(r)}><PencilSimple className="w-4 h-4 text-gray-500" aria-hidden /></IconButton>
                       {r.status !== 'ended' && r.status !== 'rejected' && (
-                        <IconButton variant="danger" label={`End partnership with ${r.name}`} onClick={() => setRemoving(r)}><Ban className="w-4 h-4" aria-hidden /></IconButton>
+                        <IconButton variant="danger" label={`End partnership with ${r.name}`} onClick={() => setRemoving(r)}><Prohibit className="w-4 h-4" aria-hidden /></IconButton>
                       )}
                     </div>
                   </td>

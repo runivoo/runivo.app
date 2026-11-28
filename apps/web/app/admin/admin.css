@@ -1,0 +1,7 @@
+/* Tailwind, for the admin only (see tailwind.config.ts). The marketing site does not load it. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tailwind's reset comes after globals.css here, so put the site's heading weight back for bare headings. */
+h1, h2, h3, h4 { font-weight: 600; }

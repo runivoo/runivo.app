@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { PageShell } from '@/components/PageShell';
-import { JsonLd } from '@/components/JsonLd';
-import { Faq } from '@/components/Faq';
-import { LinkCard } from '@/components/LinkCard';
-import { EndCta } from '@/components/EndCta';
-import { GetAppLink } from '@/components/GetAppLink';
+import { PageShell } from '@/components/layout/PageShell';
+import { JsonLd } from '@/components/ui/JsonLd';
+import { Faq } from '@/components/ui/Faq';
+import { LinkCard } from '@/components/ui/LinkCard';
+import { EndCta } from '@/components/ui/EndCta';
+import { GetAppLink } from '@/components/ui/GetAppLink';
 import { FEATURE_NAV, TOOLS_NAV, type FeatureSlug } from '@/lib/nav';
 import { FEATURES } from '@/lib/features';
 import { getPost } from '@/lib/posts';

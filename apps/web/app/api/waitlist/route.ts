@@ -1,6 +1,7 @@
 import { serviceClient, str, json } from '@/lib/adminServer';
 import { after } from 'next/server';
-import { makeLimiter, clientIp, EMAIL_RE } from '@/lib/rateLimit';
+import { makeLimiter, EMAIL_RE } from '@/lib/rateLimit';
+import { guardPublicForm } from '@/lib/publicForm';
 import { sendWaitlistWelcome } from '@/lib/waitlistEmail';
 import { platformOf, referrerHost, slug, type Touch } from '@/lib/attribution';
 
@@ -26,23 +27,9 @@ const rateLimited = makeLimiter(10 * 60 * 1000, 6);
 const SOURCES = ['web', 'invite', 'club', 'run', 'partners'] as const;
 
 export async function POST(req: Request): Promise<Response> {
-  let body: Record<string, unknown>;
-  try {
-    const raw = await req.json();
-    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new Error('bad body');
-    body = raw as Record<string, unknown>;
-  } catch {
-    return json({ ok: false, error: 'Please send the form again.' }, 400);
-  }
-
-  // Honeypot: real people never fill the hidden "company_url" field.
-  if (typeof body.company_url === 'string' && body.company_url.trim() !== '') {
-    return json({ ok: true });
-  }
-
-  if (rateLimited(clientIp(req))) {
-    return json({ ok: false, error: 'Too many tries from here. Please wait a few minutes.' }, 429);
-  }
+  const guarded = await guardPublicForm(req, rateLimited, 'Too many tries from here. Please wait a few minutes.');
+  if (guarded instanceof Response) return guarded;
+  const body = guarded;
 
   const email = str(body.email, 200)?.toLowerCase() ?? null;
   const city = str(body.city, 80);

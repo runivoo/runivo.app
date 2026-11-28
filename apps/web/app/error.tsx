@@ -3,17 +3,15 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import * as Sentry from '@sentry/nextjs';
-import { Nav } from '@/components/Nav';
-import { Footer } from '@/components/Footer';
+import { PageShell } from '@/components/layout/PageShell';
 import { SUPPORT_EMAIL } from '@/lib/site';
 
 /** A page failed while rendering. The layout (and so the nav and footer) is still intact. */
 export default function RouteError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => { Sentry.captureException(error); }, [error]);
   return (
-    <>
-      <Nav />
-      <main id="main" className="status-page">
+    <PageShell>
+      <section className="status-page">
         <div role="alert">
           <h1 className="h-section">Something went wrong.</h1>
           <p className="lead" style={{ margin: '14px auto 0', maxWidth: 440 }}>
@@ -24,8 +22,7 @@ export default function RouteError({ error, reset }: { error: Error & { digest?:
             <Link href="/" className="btn btn-surface">Back to home</Link>
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </section>
+    </PageShell>
   );
 }

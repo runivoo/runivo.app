@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/seo';
 import { staticPage } from '@/lib/pages';
-import { PageShell } from '@/components/PageShell';
+import { PageShell } from '@/components/layout/PageShell';
 import { ApplyForm } from './ApplyForm';
 import './partners.css';
 

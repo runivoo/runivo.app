@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { PageShell } from '@/components/PageShell';
-import { JsonLd } from '@/components/JsonLd';
-import { Faq } from '@/components/Faq';
-import { LinkCard } from '@/components/LinkCard';
-import { EndCta } from '@/components/EndCta';
+import { PageShell } from '@/components/layout/PageShell';
+import { JsonLd } from '@/components/ui/JsonLd';
+import { Faq } from '@/components/ui/Faq';
+import { LinkCard } from '@/components/ui/LinkCard';
+import { EndCta } from '@/components/ui/EndCta';
 import { PaceCalculator } from '@/components/tools/PaceCalculator';
 import { RacePredictor } from '@/components/tools/RacePredictor';
 import { TrainingPacesTool } from '@/components/tools/TrainingPacesTool';
